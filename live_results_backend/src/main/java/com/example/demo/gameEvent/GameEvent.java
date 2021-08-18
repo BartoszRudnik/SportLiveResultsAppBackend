@@ -29,6 +29,8 @@ public class GameEvent {
     private Long gameEventId;
 
     private int eventMinute;
+
+    @Enumerated(EnumType.STRING)
     private GameEventType gameEventType;
 
     @ManyToOne
