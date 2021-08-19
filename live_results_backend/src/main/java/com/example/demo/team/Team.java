@@ -29,7 +29,7 @@ public class Team {
             strategy = GenerationType.SEQUENCE,
             generator = "team_sequence"
     )
-    private Long teamId;
+    private Long id;
 
     private String teamName;
     private String city;

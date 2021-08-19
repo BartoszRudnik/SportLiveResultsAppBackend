@@ -29,7 +29,7 @@ public class Game {
             strategy = GenerationType.SEQUENCE,
             generator = "game_sequence"
     )
-    private Long gameId;
+    private Long id;
 
     private int scoreTeamA;
     private int scoreTeamB;

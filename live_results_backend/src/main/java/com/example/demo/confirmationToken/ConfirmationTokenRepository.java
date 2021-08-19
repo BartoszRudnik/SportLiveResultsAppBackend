@@ -1,6 +1,6 @@
 package com.example.demo.confirmationToken;
 
-import com.example.demo.user.User;
+import com.example.demo.appUser.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,7 +16,7 @@ public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationT
     Optional<ConfirmationToken> findByToken(String token);
 
     @Transactional
-    void deleteAllByUser(User user);
+    void deleteAllByAppUser(AppUser appUser);
 
     @Transactional
     @Modifying
@@ -29,7 +29,7 @@ public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationT
     @Modifying
     @Query("UPDATE ConfirmationToken c " +
             "SET c.token = ?1, c.createdAt = ?2, c.expiresAt = ?3 " +
-            "WHERE c.user.id = ?4")
+            "WHERE c.appUser.id = ?4")
     void updateToken (String token, LocalDateTime createdAt, LocalDateTime expiresAt, Long id);
 
 

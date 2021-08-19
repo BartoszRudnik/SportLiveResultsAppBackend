@@ -28,7 +28,7 @@ public class League {
             strategy = GenerationType.SEQUENCE,
             generator = "league_sequence"
     )
-    private Long leagueId;
+    private Long id;
 
     private String leagueName;
 

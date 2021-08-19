@@ -1,6 +1,5 @@
 package com.example.demo.emailSender;
-
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +12,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EmailSenderService implements EmailSender{
 
     private final static Logger LOGGER = LoggerFactory.getLogger(EmailSenderService.class);

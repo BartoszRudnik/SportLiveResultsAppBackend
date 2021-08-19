@@ -1,6 +1,6 @@
 package com.example.demo.confirmationToken;
 
-import com.example.demo.user.User;
+import com.example.demo.appUser.AppUser;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ public class ConfirmationTokenService {
     }
 
     public void updateConfirmationToken(ConfirmationToken token){
-        this.confirmationTokenRepository.updateToken(token.getToken(), token.getCreatedAt(), token.getExpiresAt(), token.getUser().getUserId());
+        this.confirmationTokenRepository.updateToken(token.getToken(), token.getCreatedAt(), token.getExpiresAt(), token.getAppUser().getId());
     }
 
     public Optional<ConfirmationToken> getToken(String token){
@@ -29,8 +29,8 @@ public class ConfirmationTokenService {
         this.confirmationTokenRepository.updateConfirmedAt(token, LocalDateTime.now());
     }
 
-    public void deleteConfirmationToken(User user){
-        this.confirmationTokenRepository.deleteAllByUser(user);
+    public void deleteConfirmationToken(AppUser appUser){
+        this.confirmationTokenRepository.deleteAllByAppUser(appUser);
     }
 
 }

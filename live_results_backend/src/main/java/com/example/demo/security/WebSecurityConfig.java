@@ -1,5 +1,5 @@
 package com.example.demo.security;
-import com.example.demo.user.UserService;
+import com.example.demo.appUser.AppUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,13 +15,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserService appUserService;
+    private final AppUserService appUserService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().
                 authorizeRequests().
+                antMatchers("/api/v*/registration/**").permitAll().
+                antMatchers("/api/v*/signIn/**").permitAll().
+                antMatchers("/api/v*/resetToken/**").permitAll().
+                antMatchers("/api/v*/newPassword/**").permitAll().
                 anyRequest().
                 authenticated().and()
                 .formLogin();

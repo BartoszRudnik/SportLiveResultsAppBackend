@@ -27,7 +27,7 @@ public class Player {
             strategy = GenerationType.SEQUENCE,
             generator = "player_sequence"
     )
-    private Long playerId;
+    private Long id;
 
     private String firstName;
     private String lastName;

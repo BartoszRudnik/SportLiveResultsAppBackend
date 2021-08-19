@@ -4,9 +4,9 @@ import com.example.demo.confirmationToken.ConfirmationToken;
 import com.example.demo.confirmationToken.ConfirmationTokenService;
 import com.example.demo.emailSender.EmailSender;
 import com.example.demo.signUp.dto.SignUpRequest;
-import com.example.demo.user.User;
-import com.example.demo.user.UserRole;
-import com.example.demo.user.UserService;
+import com.example.demo.appUser.AppUser;
+import com.example.demo.appUser.AppUserRole;
+import com.example.demo.appUser.AppUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class SignUpService {
 
     private final EmailValidator emailValidator;
-    private final UserService userService;
+    private final AppUserService appUserService;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
 
@@ -29,9 +29,9 @@ public class SignUpService {
             throw new IllegalStateException("Email is not valid");
         }
 
-        User newUser = new User(request.getFirstName(), request.getLastName(), request.getEmail(), request.getPassword(), UserRole.MAIL_USER);
+        AppUser newAppUser = new AppUser(request.getFirstName(), request.getLastName(), request.getEmail(), request.getPassword(), AppUserRole.MAIL_USER);
 
-        ConfirmationToken token = this.userService.signUpUser(newUser);
+        ConfirmationToken token = this.appUserService.signUpUser(newAppUser);
 
         String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token.getToken();
 
@@ -58,7 +58,7 @@ public class SignUpService {
 
         this.confirmationTokenService.setConfirmedAt(token);
 
-        this.userService.enableUser(confirmationToken.getUser().getEmail());
+        this.appUserService.enableUser(confirmationToken.getAppUser().getEmail());
 
         return "confirmed";
     }

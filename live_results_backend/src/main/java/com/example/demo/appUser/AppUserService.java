@@ -1,4 +1,4 @@
-package com.example.demo.user;
+package com.example.demo.appUser;
 
 import com.example.demo.confirmationToken.ConfirmationToken;
 import com.example.demo.confirmationToken.ConfirmationTokenService;
@@ -16,32 +16,32 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class UserService implements UserDetailsService {
+public class AppUserService implements UserDetailsService {
 
     private final static String USER_NOT_FOUND_MSG = "User with email %s not found";
 
-    private final UserRepository userRepository;
+    private final AppUserRepository appUserRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
 
-    public Optional<User> findByEmail(String email){
-        return this.userRepository.findByEmail(email);
+    public Optional<AppUser> findByEmail(String email){
+        return this.appUserRepository.findByEmail(email);
     }
 
-    public void deleteUser(User user){
-        this.userRepository.delete(user);
+    public void deleteUser(AppUser appUser){
+        this.appUserRepository.delete(appUser);
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return this.userRepository.
+        return this.appUserRepository.
                 findByEmail(email).
                 orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
     }
 
     public ConfirmationToken signInUser(String email, String password){
 
-        boolean userExists = this.userRepository.
+        boolean userExists = this.appUserRepository.
                 findByEmail(email).
                 isPresent();
 
@@ -49,9 +49,9 @@ public class UserService implements UserDetailsService {
             throw new IllegalStateException("User doesn't exist");
         }
 
-        User user = this.userRepository.findByEmail(email).get();
+        AppUser appUser = this.appUserRepository.findByEmail(email).get();
 
-        if(!this.bCryptPasswordEncoder.matches(password, user.getPassword()) || !user.getEnabled()){
+        if(!this.bCryptPasswordEncoder.matches(password, appUser.getPassword()) || !appUser.getEnabled()){
             throw new IllegalStateException("Wrong email or password");
         }
 
@@ -61,7 +61,7 @@ public class UserService implements UserDetailsService {
                 token,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusMinutes(15),
-                user
+                appUser
         );
 
         this.confirmationTokenService.updateConfirmationToken(confirmationToken);
@@ -71,25 +71,25 @@ public class UserService implements UserDetailsService {
 
     public ConfirmationToken googleSignIn(SignUpRequest request){
 
-        boolean userExists = this.userRepository
+        boolean userExists = this.appUserRepository
                 .findByEmail(request.getEmail())
                 .isPresent();
 
         if(!userExists){
-            UserRole userRole;
+            AppUserRole appUserRole;
 
             if(request.getUserType().equals("google")){
-                userRole = UserRole.GOOGLE_USER;
+                appUserRole = AppUserRole.GOOGLE_USER;
             }else{
-                userRole = UserRole.MAIL_USER;
+                appUserRole = AppUserRole.MAIL_USER;
             }
 
-            User user = new User(request.getFirstName(), request.getLastName(), request.getEmail(), userRole);
+            AppUser appUser = new AppUser(request.getFirstName(), request.getLastName(), request.getEmail(), appUserRole);
 
-            this.userRepository.save(user);
+            this.appUserRepository.save(appUser);
         }
 
-        User user = this.userRepository.findByEmail(request.getEmail()).get();
+        AppUser appUser = this.appUserRepository.findByEmail(request.getEmail()).get();
 
         String token = UUID.randomUUID().toString();
 
@@ -97,7 +97,7 @@ public class UserService implements UserDetailsService {
           token,
           LocalDateTime.now(),
           LocalDateTime.now().plusMinutes(15),
-          user
+                appUser
         );
 
         this.confirmationTokenService.updateConfirmationToken(confirmationToken);
@@ -105,21 +105,19 @@ public class UserService implements UserDetailsService {
         return confirmationToken;
     }
 
-    public ConfirmationToken signUpUser(User user){
+    public ConfirmationToken signUpUser(AppUser appUser){
 
-        boolean userExists = this.userRepository
-                .findByEmail(user.getEmail())
-                .isPresent();
+        boolean userExists = this.appUserRepository.findByEmail(appUser.getEmail()).isPresent();
 
         if(userExists){
             throw new IllegalStateException("Email already taken");
         }
 
-        String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+        String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
 
-        user.setPassword(encodedPassword);
+        appUser.setPassword(encodedPassword);
 
-        this.userRepository.save(user);
+        this.appUserRepository.save(appUser);
 
         String token = UUID.randomUUID().toString();
 
@@ -127,7 +125,7 @@ public class UserService implements UserDetailsService {
           token,
           LocalDateTime.now(),
           LocalDateTime.now().plusMinutes(15),
-          user
+                appUser
         );
 
         this.confirmationTokenService.saveConfirmationToken(confirmationToken);
@@ -136,15 +134,15 @@ public class UserService implements UserDetailsService {
     }
 
     public void enableUser(String email){
-        this.userRepository.enableAppUser(email);
+        this.appUserRepository.enableAppUser(email);
     }
 
     public void disableUser(String email){
-        this.userRepository.disableAppUser(email);
+        this.appUserRepository.disableAppUser(email);
     }
 
     public void updateUserPassword(String email, String newPassword){
-        this.userRepository.updateAppUserPassword(email, newPassword);
+        this.appUserRepository.updateAppUserPassword(email, newPassword);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.example.demo.user;
+package com.example.demo.appUser;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -13,10 +13,8 @@ import java.util.Collections;
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
-@AllArgsConstructor
-@ToString
-@Entity(name="User")
-public class User implements UserDetails {
+@Entity
+public class AppUser implements UserDetails {
 
     @Id
     @SequenceGenerator(
@@ -28,7 +26,7 @@ public class User implements UserDetails {
             strategy = GenerationType.SEQUENCE,
             generator = "user_sequence"
     )
-    private Long userId;
+    private Long id;
 
     private String firstName;
     private String lastName;
@@ -38,29 +36,29 @@ public class User implements UserDetails {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private UserRole userRole;
+    private AppUserRole appUserRole;
 
-    private Boolean locked;
-    private Boolean enabled;
+    private Boolean locked = false;
+    private Boolean enabled = true;
 
-    public User(String firstName, String lastName, String email, UserRole userRole){
+    public AppUser(String firstName, String lastName, String email, AppUserRole appUserRole){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.userRole = userRole;
+        this.appUserRole = appUserRole;
     }
 
-    public User(String firstName, String lastName, String email, String password, UserRole userRole) {
+    public AppUser(String firstName, String lastName, String email, String password, AppUserRole appUserRole) {
         this.firstName = firstName;
         this.lastName =lastName;
         this.email = email;
         this.password = password;
-        this.userRole = userRole;
+        this.appUserRole = appUserRole;
     }
 
     @Override
     public java.util.Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(this.userRole.name());
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(this.appUserRole.name());
 
         return Collections.singletonList(authority);
     }

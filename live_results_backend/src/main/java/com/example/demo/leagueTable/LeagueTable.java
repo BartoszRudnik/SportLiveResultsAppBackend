@@ -27,7 +27,7 @@ public class LeagueTable {
             strategy = GenerationType.SEQUENCE,
             generator = "league_table_sequence"
     )
-    private Long leagueTableId;
+    private Long id;
 
     private int games;
     private int goalsScored;

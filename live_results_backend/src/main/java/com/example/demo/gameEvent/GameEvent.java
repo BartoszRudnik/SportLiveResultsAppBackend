@@ -26,7 +26,7 @@ public class GameEvent {
             strategy = GenerationType.SEQUENCE,
             generator = "game_event_sequence"
     )
-    private Long gameEventId;
+    private Long id;
 
     private int eventMinute;
 
