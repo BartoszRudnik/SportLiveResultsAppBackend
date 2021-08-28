@@ -5,8 +5,8 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/liveResultsApp
-    username: bartosz
+    url: jdbc:postgresql://localhost:5432/liveresultsapp
+    username: postgres
     password: haslo1234
   jpa:
     hibernate:

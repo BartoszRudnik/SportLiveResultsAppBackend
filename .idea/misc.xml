@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/team-service/pom.xml" />
+        <option value="$PROJECT_DIR$/config-service/pom.xml" />
+        <option value="$PROJECT_DIR$/gateway-service/pom.xml" />
+        <option value="$PROJECT_DIR$/service-registry/pom.xml" />
+        <option value="$PROJECT_DIR$/live-score-service/pom.xml" />
+        <option value="$PROJECT_DIR$/live_results_backend/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="corretto-11" project-jdk-type="JavaSDK" />
+</project>

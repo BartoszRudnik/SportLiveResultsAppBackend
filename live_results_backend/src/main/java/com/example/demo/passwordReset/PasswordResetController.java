@@ -19,6 +19,7 @@ public class PasswordResetController {
 
     @PostMapping("/reset/{email}")
     public String reset(@PathVariable String email){
+
         this.newPasswordService.resetPassword(email);
 
         return "Success";

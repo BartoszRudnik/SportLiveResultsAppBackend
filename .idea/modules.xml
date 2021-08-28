@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/SportLiveResultsAppBackend.iml" filepath="$PROJECT_DIR$/.idea/SportLiveResultsAppBackend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/config-service/config-service.iml" filepath="$PROJECT_DIR$/config-service/config-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/live_results_backend/demo.iml" filepath="$PROJECT_DIR$/live_results_backend/demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gateway-service/gateway-service.iml" filepath="$PROJECT_DIR$/gateway-service/gateway-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/live-score-service/live-score-service.iml" filepath="$PROJECT_DIR$/live-score-service/live-score-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/service-registry/service-registry.iml" filepath="$PROJECT_DIR$/service-registry/service-registry.iml" />
+      <module fileurl="file://$PROJECT_DIR$/team-service/team-service.iml" filepath="$PROJECT_DIR$/team-service/team-service.iml" />
+    </modules>
+  </component>
+</project>
