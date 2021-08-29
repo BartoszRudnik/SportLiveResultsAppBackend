@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @Entity(name="League_Table")
-public class LeagueTable {
+public class LeagueTable implements Comparable<LeagueTable>{
 
     @Id
     @SequenceGenerator(
@@ -34,21 +34,13 @@ public class LeagueTable {
     private int goalsConceded;
     private int points;
 
-    @OneToMany(mappedBy = "leagueTable")
-    private List<Team> teams;
-
     @OneToOne
-    @JoinColumn(name = "league_id")
-    private League league;
+    @JoinColumn(name = "team_id")
+    private Team team;
 
-    void addTeam(Team team){
-        if(this.teams == null){
-            this.teams = new ArrayList<>();
-        }
-
-        this.teams.add(team);
-
-        team.setLeagueTable(this);
+    @Override
+    public int compareTo(LeagueTable u) {
+        return Integer.compare(this.points, u.points);
     }
 
 }

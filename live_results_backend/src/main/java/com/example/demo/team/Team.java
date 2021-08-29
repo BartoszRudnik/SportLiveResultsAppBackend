@@ -45,7 +45,7 @@ public class Team {
     @JoinColumn(name = "league_id")
     private League league;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "league_table_id")
     private LeagueTable leagueTable;
 

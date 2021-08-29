@@ -38,18 +38,12 @@ public class League {
     @OneToMany(mappedBy = "league")
     private List<Game> games;
 
-    @OneToOne
-    @JoinColumn(name = "league_table_id")
-    private LeagueTable leagueTable;
-
-    public League(String leagueName, LeagueTable leagueTable){
+    public League(String leagueName){
         this.leagueName = leagueName;
-        this.leagueTable = leagueTable;
     }
 
-    public League(String leagueName, LeagueTable leagueTable, List<Team> teams, List<Game> games){
+    public League(String leagueName, List<Team> teams, List<Game> games){
         this.leagueName = leagueName;
-        this.leagueTable = leagueTable;
         this.teams = teams;
         this.games = games;
     }
