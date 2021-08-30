@@ -47,13 +47,13 @@ public class Game {
     private League league;
 
     private Date gameStartDate;
-    private String gameStatus;
+    private GameStatus gameStatus;
     private int round;
 
     @OneToMany(mappedBy = "game")
     private List<GameEvent> gameEvents;
 
-    public Game(int scoreTeamA, int scoreTeamB, League league, Team teamA, Team teamB, Date gameStartDate, String gameStatus, int round){
+    public Game(int scoreTeamA, int scoreTeamB, League league, Team teamA, Team teamB, Date gameStartDate, GameStatus gameStatus, int round){
         this.scoreTeamA = scoreTeamA;
         this.scoreTeamB = scoreTeamB;
         this.league = league;
@@ -64,7 +64,7 @@ public class Game {
         this.round = round;
     }
 
-    public Game(int scoreTeamA, int scoreTeamB, League league, Team teamA, Team teamB, Date gameStartDate, String gameStatus, List<GameEvent> gameEvents, int round){
+    public Game(int scoreTeamA, int scoreTeamB, League league, Team teamA, Team teamB, Date gameStartDate, GameStatus gameStatus, List<GameEvent> gameEvents, int round){
         this.scoreTeamA = scoreTeamA;
         this.scoreTeamB = scoreTeamB;
         this.league = league;
