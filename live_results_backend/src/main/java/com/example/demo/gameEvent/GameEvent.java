@@ -45,9 +45,11 @@ public class GameEvent {
     @JoinColumn(name = "player_id")
     private Player player;
 
-    public GameEvent(int eventMinute, GameEventType gameEventType){
+    public GameEvent(int eventMinute, GameEventType gameEventType, Team team, Game game){
         this.eventMinute = eventMinute;
         this.gameEventType = gameEventType;
+        this.team = team;
+        this.game = game;
     }
 
     public GameEvent(int eventMinute, GameEventType gameEventType, Team team, Game game, Player player){

@@ -12,6 +12,14 @@ public class GameService {
 
     private final GameRepository gameRepository;
 
+    public Game getGame(Long gameId) {
+        if (this.gameRepository.findById(gameId).isPresent()){
+            return this.gameRepository.findById(gameId).get();
+        }else{
+            return null;
+        }
+    }
+
     public List<GameEvent> getGameEvents(Long gameId){
         if(this.checkIfGameNotExist(gameId)){
             throw new IllegalStateException("Game doesn't exist");

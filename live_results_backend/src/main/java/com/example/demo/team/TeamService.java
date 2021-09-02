@@ -16,6 +16,14 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final GameRepository gameRepository;
 
+    public Team getTeam(Long teamId){
+        if(this.teamRepository.findById(teamId).isPresent()){
+            return this.teamRepository.findById(teamId).get();
+        }else{
+            return null;
+        }
+    }
+
     public List<Player> getTeamPlayers(Long teamId){
         if(this.checkIfTeamNotExist(teamId)){
             throw new IllegalStateException("Team doesn't exist");
