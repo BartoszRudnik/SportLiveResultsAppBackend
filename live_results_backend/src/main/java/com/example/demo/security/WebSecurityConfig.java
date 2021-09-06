@@ -27,6 +27,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 antMatchers("/api/v*/resetToken/**").permitAll().
                 antMatchers("/api/v*/newPassword/**").permitAll().
                 antMatchers("/api/v*/passwordReset/**").permitAll().
+                antMatchers("/api/v*/team/**").permitAll().
+                antMatchers("/api/v*/game/**").permitAll().
+                antMatchers("/api/v*/player/**").permitAll().
+                antMatchers("/api/v*/league/**").permitAll().
                 anyRequest().
                 authenticated().and()
                 .formLogin();

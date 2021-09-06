@@ -65,6 +65,9 @@ public class GameEventService {
 
         GameEvent newGameEvent = new GameEvent(request.getMinute(), eventType, team, game);
 
+        team.addGameEvent(newGameEvent);
+        game.addGameEvent(newGameEvent);
+
         this.gameEventRepository.save(newGameEvent);
     }
 
@@ -76,6 +79,10 @@ public class GameEventService {
         Player player = this.playerService.getPlayer(request.getPlayerId());
 
         GameEvent newGameEvent = new GameEvent(request.getMinute(), eventType, team, game, player);
+
+        team.addGameEvent(newGameEvent);
+        game.addGameEvent(newGameEvent);
+        player.addGameEvent(newGameEvent);
 
         this.gameEventRepository.save(newGameEvent);
     }
