@@ -18,7 +18,6 @@ import java.util.List;
 @ToString
 @Entity(name="Team")
 public class Team {
-
     @Id
     @SequenceGenerator(
             name = "team_sequence",
@@ -75,5 +74,4 @@ public class Team {
 
         player.setTeam(this);
     }
-
 }

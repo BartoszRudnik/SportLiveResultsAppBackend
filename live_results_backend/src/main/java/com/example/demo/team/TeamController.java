@@ -12,7 +12,6 @@ import java.util.List;
 @RequestMapping(path = "api/v1/team")
 @AllArgsConstructor
 public class TeamController {
-
     private final TeamService teamService;
 
     @GetMapping("/getTeam/{teamId}")
@@ -39,5 +38,4 @@ public class TeamController {
     public List<Game> getAllTeamScheduledGames(@PathVariable Long teamId){
         return this.teamService.getAllTeamScheduledGame(teamId);
     }
-
 }

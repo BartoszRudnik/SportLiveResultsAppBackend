@@ -1,6 +1,7 @@
 package com.example.demo.player;
 
 import com.example.demo.player.dto.AddPlayerRequest;
+import com.example.demo.player.dto.UpdatePlayerDataRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "api/v1/player")
 @AllArgsConstructor
 public class PlayerController {
-
     private final PlayerService playerService;
 
     @PostMapping("/addPlayer")
@@ -22,4 +22,13 @@ public class PlayerController {
         return this.playerService.getPlayer(id);
     }
 
+    @PostMapping("/updatePlayerTeam/{playerId}/{newTeamId}")
+    public void updatePlayerTeam(@PathVariable Long playerId, @PathVariable Long newTeamId){
+        this.playerService.updatePlayerTeam(playerId, newTeamId);
+    }
+
+    @PostMapping("/updatePlayerData/{playerId}")
+    public void updatePlayerData(@PathVariable Long playerId, @RequestBody UpdatePlayerDataRequest request){
+        this.playerService.updatePlayerData(playerId, request);
+    }
 }

@@ -6,6 +6,7 @@ import com.example.demo.team.Team;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -46,14 +47,14 @@ public class Game {
     @JoinColumn(name = "league_id")
     private League league;
 
-    private Date gameStartDate;
+    private LocalDateTime gameStartDate;
     private GameStatus gameStatus;
     private int round;
 
     @OneToMany(mappedBy = "game")
     private List<GameEvent> gameEvents;
 
-    public Game(int scoreTeamA, int scoreTeamB, League league, Team teamA, Team teamB, Date gameStartDate, GameStatus gameStatus, int round){
+    public Game(int scoreTeamA, int scoreTeamB, League league, Team teamA, Team teamB, LocalDateTime gameStartDate, GameStatus gameStatus, int round){
         this.scoreTeamA = scoreTeamA;
         this.scoreTeamB = scoreTeamB;
         this.league = league;
@@ -64,7 +65,7 @@ public class Game {
         this.round = round;
     }
 
-    public Game(int scoreTeamA, int scoreTeamB, League league, Team teamA, Team teamB, Date gameStartDate, GameStatus gameStatus, List<GameEvent> gameEvents, int round){
+    public Game(int scoreTeamA, int scoreTeamB, League league, Team teamA, Team teamB, LocalDateTime gameStartDate, GameStatus gameStatus, List<GameEvent> gameEvents, int round){
         this.scoreTeamA = scoreTeamA;
         this.scoreTeamB = scoreTeamB;
         this.league = league;

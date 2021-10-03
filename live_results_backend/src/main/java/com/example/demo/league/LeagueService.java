@@ -21,6 +21,14 @@ public class LeagueService {
     private final LeagueRepository leagueRepository;
     private final GameRepository gameRepository;
 
+    public League findById(Long id){
+        if(this.leagueRepository.findById(id).isPresent()){
+            return this.leagueRepository.findById(id).get();
+        }else{
+            return null;
+        }
+    }
+
     private boolean chefIfNotExist(Long leagueId){
         return this.leagueRepository.findById(leagueId).isEmpty();
     }
