@@ -1,5 +1,8 @@
 package com.example.demo.appUser;
 
+import com.example.demo.game.Game;
+import com.example.demo.league.League;
+import com.example.demo.team.Team;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -40,6 +45,30 @@ public class AppUser implements UserDetails {
 
     private Boolean locked = false;
     private Boolean enabled = true;
+
+    @ManyToMany
+    @JoinTable(
+            name = "favorite_games",
+            joinColumns = @JoinColumn(name = "app_user_id"),
+            inverseJoinColumns = @JoinColumn(name = "game_id")
+    )
+    private Set<Game> favoriteGames;
+
+    @ManyToMany
+    @JoinTable(
+            name = "favorite_leagues",
+            joinColumns = @JoinColumn(name = "app_user_id"),
+            inverseJoinColumns = @JoinColumn(name = "league_id")
+    )
+    private Set<League> favoriteLeagues;
+
+    @ManyToMany
+    @JoinTable(
+            name = "favorite_teams",
+            joinColumns = @JoinColumn(name = "app_user_id"),
+            inverseJoinColumns = @JoinColumn(name = "team_id")
+    )
+    private Set<Team> favoriteTeams;
 
     public AppUser(String firstName, String lastName, String email, AppUserRole appUserRole){
         this.firstName = firstName;
@@ -93,4 +122,51 @@ public class AppUser implements UserDetails {
         return this.enabled;
     }
 
+    public void addFavoriteGame(Game game){
+        if(this.favoriteGames == null){
+            this.favoriteGames = new HashSet<>();
+        }
+
+        this.favoriteGames.add(game);
+        game.addUser(this);
+    }
+
+    public void removeFavoriteGame(Game game){
+        if(this.favoriteGames != null){
+            this.favoriteGames.remove(game);
+            game.removeUser(this);
+        }
+    }
+
+    public void addFavoriteTeam(Team team){
+        if(this.favoriteTeams == null){
+            this.favoriteTeams = new HashSet<>();
+        }
+
+        this.favoriteTeams.add(team);
+        team.addUser(this);
+    }
+
+    public void removeFavoriteTeam(Team team){
+        if(this.favoriteTeams != null){
+            this.favoriteTeams.remove(team);
+            team.removeUser(this);
+        }
+    }
+
+    public void addFavoriteLeague(League league){
+        if(this.favoriteLeagues == null){
+            this.favoriteLeagues = new HashSet<>();
+        }
+
+        this.favoriteLeagues.add(league);
+        league.addUser(this);
+    }
+
+    public void removeFavoriteLeague(League league){
+        if(this.favoriteLeagues != null){
+            this.favoriteLeagues.remove(league);
+            league.removeUser(this);
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.demo.team;
 
+import com.example.demo.appUser.AppUser;
 import com.example.demo.gameEvent.GameEvent;
 import com.example.demo.league.League;
 import com.example.demo.leagueTable.LeagueTable;
@@ -8,7 +9,9 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -48,6 +51,9 @@ public class Team {
     @JoinColumn(name = "league_table_id")
     private LeagueTable leagueTable;
 
+    @ManyToMany(mappedBy = "favoriteGames")
+    private Set<AppUser> users;
+
     public Team(String teamName, String city, String stadiumName, List<Player> players, League league, LeagueTable leagueTable){
         this.teamName = teamName;
         this.city = city;
@@ -73,5 +79,19 @@ public class Team {
         this.players.add(player);
 
         player.setTeam(this);
+    }
+
+    public void addUser(AppUser user){
+        if(this.users == null){
+            this.users = new HashSet<>();
+        }
+
+        this.users.add(user);
+    }
+
+    public void removeUser(AppUser user){
+        if(this.users != null){
+            this.users.remove(user);
+        }
     }
 }

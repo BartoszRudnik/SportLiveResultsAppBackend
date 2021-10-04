@@ -1,8 +1,15 @@
 package com.example.demo.appUser;
 
+import com.example.demo.appUser.dto.UserFavoritesRequest;
 import com.example.demo.confirmationToken.ConfirmationToken;
 import com.example.demo.confirmationToken.ConfirmationTokenService;
+import com.example.demo.game.Game;
+import com.example.demo.game.GameRepository;
+import com.example.demo.league.League;
+import com.example.demo.league.LeagueRepository;
 import com.example.demo.signUp.dto.SignUpRequest;
+import com.example.demo.team.Team;
+import com.example.demo.team.TeamRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,8 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -23,6 +29,9 @@ public class AppUserService implements UserDetailsService {
     private final AppUserRepository appUserRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
+    private final TeamRepository teamRepository;
+    private final GameRepository gameRepository;
+    private final LeagueRepository leagueRepository;
 
     public Optional<AppUser> findByEmail(String email){
         return this.appUserRepository.findByEmail(email);
@@ -145,4 +154,81 @@ public class AppUserService implements UserDetailsService {
         this.appUserRepository.updateAppUserPassword(email, newPassword);
     }
 
+    public void changeTeamFavoriteStatus(String userMail, Long teamId) {
+        if(this.appUserRepository.findByEmail(userMail).isPresent() && this.teamRepository.findById(teamId).isPresent()){
+
+            AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
+            Team team = this.teamRepository.findById(teamId).get();
+
+            if(appUser.getFavoriteTeams().contains(team)){
+                appUser.removeFavoriteTeam(team);
+            }else{
+                appUser.addFavoriteTeam(team);
+            }
+
+            this.appUserRepository.save(appUser);
+        }
+    }
+
+    public void changeGameFavoriteStatus(String userMail, Long gameId) {
+        if(this.appUserRepository.findByEmail(userMail).isPresent() && this.gameRepository.findById(gameId).isPresent()){
+
+            AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
+            Game game = this.gameRepository.findById(gameId).get();
+
+            if(appUser.getFavoriteGames().contains(game)){
+                appUser.removeFavoriteGame(game);
+            }else{
+                appUser.addFavoriteGame(game);
+            }
+
+            this.appUserRepository.save(appUser);
+        }
+    }
+
+    public void changeLeagueFavoriteStatus(String userMail, Long leagueId) {
+        if(this.appUserRepository.findByEmail(userMail).isPresent() && this.leagueRepository.findById(leagueId).isPresent()){
+
+            AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
+            League league = this.leagueRepository.findById(leagueId).get();
+
+            if(appUser.getFavoriteLeagues().contains(league)){
+                appUser.removeFavoriteLeague(league);
+            }else{
+                appUser.addFavoriteLeague(league);
+            }
+
+            this.appUserRepository.save(appUser);
+        }
+    }
+
+    public UserFavoritesRequest getUserFavorites(String userMail) {
+        if(this.appUserRepository.findByEmail(userMail).isPresent()){
+            AppUser user = this.appUserRepository.findByEmail(userMail).get();
+
+            List<Long> games = new ArrayList<>();
+            List<Long> leagues = new ArrayList<>();
+            List<Long> teams = new ArrayList<>();
+
+            Set<Game> userGames = user.getFavoriteGames();
+            Set<League> userLeagues = user.getFavoriteLeagues();
+            Set<Team> userTeams = user.getFavoriteTeams();
+
+            for(Game game : userGames){
+                games.add(game.getId());
+            }
+
+            for(League league : userLeagues){
+                leagues.add(league.getId());
+            }
+
+            for(Team team : userTeams){
+                teams.add(team.getId());
+            }
+
+            return new UserFavoritesRequest(games, teams, leagues);
+        }else{
+            return null;
+        }
+    }
 }

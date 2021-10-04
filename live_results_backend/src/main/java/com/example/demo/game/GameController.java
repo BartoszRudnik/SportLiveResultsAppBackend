@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "api/v1/game")
 @AllArgsConstructor
 public class GameController {
-
     private final GameService gameService;
 
     @GetMapping("/getGame/{gameId}")
