@@ -38,9 +38,12 @@ public class LeagueTable implements Comparable<LeagueTable>{
     @JoinColumn(name = "team_id")
     private Team team;
 
+    public LeagueTable(Team team){
+        this.team = team;
+    }
+
     @Override
     public int compareTo(LeagueTable u) {
         return Integer.compare(this.points, u.points);
     }
-
 }

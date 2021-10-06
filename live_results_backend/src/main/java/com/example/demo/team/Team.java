@@ -54,13 +54,12 @@ public class Team {
     @ManyToMany(mappedBy = "favoriteGames")
     private Set<AppUser> users;
 
-    public Team(String teamName, String city, String stadiumName, List<Player> players, League league, LeagueTable leagueTable){
+    public Team(String teamName, String city, String stadiumName, List<Player> players, League league){
         this.teamName = teamName;
         this.city = city;
         this.stadiumName = stadiumName;
         this.players = players;
         this.league = league;
-        this.leagueTable = leagueTable;
     }
 
     public void addGameEvent(GameEvent event){

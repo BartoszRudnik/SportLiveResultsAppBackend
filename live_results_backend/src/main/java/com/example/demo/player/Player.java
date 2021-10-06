@@ -1,5 +1,7 @@
 package com.example.demo.player;
 
+import com.example.demo.appUser.AppUser;
+import com.example.demo.game.Game;
 import com.example.demo.gameEvent.GameEvent;
 import com.example.demo.team.Team;
 import lombok.*;
@@ -7,6 +9,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -41,6 +44,9 @@ public class Player {
 
     @OneToMany(mappedBy = "player")
     List<GameEvent> gameEvents;
+
+    @ManyToMany(mappedBy = "players")
+    private Set<Game> games;
 
     public Player(String firstName, String lastName, String position, int numberOfGoals, int numberOfAssists){
         this.firstName = firstName;

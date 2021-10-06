@@ -14,5 +14,6 @@ public interface GameRepository extends JpaRepository<Game, Long> {
 
     List<Game> findAllByLeagueAndGameStatusAndTeamAOrTeamB(League league, GameStatus gameStatus, Team teamA, Team teamB);
     List<Game> findAllByLeagueAndTeamAOrTeamB(League league, Team teamA, Team teamB);
+    List<Game> findAllByLeagueAndGameStatusAndRound(League league, GameStatus gameStatus, int round);
 
 }

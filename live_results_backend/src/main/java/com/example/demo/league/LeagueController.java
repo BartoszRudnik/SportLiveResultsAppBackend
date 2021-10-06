@@ -1,6 +1,7 @@
 package com.example.demo.league;
 
 import com.example.demo.game.Game;
+import com.example.demo.league.dto.AddLeagueRequest;
 import com.example.demo.leagueTable.LeagueTable;
 import com.example.demo.player.Player;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,11 @@ import java.util.List;
 public class LeagueController {
 
     private final LeagueService leagueService;
+
+    @PostMapping("/addLeague")
+    public Long addLeague(@RequestBody AddLeagueRequest request){
+        return this.leagueService.addLeague(request);
+    }
 
     @GetMapping("/getBestScorers/{leagueId}")
     public List<Player> getBestScorers(@PathVariable Long leagueId){
@@ -36,9 +42,23 @@ public class LeagueController {
         return this.leagueService.getLeagueTable(leagueId);
     }
 
-    @GetMapping("/getGamesByRound/{leagueId}/{round}")
-    public List<Game> getGamesByRound(@PathVariable Long leagueId, @PathVariable int round){
+    @GetMapping("/getAllGamesByRound/{leagueId}/{round}")
+    public List<Game> getAllGamesByRound(@PathVariable Long leagueId, @PathVariable int round){
         return this.leagueService.getGamesByRound(leagueId, round);
     }
 
+    @GetMapping("/getLiveGamesByRound/{leagueId}/{round}")
+    public List<Game> getLiveGamesByRound(@PathVariable Long leagueId, @PathVariable int round){
+        return this.leagueService.getLiveGamesByRound(leagueId, round);
+    }
+
+    @GetMapping("/getScheduledGamesByRound/{leagueId}/{round}")
+    public List<Game> getScheduledGamesByRound(@PathVariable Long leagueId, @PathVariable int round){
+        return this.leagueService.getScheduledGamesByRound(leagueId, round);
+    }
+
+    @GetMapping("/getFinishedGamesByRound/{leagueId}/{round}")
+    public List<Game> getFinishedGamesByRound(@PathVariable Long leagueId, @PathVariable int round){
+        return this.leagueService.getFinishedGamesByRound(leagueId, round);
+    }
 }

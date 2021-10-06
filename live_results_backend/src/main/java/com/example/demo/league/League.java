@@ -44,8 +44,15 @@ public class League {
     @ManyToMany(mappedBy = "favoriteGames")
     private Set<AppUser> users;
 
+    private LeagueLevel leagueLevel;
+
     public League(String leagueName){
         this.leagueName = leagueName;
+    }
+
+    public League(String leagueName, LeagueLevel leagueLevel){
+        this.leagueName = leagueName;
+        this.leagueLevel = leagueLevel;
     }
 
     public League(String leagueName, List<Team> teams, List<Game> games){

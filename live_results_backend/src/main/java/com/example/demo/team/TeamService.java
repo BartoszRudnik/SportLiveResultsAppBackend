@@ -3,10 +3,17 @@ package com.example.demo.team;
 import com.example.demo.game.Game;
 import com.example.demo.game.GameRepository;
 import com.example.demo.game.GameStatus;
+import com.example.demo.league.League;
+import com.example.demo.league.LeagueRepository;
+import com.example.demo.leagueTable.LeagueTable;
+import com.example.demo.leagueTable.LeagueTableRepository;
 import com.example.demo.player.Player;
+import com.example.demo.player.PlayerRepository;
+import com.example.demo.team.dto.AddTeamRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -15,6 +22,9 @@ public class TeamService {
 
     private final TeamRepository teamRepository;
     private final GameRepository gameRepository;
+    private final PlayerRepository playerRepository;
+    private final LeagueRepository leagueRepository;
+    private final LeagueTableRepository leagueTableRepository;
 
     public Team getTeam(Long teamId){
         if(this.teamRepository.findById(teamId).isPresent()){
@@ -66,4 +76,32 @@ public class TeamService {
         return this.teamRepository.findById(teamId).isEmpty();
     }
 
+    public Long addTeam(AddTeamRequest request) {
+        List<Player> teamPlayers = new ArrayList<>();
+        League league = null;
+
+        for(Long playerId : request.getPlayers()){
+            if(this.playerRepository.findById(playerId).isPresent()){
+                Player newPlayer = this.playerRepository.findById(playerId).get();
+
+                teamPlayers.add(newPlayer);
+            }
+        }
+
+        if(this.leagueRepository.findById(request.getLeagueId()).isPresent()){
+            league = this.leagueRepository.findById(request.getLeagueId()).get();
+        }
+
+        Team newTeam = new Team(request.getTeamName(), request.getCity(), request.getStadiumName(), teamPlayers, league);
+
+        this.teamRepository.save(newTeam);
+
+        LeagueTable newLeagueTable = new LeagueTable(newTeam);
+        newTeam.setLeagueTable(newLeagueTable);
+
+        this.leagueTableRepository.save(newLeagueTable);
+        this.teamRepository.save(newTeam);
+
+        return newTeam.getId();
+    }
 }
