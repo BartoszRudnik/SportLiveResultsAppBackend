@@ -10,6 +10,7 @@ import com.example.demo.leagueTable.LeagueTableRepository;
 import com.example.demo.player.Player;
 import com.example.demo.player.PlayerRepository;
 import com.example.demo.team.dto.AddTeamRequest;
+import com.example.demo.team.dto.SingleTeamResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -103,5 +104,23 @@ public class TeamService {
         this.teamRepository.save(newTeam);
 
         return newTeam.getId();
+    }
+
+    public List<SingleTeamResponse> getTeamsFromLeague(Long leagueId) {
+        if(this.leagueRepository.findById(leagueId).isPresent()) {
+            League league = this.leagueRepository.findById(leagueId).get();
+
+            List<Team> teams = this.teamRepository.findAllByLeague(league);
+
+            List<SingleTeamResponse> resultList = new ArrayList<>();
+
+            for(Team team : teams){
+                resultList.add(new SingleTeamResponse(team.getId(), team.getTeamName(), team.getCity(), team.getStadiumName()));
+            }
+
+            return resultList;
+        }else{
+            return new ArrayList<>();
+        }
     }
 }

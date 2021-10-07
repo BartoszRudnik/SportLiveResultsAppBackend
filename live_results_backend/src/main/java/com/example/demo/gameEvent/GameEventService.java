@@ -90,9 +90,12 @@ public class GameEventService {
     private GameEventType gameEventTypeFromString(String eventType){
         if(eventType.equalsIgnoreCase("goal")){
             return GameEventType.GOAL;
-        }else if(eventType.equalsIgnoreCase("substitution")){
-            return GameEventType.SUBSTITUTION;
-        }else if(eventType.equalsIgnoreCase("yellow_card")){
+        }else if(eventType.equalsIgnoreCase("substitution_on")){
+            return GameEventType.SUBSTITUTION_ON;
+        }else if(eventType.equalsIgnoreCase("substitution_of")){
+            return GameEventType.SUBSTITUTION_OF;
+        }
+        else if(eventType.equalsIgnoreCase("yellow_card")){
             return GameEventType.YELLOW_CARD;
         }else{
             return GameEventType.RED_CARD;

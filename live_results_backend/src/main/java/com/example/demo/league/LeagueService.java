@@ -9,6 +9,7 @@ import com.example.demo.gamePlayer.GamePlayerStatus;
 import com.example.demo.league.dto.AddLeagueRequest;
 import com.example.demo.league.dto.GameEventsResponse;
 import com.example.demo.league.dto.GetGamesResponse;
+import com.example.demo.league.dto.GetLeaguesResponse;
 import com.example.demo.leagueTable.LeagueTable;
 import com.example.demo.player.Player;
 import com.example.demo.team.Team;
@@ -68,7 +69,7 @@ public class LeagueService {
             List<GameEventsResponse> gameEventsResponses = new ArrayList<>();
 
             for(GameEvent gameEvent : gameEvents){
-                gameEventsResponses.add(new GameEventsResponse(gameEvent.getEventMinute(), gameEvent.getPlayer().getId(), gameEvent.getGameEventType().toString()));
+                gameEventsResponses.add(new GameEventsResponse(gameEvent.getEventMinute(), gameEvent.getPlayer().getId(), gameEvent.getTeam().getId(), gameEvent.getGameEventType().toString()));
             }
 
             GetGamesResponse responseElement = new GetGamesResponse(game.getId(), game.getTeamA().getId(), game.getTeamB().getId(), game.getScoreTeamA(), game.getScoreTeamB(), game.getGameStartDate(), game.getTeamA().getStadiumName(), gameEventsResponses, squadTeamA, squadTeamB, substitutionsTeamA, substitutionsTeamB);
@@ -140,40 +141,55 @@ public class LeagueService {
         return leaguePlayers.stream().limit(50).collect(Collectors.toList());
     }
 
-    public List<GetGamesResponse> getLiveGamesByRound(Long leagueId, int round) {
+    public List<Long> getLiveGamesByRound(Long leagueId, int round) {
         if(this.leagueRepository.findById(leagueId).isPresent()){
             League league = this.leagueRepository.findById(leagueId).get();
             GameStatus gameStatus = GameStatus.IN_PROGRESS;
 
             List<Game> games = this.gameRepository.findAllByLeagueAndGameStatusAndRound(league, gameStatus, round);
+            List<Long> gameIds = new ArrayList<>();
 
-            return this.getGames(games);
+            for(Game game : games){
+                gameIds.add(game.getId());
+            }
+
+            return gameIds;
         }else{
             return new ArrayList<>();
         }
     }
 
-    public List<GetGamesResponse> getFinishedGamesByRound(Long leagueId, int round){
+    public List<Long> getFinishedGamesByRound(Long leagueId, int round){
         if(this.leagueRepository.findById(leagueId).isPresent()){
             League league = this.leagueRepository.findById(leagueId).get();
             GameStatus gameStatus = GameStatus.FINISHED;
 
             List<Game> games = this.gameRepository.findAllByLeagueAndGameStatusAndRound(league, gameStatus, round);
+            List<Long> gameIds = new ArrayList<>();
 
-            return this.getGames(games);
+            for(Game game : games){
+                gameIds.add(game.getId());
+            }
+
+            return gameIds;
         }else{
             return new ArrayList<>();
         }
     }
 
-    public List<GetGamesResponse> getScheduledGamesByRound(Long leagueId, int round){
+    public List<Long> getScheduledGamesByRound(Long leagueId, int round){
         if(this.leagueRepository.findById(leagueId).isPresent()){
             League league = this.leagueRepository.findById(leagueId).get();
             GameStatus gameStatus = GameStatus.SCHEDULED;
 
             List<Game> games = this.gameRepository.findAllByLeagueAndGameStatusAndRound(league, gameStatus, round);
+            List<Long> gameIds = new ArrayList<>();
 
-            return this.getGames(games);
+            for(Game game : games){
+                gameIds.add(game.getId());
+            }
+
+            return gameIds;
         }else{
             return new ArrayList<>();
         }
@@ -207,5 +223,18 @@ public class LeagueService {
         }else{
             return LeagueLevel.KlasaB;
         }
+    }
+
+    public List<GetLeaguesResponse> findAllByLeagueLevel(String leagueLevelName) {
+        LeagueLevel leagueLevel = this.stringToLeagueLevel(leagueLevelName);
+
+        List<League> leagues = this.leagueRepository.findAllByLeagueLevel(leagueLevel);
+        List<GetLeaguesResponse> resultList = new ArrayList<>();
+
+        for(League league : leagues){
+            resultList.add(new GetLeaguesResponse(league.getId(), league.getLeagueName(), league.getLeagueLevel().toString()));
+        }
+
+        return resultList;
     }
 }

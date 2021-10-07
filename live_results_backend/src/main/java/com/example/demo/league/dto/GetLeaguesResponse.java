@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class GameEventsResponse {
-    private int gameMinute;
-    private Long playerId;
-    private Long teamId;
-    private String eventType;
+public class GetLeaguesResponse {
+    private Long leagueId;
+    private String leagueName;
+    private String leagueLevel;
 }

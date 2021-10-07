@@ -1,9 +1,12 @@
 package com.example.demo.player;
 
 import com.example.demo.player.dto.AddPlayerRequest;
+import com.example.demo.player.dto.SinglePlayerResponse;
 import com.example.demo.player.dto.UpdatePlayerDataRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -11,6 +14,11 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class PlayerController {
     private final PlayerService playerService;
+
+    @GetMapping("/getPlayersFromLeague/{leagueId}")
+    public List<SinglePlayerResponse> getPlayersFromLeague(@PathVariable Long leagueId){
+        return this.playerService.getPlayerFromLeague(leagueId);
+    }
 
     @PostMapping("/addPlayer")
     public void addPlayer(@RequestBody AddPlayerRequest request){
