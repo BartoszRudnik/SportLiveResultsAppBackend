@@ -7,10 +7,7 @@ import com.example.demo.team.Team;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -93,5 +90,18 @@ public class League {
         if(this.users != null){
             this.users.remove(user);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        League league = (League) o;
+        return id.equals(league.id) && leagueName.equals(league.leagueName) && leagueLevel == league.leagueLevel;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, leagueName, leagueLevel);
     }
 }

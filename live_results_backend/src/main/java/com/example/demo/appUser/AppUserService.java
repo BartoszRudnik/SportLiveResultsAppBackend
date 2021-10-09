@@ -160,7 +160,7 @@ public class AppUserService implements UserDetailsService {
             AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
             Team team = this.teamRepository.findById(teamId).get();
 
-            if(appUser.getFavoriteTeams().contains(team)){
+            if(appUser.getFavoriteTeams() != null && appUser.getFavoriteTeams().contains(team)){
                 appUser.removeFavoriteTeam(team);
             }else{
                 appUser.addFavoriteTeam(team);
@@ -176,7 +176,7 @@ public class AppUserService implements UserDetailsService {
             AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
             Game game = this.gameRepository.findById(gameId).get();
 
-            if(appUser.getFavoriteGames().contains(game)){
+            if(appUser.getFavoriteGames() != null && appUser.getFavoriteGames().contains(game)){
                 appUser.removeFavoriteGame(game);
             }else{
                 appUser.addFavoriteGame(game);
@@ -192,7 +192,7 @@ public class AppUserService implements UserDetailsService {
             AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
             League league = this.leagueRepository.findById(leagueId).get();
 
-            if(appUser.getFavoriteLeagues().contains(league)){
+            if(appUser.getFavoriteLeagues() != null && appUser.getFavoriteLeagues().contains(league)){
                 appUser.removeFavoriteLeague(league);
             }else{
                 appUser.addFavoriteLeague(league);
@@ -229,6 +229,57 @@ public class AppUserService implements UserDetailsService {
             return new UserFavoritesRequest(games, teams, leagues);
         }else{
             return null;
+        }
+    }
+
+    public Set<Long> getUserFavoritesLeagues(String userMail) {
+        if(this.appUserRepository.findByEmail(userMail).isPresent()){
+            AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
+
+            Set<League> favoriteLeagues = appUser.getFavoriteLeagues();
+            Set<Long> result = new HashSet<>();
+
+            for(League league : favoriteLeagues){
+                result.add(league.getId());
+            }
+
+            return result;
+        }else{
+            return new HashSet<>();
+        }
+    }
+
+    public Set<Long> getUserFavoriteGames(String userMail){
+        if(this.appUserRepository.findByEmail(userMail).isPresent()){
+            AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
+
+            Set<Game> favoriteGames = appUser.getFavoriteGames();
+            Set<Long> result = new HashSet<>();
+
+            for(Game game : favoriteGames){
+                result.add(game.getId());
+            }
+
+            return result;
+        }else{
+            return new HashSet<>();
+        }
+    }
+
+    public Set<Long> getUserFavoriteTeams(String userMail) {
+        if(this.appUserRepository.findByEmail(userMail).isPresent()){
+            AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
+
+            Set<Team> favoriteTeams = appUser.getFavoriteTeams();
+            Set<Long> result = new HashSet<>();
+
+            for(Team team : favoriteTeams){
+                result.add(team.getId());
+            }
+
+            return result;
+        }else{
+            return new HashSet<>();
         }
     }
 }

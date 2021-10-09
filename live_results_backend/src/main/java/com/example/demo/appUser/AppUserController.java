@@ -4,6 +4,9 @@ import com.example.demo.appUser.dto.UserFavoritesRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Set;
+
 @RestController
 @CrossOrigin
 @RequestMapping(path = "api/v1/user")
@@ -29,5 +32,20 @@ public class AppUserController {
     @GetMapping("/getUserFavorites/{userMail}")
     public UserFavoritesRequest getUserFavorites(@PathVariable String userMail){
         return this.appUserService.getUserFavorites(userMail);
+    }
+
+    @GetMapping("/getUserFavoriteLeagues/{userMail}")
+    public Set<Long> getUserFavoritesLeagues(@PathVariable String userMail){
+        return this.appUserService.getUserFavoritesLeagues(userMail);
+    }
+
+    @GetMapping("/getUserFavoriteTeams/{userMail}")
+    public Set<Long> getUserFavoriteTeams(@PathVariable String userMail){
+        return this.appUserService.getUserFavoriteTeams(userMail);
+    }
+
+    @GetMapping("/getUserFavoriteGames/{userMail}")
+    public Set<Long> getUserFavoriteGames(@PathVariable String userMail){
+        return this.appUserService.getUserFavoriteGames(userMail);
     }
 }
