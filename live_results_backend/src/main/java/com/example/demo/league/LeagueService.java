@@ -6,10 +6,7 @@ import com.example.demo.game.GameStatus;
 import com.example.demo.gameEvent.GameEvent;
 import com.example.demo.gamePlayer.GamePlayer;
 import com.example.demo.gamePlayer.GamePlayerStatus;
-import com.example.demo.league.dto.AddLeagueRequest;
-import com.example.demo.league.dto.GameEventsResponse;
-import com.example.demo.league.dto.GetGamesResponse;
-import com.example.demo.league.dto.GetLeaguesResponse;
+import com.example.demo.league.dto.*;
 import com.example.demo.leagueTable.LeagueTable;
 import com.example.demo.player.Player;
 import com.example.demo.team.Team;
@@ -91,7 +88,7 @@ public class LeagueService {
       return this.getGames(games);
     }
 
-    public List<LeagueTable> getLeagueTable(Long leagueId){
+    public List<GetLeagueTableResponse> getLeagueTable(Long leagueId){
         if(this.chefIfNotExist(leagueId)){
             throw new IllegalStateException("League doesn't exist");
         }
@@ -99,12 +96,11 @@ public class LeagueService {
         League league = this.leagueRepository.findById(leagueId).get();
 
         List<Team> leagueTeams = league.getTeams();
-        List<LeagueTable> leagueTables = new ArrayList<>();
+        List<GetLeagueTableResponse> leagueTables = new ArrayList<>();
 
         for(Team team : leagueTeams){
-            leagueTables.add(team.getLeagueTable());
+            leagueTables.add(new GetLeagueTableResponse(team.getLeagueTable().getTeam().getTeamName(), team.getLeagueTable().getGames(), team.getLeagueTable().getGoalsScored(), team.getLeagueTable().getGoalsConceded(), team.getLeagueTable().getPoints()));
         }
-
         Collections.sort(leagueTables);
 
         return leagueTables;

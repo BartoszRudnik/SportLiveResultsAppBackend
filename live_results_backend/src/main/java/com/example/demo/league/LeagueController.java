@@ -3,6 +3,7 @@ package com.example.demo.league;
 import com.example.demo.game.Game;
 import com.example.demo.league.dto.AddLeagueRequest;
 import com.example.demo.league.dto.GetGamesResponse;
+import com.example.demo.league.dto.GetLeagueTableResponse;
 import com.example.demo.league.dto.GetLeaguesResponse;
 import com.example.demo.leagueTable.LeagueTable;
 import com.example.demo.player.Player;
@@ -44,7 +45,7 @@ public class LeagueController {
     }
 
     @GetMapping("/getLeagueTable/{leagueId}")
-    public List<LeagueTable> getLeagueTable(@PathVariable Long leagueId){
+    public List<GetLeagueTableResponse> getLeagueTable(@PathVariable Long leagueId){
         return this.leagueService.getLeagueTable(leagueId);
     }
 
