@@ -24,7 +24,6 @@ public class PlayerService {
 
     public void addPlayer(AddPlayerRequest request){
         Team team = this.teamService.getTeam(request.getTeamId());
-
         Player newPlayer = new Player(request.getFirstName(), request.getLastName(), request.getPosition(), request.getNumberOfGoals(), request.getNumberOfAssists(), team);
 
         this.playerRepository.save(newPlayer);

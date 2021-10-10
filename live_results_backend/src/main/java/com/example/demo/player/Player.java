@@ -53,6 +53,7 @@ public class Player {
         this.lastName = lastName;
         this.numberOfGoals = numberOfGoals;
         this.numberOfAssists = numberOfAssists;
+        this.position = position;
     }
 
     public Player(String firstName, String lastName, String position, int numberOfGoals, int numberOfAssists, Team team){
@@ -61,6 +62,7 @@ public class Player {
         this.numberOfGoals = numberOfGoals;
         this.numberOfAssists = numberOfAssists;
         this.team = team;
+        this.position = position;
     }
 
     public void addGameEvent(GameEvent event){
