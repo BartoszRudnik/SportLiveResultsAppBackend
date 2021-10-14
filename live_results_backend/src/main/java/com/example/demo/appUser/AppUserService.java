@@ -249,7 +249,7 @@ public class AppUserService implements UserDetailsService {
         }
     }
 
-    public Set<Long> getUserFavoriteGames(String userMail){
+    public Set<Long> getUserFavoriteGames(String userMail, Long leagueId, int round){
         if(this.appUserRepository.findByEmail(userMail).isPresent()){
             AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
 
@@ -257,7 +257,9 @@ public class AppUserService implements UserDetailsService {
             Set<Long> result = new HashSet<>();
 
             for(Game game : favoriteGames){
-                result.add(game.getId());
+                if(Objects.equals(game.getLeague().getId(), leagueId) && Objects.equals(game.getRound(), round)) {
+                    result.add(game.getId());
+                }
             }
 
             return result;
@@ -266,7 +268,7 @@ public class AppUserService implements UserDetailsService {
         }
     }
 
-    public Set<Long> getUserFavoriteTeams(String userMail) {
+    public Set<Long> getUserFavoriteTeams(String userMail, Long leagueId) {
         if(this.appUserRepository.findByEmail(userMail).isPresent()){
             AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
 
@@ -274,7 +276,9 @@ public class AppUserService implements UserDetailsService {
             Set<Long> result = new HashSet<>();
 
             for(Team team : favoriteTeams){
-                result.add(team.getId());
+                if(Objects.equals(team.getLeague().getId(), leagueId)) {
+                    result.add(team.getId());
+                }
             }
 
             return result;

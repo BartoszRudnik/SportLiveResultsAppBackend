@@ -4,7 +4,6 @@ import com.example.demo.appUser.dto.UserFavoritesRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -39,13 +38,13 @@ public class AppUserController {
         return this.appUserService.getUserFavoritesLeagues(userMail);
     }
 
-    @GetMapping("/getUserFavoriteTeams/{userMail}")
-    public Set<Long> getUserFavoriteTeams(@PathVariable String userMail){
-        return this.appUserService.getUserFavoriteTeams(userMail);
+    @GetMapping("/getUserFavoriteTeams/{userMail}/{leagueId}")
+    public Set<Long> getUserFavoriteTeams(@PathVariable String userMail, @PathVariable Long leagueId){
+        return this.appUserService.getUserFavoriteTeams(userMail, leagueId);
     }
 
-    @GetMapping("/getUserFavoriteGames/{userMail}")
-    public Set<Long> getUserFavoriteGames(@PathVariable String userMail){
-        return this.appUserService.getUserFavoriteGames(userMail);
+    @GetMapping("/getUserFavoriteGames/{userMail}/{leagueId}/{round}")
+    public Set<Long> getUserFavoriteGames(@PathVariable String userMail, @PathVariable Long leagueId, @PathVariable int round){
+        return this.appUserService.getUserFavoriteGames(userMail, leagueId, round);
     }
 }
