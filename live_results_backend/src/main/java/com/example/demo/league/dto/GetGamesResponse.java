@@ -24,5 +24,6 @@ public class GetGamesResponse {
     private List<Long> squadTeamB;
     private List<Long> substitutionsTeamA;
     private List<Long> substitutionsTeamB;
+    private int round;
 
 }

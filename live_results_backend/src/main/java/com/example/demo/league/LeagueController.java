@@ -54,6 +54,11 @@ public class LeagueController {
         return this.leagueService.getGamesByRound(leagueId, round);
     }
 
+    @GetMapping("/getAllFinishedByLeague/{leagueId}")
+    public List<GetGamesResponse> getAllFinishedByLeague(@PathVariable Long leagueId){
+        return this.leagueService.getAllFinishedByLeague(leagueId);
+    }
+
     @GetMapping("/getLiveGamesByRound/{leagueId}/{round}")
     public List<Long> getLiveGamesByRound(@PathVariable Long leagueId, @PathVariable int round){
         return this.leagueService.getLiveGamesByRound(leagueId, round);

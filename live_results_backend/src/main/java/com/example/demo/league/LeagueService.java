@@ -69,12 +69,23 @@ public class LeagueService {
                 gameEventsResponses.add(new GameEventsResponse(gameEvent.getEventMinute(), gameEvent.getPlayer().getId(), gameEvent.getTeam().getId(), gameEvent.getGameEventType().toString()));
             }
 
-            GetGamesResponse responseElement = new GetGamesResponse(game.getId(), game.getTeamA().getId(), game.getTeamB().getId(), game.getScoreTeamA(), game.getScoreTeamB(), game.getGameStartDate(), game.getTeamA().getStadiumName(), gameEventsResponses, squadTeamA, squadTeamB, substitutionsTeamA, substitutionsTeamB);
+            GetGamesResponse responseElement = new GetGamesResponse(game.getId(), game.getTeamA().getId(), game.getTeamB().getId(), game.getScoreTeamA(), game.getScoreTeamB(), game.getGameStartDate(), game.getTeamA().getStadiumName(), gameEventsResponses, squadTeamA, squadTeamB, substitutionsTeamA, substitutionsTeamB, game.getRound());
 
             result.add(responseElement);
         }
 
         return result;
+    }
+
+    public List<GetGamesResponse> getAllFinishedByLeague(Long leagueId) {
+        if(this.chefIfNotExist(leagueId)){
+            throw new IllegalStateException("League doesn't exist");
+        }
+
+        League league = this.leagueRepository.findById(leagueId).get();
+        List<Game> games = this.gameRepository.findAllByLeagueAndGameStatus(league, GameStatus.FINISHED);
+
+        return this.getGames(games);
     }
 
     public List<GetGamesResponse> getGamesByRound(Long leagueId, int round){
@@ -233,4 +244,6 @@ public class LeagueService {
 
         return resultList;
     }
+
+
 }
