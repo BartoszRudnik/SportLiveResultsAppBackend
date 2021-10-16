@@ -5,10 +5,10 @@ import com.example.demo.player.Player;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -41,5 +41,18 @@ public class GamePlayer {
         this.player = player;
         this.game = game;
         this.gamePlayerStatus = gamePlayerStatus;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GamePlayer that = (GamePlayer) o;
+        return player.getId().equals(that.player.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(player.getId());
     }
 }

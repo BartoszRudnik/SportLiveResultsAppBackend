@@ -1,6 +1,7 @@
 package com.example.demo.player;
 
 import com.example.demo.player.dto.AddPlayerRequest;
+import com.example.demo.player.dto.GetPlayerGamesResponse;
 import com.example.demo.player.dto.SinglePlayerResponse;
 import com.example.demo.player.dto.UpdatePlayerDataRequest;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,11 @@ import java.util.List;
 @AllArgsConstructor
 public class PlayerController {
     private final PlayerService playerService;
+
+    @GetMapping("/getPlayerGames/{playerId}")
+    public List<GetPlayerGamesResponse> getPlayerGames(@PathVariable Long playerId){
+        return this.playerService.getPlayerGames(playerId);
+    }
 
     @GetMapping("/getPlayersFromLeague/{leagueId}")
     public List<SinglePlayerResponse> getPlayersFromLeague(@PathVariable Long leagueId){

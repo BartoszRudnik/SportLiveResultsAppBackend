@@ -120,16 +120,20 @@ public class GameService {
             Game game = this.gameRepository.findById(gameId).get();
             game.setPlayers(new HashSet<>());
 
-            Set<SinglePlayerRequest> players = request.getPlayers();
+            List<SinglePlayerRequest> players = request.getPlayers();
 
             for(SinglePlayerRequest singlePlayerRequest : players){
                 if(this.playerRepository.findById(singlePlayerRequest.getPlayerId()).isPresent()){
                     Player newPlayer = this.playerRepository.findById(singlePlayerRequest.getPlayerId()).get();
                     GamePlayerStatus newPlayerGameStatus = this.getPlayerGameStatus(singlePlayerRequest.getPlayerStatus());
+                    GamePlayer newGamePlayer = new GamePlayer(newPlayer, game, newPlayerGameStatus);
 
-                    game.addPlayer(new GamePlayer(newPlayer, game, newPlayerGameStatus));
+                    game.addPlayer(newGamePlayer);
+                    this.gamePlayerRepository.save(newGamePlayer);
                 }
             }
+
+            this.gameRepository.save(game);
         }
     }
 

@@ -3,11 +3,13 @@ package com.example.demo.player;
 import com.example.demo.appUser.AppUser;
 import com.example.demo.game.Game;
 import com.example.demo.gameEvent.GameEvent;
+import com.example.demo.gamePlayer.GamePlayer;
 import com.example.demo.team.Team;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -45,8 +47,8 @@ public class Player {
     @OneToMany(mappedBy = "player")
     List<GameEvent> gameEvents;
 
-    @ManyToMany(mappedBy = "players")
-    private Set<Game> games;
+    @OneToMany(mappedBy = "player")
+    private Set<GamePlayer> games;
 
     public Player(String firstName, String lastName, String position, int numberOfGoals, int numberOfAssists){
         this.firstName = firstName;
@@ -63,6 +65,14 @@ public class Player {
         this.numberOfAssists = numberOfAssists;
         this.team = team;
         this.position = position;
+    }
+
+    public void addGame(GamePlayer game){
+        if(this.games == null){
+            this.games = new HashSet<>();
+        }
+
+        this.games.add(game);
     }
 
     public void addGameEvent(GameEvent event){

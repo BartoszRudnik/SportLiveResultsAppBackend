@@ -1,5 +1,6 @@
 package com.example.demo.game;
 
+import com.example.demo.gamePlayer.GamePlayer;
 import com.example.demo.league.League;
 import com.example.demo.team.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
