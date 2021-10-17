@@ -5,6 +5,8 @@ import com.example.demo.game.GameRepository;
 import com.example.demo.game.GameStatus;
 import com.example.demo.league.League;
 import com.example.demo.league.LeagueRepository;
+import com.example.demo.league.LeagueService;
+import com.example.demo.league.dto.GetGamesResponse;
 import com.example.demo.leagueTable.LeagueTable;
 import com.example.demo.leagueTable.LeagueTableRepository;
 import com.example.demo.player.Player;
@@ -26,6 +28,7 @@ public class TeamService {
     private final PlayerRepository playerRepository;
     private final LeagueRepository leagueRepository;
     private final LeagueTableRepository leagueTableRepository;
+    private final LeagueService leagueService;
 
     public Team getTeam(Long teamId){
         if(this.teamRepository.findById(teamId).isPresent()){
@@ -53,24 +56,26 @@ public class TeamService {
         return this.gameRepository.findAllByLeagueAndTeamAOrTeamB(team.getLeague(), team, team);
     }
 
-    public List<Game> getAllTeamFinishedGames(Long teamId){
+    public List<GetGamesResponse> getAllTeamFinishedGames(Long teamId){
         if(this.checkIfTeamNotExist(teamId)){
             throw new IllegalStateException("Team doesn't exist");
         }
 
         Team team = this.teamRepository.findById(teamId).get();
+        List<Game> games = this.gameRepository.findAllByLeagueAndGameStatusAndTeamAOrTeamB(team.getLeague(), GameStatus.FINISHED, team, team);
 
-        return this.gameRepository.findAllByLeagueAndGameStatusAndTeamAOrTeamB(team.getLeague(), GameStatus.FINISHED, team, team);
+        return this.leagueService.getGames(games);
     }
 
-    public List<Game> getAllTeamScheduledGame(Long teamId){
+    public List<GetGamesResponse> getAllTeamScheduledGame(Long teamId){
         if(this.checkIfTeamNotExist(teamId)){
             throw new IllegalStateException("Team doesn't exist");
         }
 
         Team team = this.teamRepository.findById(teamId).get();
+        List<Game> games = this.gameRepository.findAllByLeagueAndGameStatusAndTeamAOrTeamB(team.getLeague(), GameStatus.SCHEDULED, team, team);
 
-        return this.gameRepository.findAllByLeagueAndGameStatusAndTeamAOrTeamB(team.getLeague(), GameStatus.SCHEDULED, team, team);
+        return this.leagueService.getGames(games);
     }
 
     private boolean checkIfTeamNotExist(Long teamId){

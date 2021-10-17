@@ -1,6 +1,7 @@
 package com.example.demo.team;
 
 import com.example.demo.game.Game;
+import com.example.demo.league.dto.GetGamesResponse;
 import com.example.demo.player.Player;
 import com.example.demo.team.dto.AddTeamRequest;
 import com.example.demo.team.dto.SingleTeamResponse;
@@ -42,12 +43,12 @@ public class TeamController {
     }
 
     @GetMapping("/getAllTeamFinishedGames/{teamId}")
-    public List<Game> getAllTeamFinishedGames(@PathVariable Long teamId){
+    public List<GetGamesResponse> getAllTeamFinishedGames(@PathVariable Long teamId){
         return this.teamService.getAllTeamFinishedGames(teamId);
     }
 
     @GetMapping("/getAllTeamScheduledGames/{teamId}")
-    public List<Game> getAllTeamScheduledGames(@PathVariable Long teamId){
+    public List<GetGamesResponse> getAllTeamScheduledGames(@PathVariable Long teamId){
         return this.teamService.getAllTeamScheduledGame(teamId);
     }
 }
