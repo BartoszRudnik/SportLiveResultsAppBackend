@@ -4,6 +4,7 @@ import com.example.demo.gameEvent.dto.FullEventRequest;
 import com.example.demo.gameEvent.dto.IncompleteEventRequest;
 import com.example.demo.gameEvent.dto.UpdateEventRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +15,31 @@ import java.util.List;
 @AllArgsConstructor
 public class GameEventController {
     private final GameEventService gameEventService;
+
+    @PostMapping("/substitution/{playerOffId}/{playerOnId}/{gameId}")
+    public void substitution(@PathVariable Long playerOffId, @PathVariable Long playerOnId, @PathVariable Long gameId){
+        this.gameEventService.substitution(playerOffId, playerOnId, gameId);
+    }
+
+    @PostMapping("/gameStart/{gameId}")
+    public void gameStart(@PathVariable Long gameId){
+        this.gameEventService.gameStart(gameId);
+    }
+
+    @PostMapping("/halfStart/{gameId}")
+    public void halfStart(@PathVariable Long gameId){
+        this.gameEventService.halfStart(gameId);
+    }
+
+    @PostMapping("/halfEnd/{gameId}")
+    public void halfEnd(@PathVariable Long gameId){
+        this.gameEventService.halfEnd(gameId);
+    }
+
+    @PostMapping("/gameEnd/{gameId}")
+    public void gameEnd(@PathVariable Long gameId){
+        this.gameEventService.gameEnd(gameId);
+    }
 
     @GetMapping("/getGameEvents/{gameId}")
     public List<GameEvent> getGameEvents(@PathVariable Long gameId){

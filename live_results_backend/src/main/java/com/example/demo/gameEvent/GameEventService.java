@@ -1,10 +1,14 @@
 package com.example.demo.gameEvent;
 
 import com.example.demo.game.Game;
+import com.example.demo.game.GameRepository;
 import com.example.demo.game.GameService;
+import com.example.demo.game.GameStatus;
 import com.example.demo.gameEvent.dto.FullEventRequest;
 import com.example.demo.gameEvent.dto.IncompleteEventRequest;
 import com.example.demo.gameEvent.dto.UpdateEventRequest;
+import com.example.demo.gamePlayer.GamePlayer;
+import com.example.demo.gamePlayer.GamePlayerStatus;
 import com.example.demo.player.Player;
 import com.example.demo.player.PlayerService;
 import com.example.demo.team.Team;
@@ -14,11 +18,15 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
 public class GameEventService {
 
+    private final GameRepository gameRepository;
     private final GameEventRepository gameEventRepository;
     private final TeamService teamService;
     private final PlayerService playerService;
@@ -102,4 +110,65 @@ public class GameEventService {
         }
     }
 
+    public void gameStart(Long gameId) {
+        if(this.gameRepository.findById(gameId).isPresent()){
+            Game game = this.gameRepository.findById(gameId).get();
+            game.setGameStatus(GameStatus.IN_PROGRESS);
+
+            this.gameRepository.save(game);
+        }
+    }
+
+    public void halfStart(Long gameId) {
+        if(this.gameRepository.findById(gameId).isPresent()){
+            Game game = this.gameRepository.findById(gameId).get();
+
+            GameEvent halfStart = new GameEvent(45, GameEventType.BREAK_END, game);
+            game.addGameEvent(halfStart);
+
+            this.gameRepository.save(game);
+        }
+    }
+
+    public void halfEnd(Long gameId) {
+        if(this.gameRepository.findById(gameId).isPresent()){
+            Game game = this.gameRepository.findById(gameId).get();
+
+            GameEvent halfEnd = new GameEvent(45, GameEventType.BREAK_START, game);
+            game.addGameEvent(halfEnd);
+
+            this.gameRepository.save(game);
+        }
+    }
+
+    public void gameEnd(Long gameId) {
+        if(this.gameRepository.findById(gameId).isPresent()){
+            Game game = this.gameRepository.findById(gameId).get();
+
+            game.setGameStatus(GameStatus.FINISHED);
+
+            this.gameRepository.save(game);
+        }
+    }
+
+    public void substitution(Long playerOffId, Long playerOnId, Long gameId) {
+        if(this.gameRepository.findById(gameId).isPresent()){
+            Game game = this.gameRepository.findById(gameId).get();
+
+            Set<GamePlayer> players = game.getPlayers();
+
+            Optional<GamePlayer> playerOff = players.stream().filter(player -> Objects.equals(player.getId(), playerOffId)).findFirst();
+            Optional<GamePlayer> playerOn = players.stream().filter(player -> Objects.equals(player.getId(), playerOnId)).findFirst();
+
+            if(playerOff.isPresent() && playerOn.isPresent()){
+                GamePlayer gamePlayerOff = playerOff.get();
+                GamePlayer gamePlayerOn = playerOn.get();
+
+                gamePlayerOff.setGamePlayerStatus(GamePlayerStatus.SUBSTITUTION);
+                gamePlayerOn.setGamePlayerStatus(GamePlayerStatus.FIRST_SQUAD);
+
+                this.gameRepository.save(game);
+            }
+        }
+    }
 }

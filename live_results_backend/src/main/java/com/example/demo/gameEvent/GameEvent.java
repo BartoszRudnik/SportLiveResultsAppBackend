@@ -52,6 +52,13 @@ public class GameEvent {
         this.game = game;
     }
 
+    public GameEvent(int eventMinute, GameEventType gameEventType, Game game){
+        this.eventMinute = eventMinute;
+        this.gameEventType = gameEventType;
+        this.team = team;
+        this.game = game;
+    }
+
     public GameEvent(int eventMinute, GameEventType gameEventType, Team team, Game game, Player player){
         this.eventMinute = eventMinute;
         this.gameEventType = gameEventType;

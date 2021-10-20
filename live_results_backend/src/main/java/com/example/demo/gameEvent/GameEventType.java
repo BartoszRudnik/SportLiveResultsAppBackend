@@ -5,5 +5,7 @@ public enum GameEventType {
     SUBSTITUTION_ON,
     SUBSTITUTION_OF,
     YELLOW_CARD,
-    RED_CARD
+    RED_CARD,
+    BREAK_START,
+    BREAK_END
 }
