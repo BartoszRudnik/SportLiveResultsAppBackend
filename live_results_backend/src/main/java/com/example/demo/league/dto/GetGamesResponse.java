@@ -18,6 +18,7 @@ public class GetGamesResponse {
     private int scoreTeamA;
     private int scoreTeamB;
     private LocalDateTime gameDate;
+    private LocalDateTime actualGameStart;
     private String stadiumName;
     private List<GameEventsResponse> events;
     private List<Long> squadTeamA;

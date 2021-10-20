@@ -48,6 +48,8 @@ public class Game {
     private League league;
 
     private LocalDateTime gameStartDate;
+    private LocalDateTime actualStartDate;
+
     private GameStatus gameStatus;
     private int round;
 
@@ -60,7 +62,7 @@ public class Game {
     @OneToMany(mappedBy = "game")
     private Set<GamePlayer> players;
 
-    public Game(int scoreTeamA, int scoreTeamB, League league, Team teamA, Team teamB, LocalDateTime gameStartDate, GameStatus gameStatus, int round){
+    public Game(int scoreTeamA, int scoreTeamB, League league, Team teamA, Team teamB, LocalDateTime actualStartDate, LocalDateTime gameStartDate, GameStatus gameStatus, int round){
         this.scoreTeamA = scoreTeamA;
         this.scoreTeamB = scoreTeamB;
         this.league = league;
@@ -69,9 +71,10 @@ public class Game {
         this.gameStartDate = gameStartDate;
         this.gameStatus = gameStatus;
         this.round = round;
+        this.actualStartDate = actualStartDate;
     }
 
-    public Game(int scoreTeamA, int scoreTeamB, League league, Team teamA, Team teamB, LocalDateTime gameStartDate, GameStatus gameStatus, List<GameEvent> gameEvents, int round){
+    public Game(int scoreTeamA, int scoreTeamB, League league, Team teamA, Team teamB,  LocalDateTime actualStartDate, LocalDateTime gameStartDate, GameStatus gameStatus, List<GameEvent> gameEvents, int round){
         this.scoreTeamA = scoreTeamA;
         this.scoreTeamB = scoreTeamB;
         this.league = league;
@@ -81,6 +84,7 @@ public class Game {
         this.gameStatus = gameStatus;
         this.gameEvents = gameEvents;
         this.round = round;
+        this.actualStartDate = actualStartDate;
     }
 
     public void addGameEvent(GameEvent event){

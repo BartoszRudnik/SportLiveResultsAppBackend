@@ -13,6 +13,7 @@ import com.example.demo.team.TeamService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -70,7 +71,7 @@ public class GameService {
         gameStatus = this.getGameStatus(request.getGameStatus());
 
 
-        Game game = new Game(0, 0, league, teamA, teamB, request.getGameStartDate(), gameStatus, request.getRound());
+        Game game = new Game(0, 0, league, teamA, teamB, request.getGameStartDate(), request.getGameStartDate(), gameStatus, request.getRound());
 
        this.gameRepository.save(game);
 

@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -113,7 +114,9 @@ public class GameEventService {
     public void gameStart(Long gameId) {
         if(this.gameRepository.findById(gameId).isPresent()){
             Game game = this.gameRepository.findById(gameId).get();
+
             game.setGameStatus(GameStatus.IN_PROGRESS);
+            game.setActualStartDate(LocalDateTime.now());
 
             this.gameRepository.save(game);
         }
