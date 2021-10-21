@@ -116,6 +116,7 @@ public class GameEventService {
             Game game = this.gameRepository.findById(gameId).get();
 
             game.setGameStatus(GameStatus.IN_PROGRESS);
+            game.setPartOfGame(0);
             game.setActualStartDate(LocalDateTime.now());
 
             this.gameRepository.save(game);
@@ -126,8 +127,9 @@ public class GameEventService {
         if(this.gameRepository.findById(gameId).isPresent()){
             Game game = this.gameRepository.findById(gameId).get();
 
-            GameEvent halfStart = new GameEvent(45, GameEventType.BREAK_END, game);
-            game.addGameEvent(halfStart);
+            game.setBreak(false);
+            game.setPartOfGame(1);
+            game.setActualStartDate(LocalDateTime.now());
 
             this.gameRepository.save(game);
         }
@@ -137,8 +139,7 @@ public class GameEventService {
         if(this.gameRepository.findById(gameId).isPresent()){
             Game game = this.gameRepository.findById(gameId).get();
 
-            GameEvent halfEnd = new GameEvent(45, GameEventType.BREAK_START, game);
-            game.addGameEvent(halfEnd);
+            game.setBreak(true);
 
             this.gameRepository.save(game);
         }

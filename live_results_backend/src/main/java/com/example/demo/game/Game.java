@@ -49,9 +49,17 @@ public class Game {
 
     private LocalDateTime gameStartDate;
     private LocalDateTime actualStartDate;
-
     private GameStatus gameStatus;
     private int round;
+
+    @Column
+    private boolean isBreak;
+
+    @Column
+    private int partOfGame;
+
+    @Column
+    private int lengthOfPartOfGame;
 
     @OneToMany(mappedBy = "game")
     private List<GameEvent> gameEvents;
@@ -72,6 +80,9 @@ public class Game {
         this.gameStatus = gameStatus;
         this.round = round;
         this.actualStartDate = actualStartDate;
+        this.isBreak = false;
+        this.partOfGame = 0;
+        this.lengthOfPartOfGame = 45;
     }
 
     public Game(int scoreTeamA, int scoreTeamB, League league, Team teamA, Team teamB,  LocalDateTime actualStartDate, LocalDateTime gameStartDate, GameStatus gameStatus, List<GameEvent> gameEvents, int round){
@@ -85,6 +96,9 @@ public class Game {
         this.gameEvents = gameEvents;
         this.round = round;
         this.actualStartDate = actualStartDate;
+        this.isBreak = false;
+        this.partOfGame = 0;
+        this.lengthOfPartOfGame = 45;
     }
 
     public void addGameEvent(GameEvent event){

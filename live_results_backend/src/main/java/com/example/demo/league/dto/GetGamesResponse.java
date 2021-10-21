@@ -26,5 +26,7 @@ public class GetGamesResponse {
     private List<Long> substitutionsTeamA;
     private List<Long> substitutionsTeamB;
     private int round;
-
+    private boolean halfBreak;
+    private int partOfGame;
+    private int lengthOfPartOfGame;
 }
