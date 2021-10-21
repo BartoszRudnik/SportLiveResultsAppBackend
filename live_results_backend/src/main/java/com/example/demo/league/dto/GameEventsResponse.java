@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class GameEventsResponse {
-    private int gameMinute;
+    private Long gameMinute;
     private Long playerId;
     private Long teamId;
     private String eventType;

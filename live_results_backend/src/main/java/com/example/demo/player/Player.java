@@ -37,7 +37,6 @@ public class Player {
     private String firstName;
     private String lastName;
     private String position;
-    private int numberOfGoals;
     private int numberOfAssists;
 
     @ManyToOne
@@ -50,18 +49,16 @@ public class Player {
     @OneToMany(mappedBy = "player")
     private Set<GamePlayer> games;
 
-    public Player(String firstName, String lastName, String position, int numberOfGoals, int numberOfAssists){
+    public Player(String firstName, String lastName, String position, int numberOfAssists){
         this.firstName = firstName;
         this.lastName = lastName;
-        this.numberOfGoals = numberOfGoals;
         this.numberOfAssists = numberOfAssists;
         this.position = position;
     }
 
-    public Player(String firstName, String lastName, String position, int numberOfGoals, int numberOfAssists, Team team){
+    public Player(String firstName, String lastName, String position, int numberOfAssists, Team team){
         this.firstName = firstName;
         this.lastName = lastName;
-        this.numberOfGoals = numberOfGoals;
         this.numberOfAssists = numberOfAssists;
         this.team = team;
         this.position = position;

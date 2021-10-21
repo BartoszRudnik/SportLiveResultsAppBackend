@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -55,10 +56,11 @@ public class GameEventService {
 
         GameEvent event = this.gameEventRepository.findById(request.getEventId()).get();
 
+        Game game = this.gameService.getGame(request.getGameId());
         Player player = this.playerService.getPlayer(request.getPlayerId());
         Team team = this.teamService.getTeam(request.getTeamId());
 
-        event.setEventMinute(request.getMinute());
+        event.setEventMinute(Duration.between(LocalDateTime.now(), game.getActualStartDate()).toMinutes() + (long) game.getLengthOfPartOfGame() * game.getPartOfGame() + 1);
         event.setGameEventType(this.gameEventTypeFromString(request.getEventType()));
         event.setPlayer(player);
         event.setTeam(team);
@@ -72,7 +74,7 @@ public class GameEventService {
         Team team = this.teamService.getTeam(request.getTeamId());
         Game game = this.gameService.getGame(request.getGameId());
 
-        GameEvent newGameEvent = new GameEvent(request.getMinute(), eventType, team, game);
+        GameEvent newGameEvent = new GameEvent(Duration.between(LocalDateTime.now(), game.getActualStartDate()).toMinutes() + (long) game.getLengthOfPartOfGame() * game.getPartOfGame() + 1, eventType, team, game);
 
         team.addGameEvent(newGameEvent);
         game.addGameEvent(newGameEvent);
@@ -87,7 +89,15 @@ public class GameEventService {
         Game game = this.gameService.getGame(request.getGameId());
         Player player = this.playerService.getPlayer(request.getPlayerId());
 
-        GameEvent newGameEvent = new GameEvent(request.getMinute(), eventType, team, game, player);
+        if(eventType == GameEventType.GOAL){
+            if(game.getTeamA() == team){
+                game.setScoreTeamA(game.getScoreTeamA() + 1);
+            }else{
+                game.setScoreTeamB(game.getScoreTeamB() + 1);
+            }
+        }
+
+        GameEvent newGameEvent = new GameEvent(Duration.between(LocalDateTime.now(), game.getActualStartDate()).toMinutes() + (long) game.getLengthOfPartOfGame() * game.getPartOfGame() + 1, eventType, team, game, player);
 
         team.addGameEvent(newGameEvent);
         game.addGameEvent(newGameEvent);

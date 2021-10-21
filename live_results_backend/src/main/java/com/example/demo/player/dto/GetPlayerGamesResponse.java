@@ -26,7 +26,7 @@ public class GetPlayerGamesResponse {
     private List<Long> substitutionsTeamA;
     private List<Long> substitutionsTeamB;
     private int round;
-    private int numberOfMinutes;
+    private Long numberOfMinutes;
     private int numberOfGoals;
     private boolean isYellowCard;
     private boolean isRedCard;

@@ -28,7 +28,7 @@ public class GameEvent {
     )
     private Long id;
 
-    private int eventMinute;
+    private Long eventMinute;
 
     @Enumerated(EnumType.STRING)
     private GameEventType gameEventType;
@@ -45,21 +45,20 @@ public class GameEvent {
     @JoinColumn(name = "player_id")
     private Player player;
 
-    public GameEvent(int eventMinute, GameEventType gameEventType, Team team, Game game){
+    public GameEvent(Long eventMinute, GameEventType gameEventType, Team team, Game game){
         this.eventMinute = eventMinute;
         this.gameEventType = gameEventType;
         this.team = team;
         this.game = game;
     }
 
-    public GameEvent(int eventMinute, GameEventType gameEventType, Game game){
+    public GameEvent(Long eventMinute, GameEventType gameEventType, Game game){
         this.eventMinute = eventMinute;
         this.gameEventType = gameEventType;
-        this.team = team;
         this.game = game;
     }
 
-    public GameEvent(int eventMinute, GameEventType gameEventType, Team team, Game game, Player player){
+    public GameEvent(Long eventMinute, GameEventType gameEventType, Team team, Game game, Player player){
         this.eventMinute = eventMinute;
         this.gameEventType = gameEventType;
         this.team = team;

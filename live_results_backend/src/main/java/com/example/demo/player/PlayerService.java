@@ -31,7 +31,7 @@ public class PlayerService {
 
     public void addPlayer(AddPlayerRequest request){
         Team team = this.teamService.getTeam(request.getTeamId());
-        Player newPlayer = new Player(request.getFirstName(), request.getLastName(), request.getPosition(), request.getNumberOfGoals(), request.getNumberOfAssists(), team);
+        Player newPlayer = new Player(request.getFirstName(), request.getLastName(), request.getPosition(), request.getNumberOfAssists(), team);
 
         this.playerRepository.save(newPlayer);
     }
@@ -79,7 +79,9 @@ public class PlayerService {
             List<SinglePlayerResponse> result = new ArrayList<>();
 
             for(Player player : players){
-                result.add(new SinglePlayerResponse(player.getId(), player.getFirstName(), player.getLastName(), player.getPosition(), player.getNumberOfGoals(), player.getNumberOfAssists(), player.getTeam().getId()));
+                int numberOfGoals = (int) player.getGameEvents().stream().filter(event -> event.getGameEventType() == GameEventType.GOAL).count();
+
+                result.add(new SinglePlayerResponse(player.getId(), player.getFirstName(), player.getLastName(), player.getPosition(), numberOfGoals, player.getNumberOfAssists(), player.getTeam().getId()));
             }
 
             return result;
@@ -88,18 +90,18 @@ public class PlayerService {
         }
     }
 
-    private int numberOfMinutesPlayed(Player player, Set<GamePlayer> gamePlayers, List<GameEvent> gameEvents){
+    private Long numberOfMinutesPlayed(Player player, Set<GamePlayer> gamePlayers, List<GameEvent> gameEvents){
         GamePlayer gamePlayer = gamePlayers.stream().filter(x -> x.getPlayer() == player).findFirst().orElse(null);
 
         if(gamePlayer != null){
             if(gamePlayer.getGamePlayerStatus() == GamePlayerStatus.INJURED){
-                return 0;
+                return 0L;
             }
             else if(gamePlayer.getGamePlayerStatus() == GamePlayerStatus.FIRST_SQUAD){
                 GameEvent gameEvent = gameEvents.stream().filter(x -> x.getPlayer() == player && x.getGameEventType() == GameEventType.SUBSTITUTION_OF).findFirst().orElse(null);
 
                 if(gameEvent == null){
-                    return 90;
+                    return 90L;
                 }else{
                     return gameEvent.getEventMinute();
                 }
@@ -108,7 +110,7 @@ public class PlayerService {
                 GameEvent gameEvent = gameEvents.stream().filter(x -> x.getPlayer() == player && x.getGameEventType() == GameEventType.SUBSTITUTION_ON).findFirst().orElse(null);
 
                 if(gameEvent == null){
-                    return 0;
+                    return 0L;
                 }else{
                     GameEvent secondGameEvent = gameEvents.stream().filter(x -> x.getPlayer() == player && x.getGameEventType() == GameEventType.SUBSTITUTION_OF).findFirst().orElse(null);
 
@@ -120,7 +122,7 @@ public class PlayerService {
                 }
             }
         }else{
-            return 0;
+            return 0L;
         }
     }
 
@@ -162,7 +164,7 @@ public class PlayerService {
                 int numberOfGoals = 0;
                 boolean isYellowCard = false;
                 boolean isRedCard = false;
-                int numberOfMinutes = this.numberOfMinutesPlayed(mainPlayer, players, gameEvents);
+                Long numberOfMinutes = this.numberOfMinutesPlayed(mainPlayer, players, gameEvents);
 
                 for(GameEvent gameEvent : gameEvents){
                     if(gameEvent.getPlayer() == mainPlayer){

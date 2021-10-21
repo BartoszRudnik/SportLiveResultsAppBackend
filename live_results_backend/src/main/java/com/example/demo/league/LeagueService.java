@@ -117,37 +117,6 @@ public class LeagueService {
         return leagueTables;
     }
 
-    public List<Player> getLeagueBestScorers(Long leagueId){
-        return this.getLeagueBest(leagueId, Comparator.comparingInt(Player::getNumberOfGoals));
-    }
-
-    public List<Player> getLeagueBestAssistants(Long leagueId){
-        return this.getLeagueBest(leagueId, Comparator.comparingInt(Player::getNumberOfAssists));
-    }
-
-    public List<Player> getLeagueBestCanadianPoints(Long leagueId){
-        return this.getLeagueBest(leagueId, Comparator.comparingInt(o -> o.getNumberOfGoals() + o.getNumberOfAssists()));
-    }
-
-    private List<Player> getLeagueBest(Long leagueId, Comparator<Player> playerComparator) {
-        if(this.chefIfNotExist(leagueId)){
-            throw new IllegalStateException("League doesn't exist");
-        }
-
-        League league = this.leagueRepository.findById(leagueId).get();
-
-        List<Team> leagueTeams = league.getTeams();
-        List<Player> leaguePlayers = new ArrayList<>();
-
-        for(Team team : leagueTeams){
-            leaguePlayers.addAll(team.getPlayers());
-        }
-
-        leaguePlayers.sort(playerComparator);
-
-        return leaguePlayers.stream().limit(50).collect(Collectors.toList());
-    }
-
     public List<Long> getLiveGamesByRound(Long leagueId, int round) {
         if(this.leagueRepository.findById(leagueId).isPresent()){
             League league = this.leagueRepository.findById(leagueId).get();

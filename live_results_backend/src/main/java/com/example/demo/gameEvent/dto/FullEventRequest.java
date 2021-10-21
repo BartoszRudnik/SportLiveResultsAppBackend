@@ -8,11 +8,8 @@ import lombok.*;
 @EqualsAndHashCode
 @ToString
 public class FullEventRequest {
-
-    private int minute;
     private String eventType;
     private Long teamId;
     private Long gameId;
     private Long playerId;
-
 }

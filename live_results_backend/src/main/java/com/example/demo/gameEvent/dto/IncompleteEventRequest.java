@@ -8,10 +8,7 @@ import lombok.*;
 @EqualsAndHashCode
 @ToString
 public class IncompleteEventRequest {
-
-    private int minute;
     private String eventType;
     private Long teamId;
     private Long gameId;
-
 }

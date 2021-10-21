@@ -29,21 +29,6 @@ public class LeagueController {
         return this.leagueService.addLeague(request);
     }
 
-    @GetMapping("/getBestScorers/{leagueId}")
-    public List<Player> getBestScorers(@PathVariable Long leagueId){
-        return this.leagueService.getLeagueBestScorers(leagueId);
-    }
-
-    @GetMapping("/getBestAssistants/{leagueId}")
-    public List<Player> getBestAssistants(@PathVariable Long leagueId){
-        return this.leagueService.getLeagueBestAssistants(leagueId);
-    }
-
-    @GetMapping("/getBestCanadianPoints/{leagueId}")
-    public List<Player> getBestCanadianPoints(@PathVariable Long leagueId){
-        return this.leagueService.getLeagueBestCanadianPoints(leagueId);
-    }
-
     @GetMapping("/getLeagueTable/{leagueId}")
     public List<GetLeagueTableResponse> getLeagueTable(@PathVariable Long leagueId){
         return this.leagueService.getLeagueTable(leagueId);
