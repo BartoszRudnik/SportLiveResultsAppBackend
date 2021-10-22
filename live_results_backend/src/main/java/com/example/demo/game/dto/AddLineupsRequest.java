@@ -13,4 +13,5 @@ import java.util.List;
 @ToString
 public class AddLineupsRequest {
     List<SinglePlayerRequest> players;
+    int teamId;
 }

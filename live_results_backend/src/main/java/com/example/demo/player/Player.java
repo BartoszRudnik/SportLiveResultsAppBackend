@@ -21,7 +21,6 @@ import java.util.Set;
 @ToString
 @Entity(name="Player")
 public class Player {
-
     @Id
     @SequenceGenerator(
             name = "player_sequence",
@@ -70,6 +69,8 @@ public class Player {
         }
 
         this.games.add(game);
+
+        game.setPlayer(this);
     }
 
     public void addGameEvent(GameEvent event){

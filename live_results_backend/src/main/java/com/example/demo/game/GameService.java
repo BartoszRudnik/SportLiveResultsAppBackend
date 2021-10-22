@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -119,21 +120,27 @@ public class GameService {
     public void addLineups(Long gameId, AddLineupsRequest request) {
         if(this.gameRepository.findById(gameId).isPresent()){
             Game game = this.gameRepository.findById(gameId).get();
-            game.setPlayers(new HashSet<>());
+
+            if(game.getPlayers() != null){
+                game.setPlayers(game.getPlayers().stream().filter(player -> player.getPlayer().getTeam().getId() != request.getTeamId()).collect(Collectors.toSet()));
+            }else{
+                game.setPlayers(new HashSet<>());
+            }
 
             List<SinglePlayerRequest> players = request.getPlayers();
 
             for(SinglePlayerRequest singlePlayerRequest : players){
                 if(this.playerRepository.findById(singlePlayerRequest.getPlayerId()).isPresent()){
                     Player newPlayer = this.playerRepository.findById(singlePlayerRequest.getPlayerId()).get();
-                    GamePlayerStatus newPlayerGameStatus = this.getPlayerGameStatus(singlePlayerRequest.getPlayerStatus());
-                    GamePlayer newGamePlayer = new GamePlayer(newPlayer, game, newPlayerGameStatus);
+                    GamePlayer newGamePlayer = new GamePlayer(newPlayer, game, this.getPlayerGameStatus(singlePlayerRequest.getPlayerStatus()));
 
                     game.addPlayer(newGamePlayer);
+                    newPlayer.addGame(newGamePlayer);
+
                     this.gamePlayerRepository.save(newGamePlayer);
+                    this.playerRepository.save(newPlayer);
                 }
             }
-
             this.gameRepository.save(game);
         }
     }

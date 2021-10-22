@@ -14,7 +14,6 @@ import java.util.Objects;
 @ToString
 @Entity(name="GamePlayer")
 public class GamePlayer {
-
     @Id
     @SequenceGenerator(
             name = "game_player_sequence",
@@ -53,6 +52,11 @@ public class GamePlayer {
 
     @Override
     public int hashCode() {
-        return Objects.hash(player.getId());
+        Long id = -1L;
+        if(player != null && player.getId() != null){
+            id = player.getId();
+        }
+
+        return Objects.hash(id);
     }
 }
