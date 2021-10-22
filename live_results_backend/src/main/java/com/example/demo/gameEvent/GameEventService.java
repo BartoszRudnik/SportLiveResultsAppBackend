@@ -182,6 +182,22 @@ public class GameEventService {
                 gamePlayerOn.setGamePlayerStatus(GamePlayerStatus.FIRST_SQUAD);
 
                 this.gameRepository.save(game);
+
+                GameEvent eventOff = new GameEvent(Duration.between(LocalDateTime.now(), game.getActualStartDate()).toMinutes() + (long) game.getLengthOfPartOfGame() * game.getPartOfGame() + 1, GameEventType.SUBSTITUTION_OF, gamePlayerOff.getPlayer().getTeam(), game, gamePlayerOff.getPlayer());
+                GameEvent eventOn = new GameEvent(Duration.between(LocalDateTime.now(), game.getActualStartDate()).toMinutes() + (long) game.getLengthOfPartOfGame() * game.getPartOfGame() + 1, GameEventType.SUBSTITUTION_ON, gamePlayerOn.getPlayer().getTeam(), game, gamePlayerOn.getPlayer());
+
+
+                game.addGameEvent(eventOff);
+                game.addGameEvent(eventOn);
+
+                gamePlayerOff.getPlayer().getTeam().addGameEvent(eventOff);
+                gamePlayerOn.getPlayer().getTeam().addGameEvent(eventOn);
+
+                gamePlayerOff.getPlayer().addGameEvent(eventOff);
+                gamePlayerOn.getPlayer().addGameEvent(eventOn);
+
+                this.gameEventRepository.save(eventOff);
+                this.gameEventRepository.save(eventOn);
             }
         }
     }
