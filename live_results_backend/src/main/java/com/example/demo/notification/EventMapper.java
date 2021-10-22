@@ -12,7 +12,7 @@ public class EventMapper {
     public SseEmitter.SseEventBuilder toSseEventBuilder(NewEventDto event) {
         return SseEmitter.event()
                 .id(RandomStringUtils.randomAlphanumeric(12))
-                .name(Integer.toString(event.getGameId()))
-                .data(event.getLeagueId());
+                .name(event.getGameId() + " " + event.getLeagueId());
+
     }
 }
