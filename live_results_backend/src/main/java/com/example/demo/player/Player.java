@@ -81,5 +81,4 @@ public class Player {
 
         event.setPlayer(this);
     }
-
 }
