@@ -2,11 +2,13 @@ package com.example.demo.game;
 
 import com.example.demo.game.dto.*;
 import com.example.demo.gameEvent.GameEvent;
+import com.example.demo.gameEvent.GameEventRepository;
 import com.example.demo.gamePlayer.GamePlayer;
 import com.example.demo.gamePlayer.GamePlayerRepository;
 import com.example.demo.gamePlayer.GamePlayerStatus;
 import com.example.demo.league.League;
 import com.example.demo.league.LeagueService;
+import com.example.demo.league.dto.GameEventsResponse;
 import com.example.demo.player.*;
 import com.example.demo.team.Team;
 import com.example.demo.team.TeamService;
@@ -14,9 +16,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -27,12 +27,23 @@ public class GameService {
     private final TeamService teamService;
     private final PlayerRepository playerRepository;
     private final GamePlayerRepository gamePlayerRepository;
+    private final GameEventRepository gameEventRepository;
 
     public Game getGame(Long gameId) {
         if (this.gameRepository.findById(gameId).isPresent()){
             return this.gameRepository.findById(gameId).get();
         }else{
             return null;
+        }
+    }
+
+    public GameEventsResponse getGameEventsResponse(Long gameEventId){
+        if(this.gameEventRepository.findById(gameEventId).isPresent()){
+            GameEvent event = this.gameEventRepository.findById(gameEventId).get();
+
+            return new GameEventsResponse(event.getEventMinute(), event.getPlayer().getId(), event.getTeam().getId(), event.getGameEventType().toString());
+        }else{
+            return new GameEventsResponse();
         }
     }
 

@@ -12,4 +12,5 @@ import lombok.ToString;
 public class NewEventDto {
     private int gameId;
     private int leagueId;
+    private int eventId;
 }

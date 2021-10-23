@@ -19,10 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -68,7 +65,7 @@ public class GameEventService {
         this.gameEventRepository.save(event);
     }
 
-    public void addIncompleteGameEvent(IncompleteEventRequest request){
+    public Long addIncompleteGameEvent(IncompleteEventRequest request){
         GameEventType eventType = this.gameEventTypeFromString(request.getEventType());
 
         Team team = this.teamService.getTeam(request.getTeamId());
@@ -80,9 +77,11 @@ public class GameEventService {
         game.addGameEvent(newGameEvent);
 
         this.gameEventRepository.save(newGameEvent);
+
+        return newGameEvent.getId();
     }
 
-    public void addFullGameEvent(FullEventRequest request){
+    public Long addFullGameEvent(FullEventRequest request){
         GameEventType eventType = this.gameEventTypeFromString(request.getEventType());
 
         Team team = this.teamService.getTeam(request.getTeamId());
@@ -104,6 +103,8 @@ public class GameEventService {
         player.addGameEvent(newGameEvent);
 
         this.gameEventRepository.save(newGameEvent);
+
+        return newGameEvent.getId();
     }
 
     private GameEventType gameEventTypeFromString(String eventType){
@@ -165,7 +166,7 @@ public class GameEventService {
         }
     }
 
-    public void substitution(Long playerOffId, Long playerOnId, Long gameId) {
+    public List<Long> substitution(Long playerOffId, Long playerOnId, Long gameId) {
         if(this.gameRepository.findById(gameId).isPresent()){
             Game game = this.gameRepository.findById(gameId).get();
 
@@ -198,7 +199,15 @@ public class GameEventService {
 
                 this.gameEventRepository.save(eventOff);
                 this.gameEventRepository.save(eventOn);
+
+                List<Long> result = new ArrayList<>();
+
+                result.add(eventOff.getId());
+                result.add(eventOn.getId());
+
+                return result;
             }
         }
+        return  new ArrayList<>();
     }
 }

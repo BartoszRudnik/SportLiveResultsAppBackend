@@ -4,8 +4,12 @@ import com.example.demo.game.dto.AddGameRequest;
 import com.example.demo.game.dto.AddLineupsRequest;
 import com.example.demo.game.dto.GetLineupsResponse;
 import com.example.demo.game.dto.UpdateScoreRequest;
+import com.example.demo.gameEvent.GameEvent;
+import com.example.demo.league.dto.GameEventsResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -13,6 +17,11 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class GameController {
     private final GameService gameService;
+
+    @GetMapping("/getGameEvents/{gameEventId}")
+    public GameEventsResponse getGameEvent(@PathVariable Long gameEventId){
+        return this.gameService.getGameEventsResponse(gameEventId);
+    }
 
     @GetMapping("/getGame/{gameId}")
     public Game getGame(@PathVariable Long gameId){

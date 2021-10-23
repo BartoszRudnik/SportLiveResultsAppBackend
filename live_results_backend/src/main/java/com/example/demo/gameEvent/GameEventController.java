@@ -17,8 +17,8 @@ public class GameEventController {
     private final GameEventService gameEventService;
 
     @PostMapping("/substitution/{playerOffId}/{playerOnId}/{gameId}")
-    public void substitution(@PathVariable Long playerOffId, @PathVariable Long playerOnId, @PathVariable Long gameId){
-        this.gameEventService.substitution(playerOffId, playerOnId, gameId);
+    public List<Long> substitution(@PathVariable Long playerOffId, @PathVariable Long playerOnId, @PathVariable Long gameId){
+        return this.gameEventService.substitution(playerOffId, playerOnId, gameId);
     }
 
     @PostMapping("/gameStart/{gameId}")
@@ -47,13 +47,13 @@ public class GameEventController {
     }
 
     @PostMapping("/addIncompleteGameEvent")
-    public void addIncompleteGameEvent(@RequestBody IncompleteEventRequest request){
-        this.gameEventService.addIncompleteGameEvent(request);
+    public Long addIncompleteGameEvent(@RequestBody IncompleteEventRequest request){
+       return this.gameEventService.addIncompleteGameEvent(request);
     }
 
     @PostMapping("/addFullGameEvent")
-    public void addFullGameEvent(@RequestBody FullEventRequest request){
-        this.gameEventService.addFullGameEvent(request);
+    public Long addFullGameEvent(@RequestBody FullEventRequest request){
+        return this.gameEventService.addFullGameEvent(request);
     }
 
     @PostMapping("/updateGameEvent")
