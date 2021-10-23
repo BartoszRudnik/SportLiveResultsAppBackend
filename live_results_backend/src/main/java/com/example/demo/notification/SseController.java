@@ -1,6 +1,7 @@
 package com.example.demo.notification;
 
 import com.example.demo.notification.dto.NewEventDto;
+import com.example.demo.notification.dto.NewTimeEventDto;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -14,6 +15,11 @@ public class SseController {
 
     @PostMapping("/publishNewEvent")
     public void publishNewEvent(@RequestBody NewEventDto request){
+        this.notificationService.sendNotification(request);
+    }
+
+    @PostMapping("/publishNewTimeEvent")
+    public void publishNewTimeEvent(@RequestBody NewTimeEventDto request){
         this.notificationService.sendNotification(request);
     }
 

@@ -9,8 +9,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Data
-public class NewEventDto {
+public class NewTimeEventDto {
     private Long gameId;
     private Long leagueId;
-    private Long eventId;
+    private String eventType;
 }

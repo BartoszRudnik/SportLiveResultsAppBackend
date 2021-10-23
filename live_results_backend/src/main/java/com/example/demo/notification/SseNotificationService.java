@@ -2,6 +2,7 @@ package com.example.demo.notification;
 
 import com.example.demo.appUser.AppUserRepository;
 import com.example.demo.notification.dto.NewEventDto;
+import com.example.demo.notification.dto.NewTimeEventDto;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -25,16 +26,37 @@ public class SseNotificationService implements NotificationService{
         }
     }
 
+    @Override
+    public void sendNotification(NewTimeEventDto request){
+        if(request != null){
+            this.doSendNotification(request);
+        }
+    }
+
+    private void doSendNotification(NewTimeEventDto request){
+        if(this.emitterRepository.get(Long.toString(request.getGameId())).isPresent()){
+            List<SseEmitter> emitters = this.emitterRepository.get(Long.toString(request.getGameId())).get();
+
+            for(SseEmitter emitter : emitters){
+                try{
+                    emitter.send(this.eventMapper.toSseEventBuilder(request));
+                }catch(IOException | IllegalStateException e){
+                    this.emitterRepository.remove(Long.toString(request.getGameId()), emitter);
+                }
+            }
+        }
+    }
+
     private void doSendNotification(NewEventDto request) {
-        if(this.emitterRepository.get(Integer.toString(request.getGameId())).isPresent()) {
-            List<SseEmitter> emitters = this.emitterRepository.get(Integer.toString(request.getGameId())).get();
+        if(this.emitterRepository.get(Long.toString(request.getGameId())).isPresent()) {
+            List<SseEmitter> emitters = this.emitterRepository.get(Long.toString(request.getGameId())).get();
 
             for (SseEmitter emitter : emitters) {
                 if(emitter != null) {
                     try {
                         emitter.send(this.eventMapper.toSseEventBuilder(request));
                     } catch (IOException | IllegalStateException e) {
-                        this.emitterRepository.remove(Integer.toString(request.getGameId()), emitter);
+                        this.emitterRepository.remove(Long.toString(request.getGameId()), emitter);
                     }
                 }
             }
