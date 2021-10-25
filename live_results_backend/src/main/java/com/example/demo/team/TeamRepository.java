@@ -1,5 +1,6 @@
 package com.example.demo.team;
 
+import com.example.demo.game.Game;
 import com.example.demo.league.League;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

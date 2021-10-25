@@ -41,7 +41,7 @@ public class GameService {
         if(this.gameEventRepository.findById(gameEventId).isPresent()){
             GameEvent event = this.gameEventRepository.findById(gameEventId).get();
 
-            return new GameEventsResponse(event.getEventMinute(), event.getPlayer().getId(), event.getTeam().getId(), event.getGameEventType().toString());
+            return new GameEventsResponse(event.getId(), event.getEventMinute(), event.getPlayer().getId(), event.getTeam().getId(), event.getGameEventType().toString());
         }else{
             return new GameEventsResponse();
         }
