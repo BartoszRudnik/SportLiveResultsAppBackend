@@ -1,9 +1,11 @@
 package com.example.demo.appUser;
 
 import com.example.demo.appUser.dto.UserFavoritesRequest;
+import com.example.demo.league.dto.GetLeaguesResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -34,7 +36,7 @@ public class AppUserController {
     }
 
     @GetMapping("/getUserFavoriteLeagues/{userMail}")
-    public Set<Long> getUserFavoritesLeagues(@PathVariable String userMail){
+    public List<GetLeaguesResponse> getUserFavoritesLeagues(@PathVariable String userMail){
         return this.appUserService.getUserFavoritesLeagues(userMail);
     }
 

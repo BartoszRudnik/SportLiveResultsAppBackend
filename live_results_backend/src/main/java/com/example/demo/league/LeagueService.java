@@ -7,14 +7,11 @@ import com.example.demo.gameEvent.GameEvent;
 import com.example.demo.gamePlayer.GamePlayer;
 import com.example.demo.gamePlayer.GamePlayerStatus;
 import com.example.demo.league.dto.*;
-import com.example.demo.leagueTable.LeagueTable;
-import com.example.demo.player.Player;
 import com.example.demo.team.Team;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service

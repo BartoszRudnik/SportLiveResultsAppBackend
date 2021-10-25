@@ -2,7 +2,6 @@ package com.example.demo.league;
 
 import com.example.demo.appUser.AppUser;
 import com.example.demo.game.Game;
-import com.example.demo.leagueTable.LeagueTable;
 import com.example.demo.team.Team;
 import lombok.*;
 
@@ -11,7 +10,6 @@ import java.util.*;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString

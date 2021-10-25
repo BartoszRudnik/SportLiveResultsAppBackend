@@ -7,6 +7,7 @@ import com.example.demo.game.Game;
 import com.example.demo.game.GameRepository;
 import com.example.demo.league.League;
 import com.example.demo.league.LeagueRepository;
+import com.example.demo.league.dto.GetLeaguesResponse;
 import com.example.demo.signUp.dto.SignUpRequest;
 import com.example.demo.team.Team;
 import com.example.demo.team.TeamRepository;
@@ -23,7 +24,6 @@ import java.util.*;
 @Service
 @AllArgsConstructor
 public class AppUserService implements UserDetailsService {
-
     private final static String USER_NOT_FOUND_MSG = "User with email %s not found";
 
     private final AppUserRepository appUserRepository;
@@ -232,20 +232,20 @@ public class AppUserService implements UserDetailsService {
         }
     }
 
-    public Set<Long> getUserFavoritesLeagues(String userMail) {
+    public List<GetLeaguesResponse> getUserFavoritesLeagues(String userMail) {
         if(this.appUserRepository.findByEmail(userMail).isPresent()){
             AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
 
             Set<League> favoriteLeagues = appUser.getFavoriteLeagues();
-            Set<Long> result = new HashSet<>();
+            List<GetLeaguesResponse> result = new ArrayList<>();
 
             for(League league : favoriteLeagues){
-                result.add(league.getId());
+                result.add(new GetLeaguesResponse(league.getId(), league.getLeagueName(), league.getLeagueLevel().toString()));
             }
 
             return result;
         }else{
-            return new HashSet<>();
+            return new ArrayList<>();
         }
     }
 
