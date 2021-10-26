@@ -38,10 +38,12 @@ public class SseNotificationService implements NotificationService{
             List<SseEmitter> emitters = this.emitterRepository.get(Long.toString(request.getGameId())).get();
 
             for(SseEmitter emitter : emitters){
-                try{
-                    emitter.send(this.eventMapper.toSseEventBuilder(request));
-                }catch(IOException | IllegalStateException e){
-                    this.emitterRepository.remove(Long.toString(request.getGameId()), emitter);
+                if(emitter != null) {
+                    try {
+                        emitter.send(this.eventMapper.toSseEventBuilder(request));
+                    } catch (IOException | IllegalStateException e) {
+                        this.emitterRepository.remove(Long.toString(request.getGameId()), emitter);
+                    }
                 }
             }
         }
