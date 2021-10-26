@@ -249,6 +249,23 @@ public class AppUserService implements UserDetailsService {
         }
     }
 
+    public Set<Long> getUserFavoritesLeaguesId(String userMail) {
+        if(this.appUserRepository.findByEmail(userMail).isPresent()){
+            AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
+
+            Set<League> favoriteLeagues = appUser.getFavoriteLeagues();
+            Set<Long> result = new HashSet<>();
+
+            for(League league : favoriteLeagues){
+                result.add(league.getId());
+            }
+
+            return result;
+        }else{
+            return new HashSet<>();
+        }
+    }
+
     public Set<Long> getUserFavoriteGames(String userMail, Long leagueId, int round){
         if(this.appUserRepository.findByEmail(userMail).isPresent()){
             AppUser appUser = this.appUserRepository.findByEmail(userMail).get();

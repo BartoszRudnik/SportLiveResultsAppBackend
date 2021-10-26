@@ -40,6 +40,11 @@ public class AppUserController {
         return this.appUserService.getUserFavoritesLeagues(userMail);
     }
 
+    @GetMapping("/getUserFavoriteLeaguesId/{userMail}")
+    public Set<Long> getUserFavoritesLeaguesId(@PathVariable String userMail){
+        return this.appUserService.getUserFavoritesLeaguesId(userMail);
+    }
+
     @GetMapping("/getUserFavoriteTeams/{userMail}/{leagueId}")
     public Set<Long> getUserFavoriteTeams(@PathVariable String userMail, @PathVariable Long leagueId){
         return this.appUserService.getUserFavoriteTeams(userMail, leagueId);
