@@ -7,11 +7,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class SingleTeamResponse {
+public class AddTeamSocialMedia {
     private Long teamId;
-    private String teamName;
-    private String city;
-    private String stadiumName;
     private String facebookUrl;
     private String twitterUrl;
     private String instagramUrl;

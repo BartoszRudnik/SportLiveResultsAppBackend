@@ -11,7 +11,10 @@ import com.example.demo.leagueTable.LeagueTable;
 import com.example.demo.leagueTable.LeagueTableRepository;
 import com.example.demo.player.Player;
 import com.example.demo.player.PlayerRepository;
+import com.example.demo.socialMedia.SocialMedia;
+import com.example.demo.socialMedia.SocialMediaRepository;
 import com.example.demo.team.dto.AddTeamRequest;
+import com.example.demo.team.dto.AddTeamSocialMedia;
 import com.example.demo.team.dto.SingleTeamResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +32,19 @@ public class TeamService {
     private final LeagueRepository leagueRepository;
     private final LeagueTableRepository leagueTableRepository;
     private final LeagueService leagueService;
+    private final SocialMediaRepository socialMediaRepository;
+
+    public void addSocialMedia(AddTeamSocialMedia request){
+        if(this.teamRepository.findById(request.getTeamId()).isPresent()){
+            Team team = this.teamRepository.findById(request.getTeamId()).get();
+            SocialMedia socialMedia = new SocialMedia(team, request.getFacebookUrl(), request.getTwitterUrl(), request.getInstagramUrl());
+
+            team.setSocialMedia(socialMedia);
+
+            this.socialMediaRepository.save(socialMedia);
+            this.teamRepository.save(team);
+        }
+    }
 
     public Team getTeam(Long teamId){
         if(this.teamRepository.findById(teamId).isPresent()){
@@ -120,7 +136,17 @@ public class TeamService {
             List<SingleTeamResponse> resultList = new ArrayList<>();
 
             for(Team team : teams){
-                resultList.add(new SingleTeamResponse(team.getId(), team.getTeamName(), team.getCity(), team.getStadiumName()));
+                String facebookUrl = "";
+                String twitterUrl = "";
+                String instagramUrl = "";
+
+                if(team.getSocialMedia() != null){
+                    facebookUrl = team.getSocialMedia().getFacebookUrl();
+                    twitterUrl = team.getSocialMedia().getTwitterUrl();
+                    instagramUrl = team.getSocialMedia().getInstagramUrl();
+                }
+
+                resultList.add(new SingleTeamResponse(team.getId(), team.getTeamName(), team.getCity(), team.getStadiumName(), facebookUrl, twitterUrl, instagramUrl));
             }
 
             return resultList;

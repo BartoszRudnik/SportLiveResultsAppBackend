@@ -4,6 +4,7 @@ import com.example.demo.game.Game;
 import com.example.demo.league.dto.GetGamesResponse;
 import com.example.demo.player.Player;
 import com.example.demo.team.dto.AddTeamRequest;
+import com.example.demo.team.dto.AddTeamSocialMedia;
 import com.example.demo.team.dto.SingleTeamResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,11 @@ public class TeamController {
     @GetMapping("/getTeamsFromLeague/{leagueId}")
     public List<SingleTeamResponse> getTeamsFromLeague(@PathVariable Long leagueId){
         return this.teamService.getTeamsFromLeague(leagueId);
+    }
+
+    @PostMapping("/addTeamSocialMedia")
+    public void addTeamSocialMedia(@RequestBody AddTeamSocialMedia request){
+        this.teamService.addSocialMedia(request);
     }
 
     @PostMapping("/addTeam")

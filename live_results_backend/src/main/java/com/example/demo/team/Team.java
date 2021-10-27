@@ -5,6 +5,7 @@ import com.example.demo.gameEvent.GameEvent;
 import com.example.demo.league.League;
 import com.example.demo.leagueTable.LeagueTable;
 import com.example.demo.player.Player;
+import com.example.demo.socialMedia.SocialMedia;
 import lombok.*;
 
 import javax.persistence.*;
@@ -47,6 +48,10 @@ public class Team {
     @OneToOne
     @JoinColumn(name = "league_table_id")
     private LeagueTable leagueTable;
+
+    @OneToOne
+    @JoinColumn(name = "social_media_id")
+    private SocialMedia socialMedia;
 
     @ManyToMany(mappedBy = "favoriteGames")
     private Set<AppUser> users;
