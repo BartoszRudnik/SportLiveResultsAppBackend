@@ -198,6 +198,16 @@ public class LeagueService {
         }
     }
 
+    public GetLeaguesResponse findSingleLeague(Long leagueId){
+        if(this.leagueRepository.findById(leagueId).isPresent()){
+            League league = this.leagueRepository.findById(leagueId).get();
+
+            return new GetLeaguesResponse(leagueId, league.getLeagueName(), league.getLeagueLevel().toString());
+        }else{
+            return new GetLeaguesResponse();
+        }
+    }
+
     public List<GetLeaguesResponse> findAllByLeagueLevel(String leagueLevelName) {
         LeagueLevel leagueLevel = this.stringToLeagueLevel(leagueLevelName);
 

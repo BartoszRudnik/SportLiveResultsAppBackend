@@ -6,6 +6,7 @@ import com.example.demo.game.dto.GetLineupsResponse;
 import com.example.demo.game.dto.UpdateScoreRequest;
 import com.example.demo.gameEvent.GameEvent;
 import com.example.demo.league.dto.GameEventsResponse;
+import com.example.demo.league.dto.GetGamesResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +37,11 @@ public class GameController {
     @PostMapping("/updateScore/{gameId}")
     public void updateScore(@PathVariable Long gameId, @RequestBody UpdateScoreRequest request){
         this.gameService.updateScore(gameId, request);
+    }
+
+    @GetMapping("/getSingleGame/{gameId}")
+    public GetGamesResponse getSingleGame(@PathVariable Long gameId){
+        return this.gameService.getSingleGame(gameId);
     }
 
     @PostMapping("/addLineups/{gameId}")

@@ -23,6 +23,11 @@ public class TeamController {
         return this.teamService.getTeamsFromLeague(leagueId);
     }
 
+    @GetMapping("/getSingleTeam/{teamId}")
+    public SingleTeamResponse getSingleTeam(@PathVariable Long teamId){
+        return this.teamService.getSingleTeam(teamId);
+    }
+
     @PostMapping("/addTeamSocialMedia")
     public void addTeamSocialMedia(@RequestBody AddTeamSocialMedia request){
         this.teamService.addSocialMedia(request);

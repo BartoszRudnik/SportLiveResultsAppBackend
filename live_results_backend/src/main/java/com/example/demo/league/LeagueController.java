@@ -24,6 +24,11 @@ public class LeagueController {
         return this.leagueService.findAllByLeagueLevel(leagueLevel);
     }
 
+    @GetMapping("/getLeague/{leagueId}")
+    public GetLeaguesResponse getSingleLeague(@PathVariable Long leagueId){
+        return this.leagueService.findSingleLeague(leagueId);
+    }
+
     @PostMapping("/addLeague")
     public Long addLeague(@RequestBody AddLeagueRequest request){
         return this.leagueService.addLeague(request);

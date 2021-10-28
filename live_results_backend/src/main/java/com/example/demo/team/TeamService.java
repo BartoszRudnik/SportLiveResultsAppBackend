@@ -154,4 +154,24 @@ public class TeamService {
             return new ArrayList<>();
         }
     }
+
+    public SingleTeamResponse getSingleTeam(Long teamId) {
+        if(this.teamRepository.findById(teamId).isPresent()){
+            Team team = this.teamRepository.findById(teamId).get();
+
+            String facebookUrl = "";
+            String twitterUrl = "";
+            String instagramUrl = "";
+
+            if(team.getSocialMedia() != null){
+                facebookUrl = team.getSocialMedia().getFacebookUrl();
+                twitterUrl = team.getSocialMedia().getTwitterUrl();
+                instagramUrl = team.getSocialMedia().getInstagramUrl();
+            }
+
+            return new SingleTeamResponse(team.getId(), team.getTeamName(), team.getCity(), team.getStadiumName(), facebookUrl, twitterUrl, instagramUrl);
+        }else{
+            return new SingleTeamResponse();
+        }
+    }
 }

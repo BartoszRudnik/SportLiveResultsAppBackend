@@ -16,6 +16,11 @@ import java.util.List;
 public class PlayerController {
     private final PlayerService playerService;
 
+    @GetMapping("/getSinglePlayer/{playerId}")
+    public SinglePlayerResponse getSinglePlayer(@PathVariable Long playerId){
+        return this.playerService.getSinglePlayer(playerId);
+    }
+
     @GetMapping("/getPlayerGames/{playerId}")
     public List<GetPlayerGamesResponse> getPlayerGames(@PathVariable Long playerId){
         return this.playerService.getPlayerGames(playerId);

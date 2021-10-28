@@ -50,6 +50,11 @@ public class AppUserController {
         return this.appUserService.getUserFavoriteTeams(userMail, leagueId);
     }
 
+    @GetMapping("/getUserAllFavoritesGames/{userMail}")
+    public Set<Long> getUserAllFavoritesGames(@PathVariable String userMail){
+        return this.appUserService.getUserAllFavoritesGames(userMail);
+    }
+
     @GetMapping("/getUserFavoriteGames/{userMail}/{leagueId}/{round}")
     public Set<Long> getUserFavoriteGames(@PathVariable String userMail, @PathVariable Long leagueId, @PathVariable int round){
         return this.appUserService.getUserFavoriteGames(userMail, leagueId, round);

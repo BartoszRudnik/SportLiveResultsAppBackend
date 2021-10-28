@@ -71,6 +71,18 @@ public class PlayerService {
         }
     }
 
+    public SinglePlayerResponse getSinglePlayer(Long playerId) {
+        if(this.playerRepository.findById(playerId).isPresent()){
+            Player player = this.playerRepository.findById(playerId).get();
+
+            int numberOfGoals = (int) player.getGameEvents().stream().filter(event -> event.getGameEventType() == GameEventType.GOAL).count();
+
+            return new SinglePlayerResponse(player.getId(), player.getFirstName(), player.getLastName(), player.getPosition(), numberOfGoals, player.getNumberOfAssists(), player.getTeam().getId());
+        }else{
+            return new SinglePlayerResponse();
+        }
+    }
+
     public List<SinglePlayerResponse> getPlayerFromLeague(Long leagueId) {
         if(this.leagueRepository.findById(leagueId).isPresent()){
             League league = this.leagueRepository.findById(leagueId).get();

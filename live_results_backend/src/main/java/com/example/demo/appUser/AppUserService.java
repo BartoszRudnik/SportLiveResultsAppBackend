@@ -303,4 +303,19 @@ public class AppUserService implements UserDetailsService {
             return new HashSet<>();
         }
     }
+
+    public Set<Long> getUserAllFavoritesGames(String userMail) {
+        if(this.appUserRepository.findByEmail(userMail).isPresent()){
+            Set<Game> favoriteGames = this.appUserRepository.findByEmail(userMail).get().getFavoriteGames();
+            Set<Long> result = new HashSet<>();
+
+            for(Game game : favoriteGames){
+                result.add(game.getId());
+            }
+
+            return result;
+        }else{
+            return new HashSet<>();
+        }
+    }
 }

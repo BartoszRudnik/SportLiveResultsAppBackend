@@ -9,6 +9,7 @@ import com.example.demo.gamePlayer.GamePlayerStatus;
 import com.example.demo.league.League;
 import com.example.demo.league.LeagueService;
 import com.example.demo.league.dto.GameEventsResponse;
+import com.example.demo.league.dto.GetGamesResponse;
 import com.example.demo.player.*;
 import com.example.demo.team.Team;
 import com.example.demo.team.TeamService;
@@ -187,6 +188,46 @@ public class GameService {
             return new GetLineupsResponse(teamAPlayers, teamBPlayers);
         }else{
             return new GetLineupsResponse();
+        }
+    }
+
+    public GetGamesResponse getSingleGame(Long gameId) {
+        if(this.gameRepository.findById(gameId).isPresent()){
+            Game game = this.gameRepository.findById(gameId).get();
+
+            List<Long> squadTeamA = new ArrayList<>();
+            List<Long> squadTeamB = new ArrayList<>();
+            List<Long> substitutionsTeamA = new ArrayList<>();
+            List<Long> substitutionsTeamB = new ArrayList<>();
+
+            Set<GamePlayer> players = game.getPlayers();
+
+            for(GamePlayer player : players){
+                if(Objects.equals(player.getPlayer().getTeam().getId(), game.getTeamA().getId())){
+                    if(player.getGamePlayerStatus() == GamePlayerStatus.FIRST_SQUAD){
+                        squadTeamA.add(player.getPlayer().getId());
+                    }else{
+                        substitutionsTeamA.add(player.getPlayer().getId());
+                    }
+                }else{
+                    if(player.getGamePlayerStatus() == GamePlayerStatus.FIRST_SQUAD) {
+                        squadTeamB.add(player.getPlayer().getId());
+                    }else{
+                        substitutionsTeamB.add(player.getPlayer().getId());
+                    }
+                }
+            }
+
+            List<GameEvent> gameEvents = game.getGameEvents();
+            List<GameEventsResponse> gameEventsResponses = new ArrayList<>();
+
+            for(GameEvent gameEvent : gameEvents){
+                gameEventsResponses.add(new GameEventsResponse(gameEvent.getId(), gameEvent.getEventMinute(), gameEvent.getPlayer().getId(), gameEvent.getTeam().getId(), gameEvent.getGameEventType().toString()));
+            }
+
+            return new GetGamesResponse(game.getId(), game.getTeamA().getId(), game.getTeamB().getId(), game.getScoreTeamA(), game.getScoreTeamB(), game.getGameStartDate(), game.getActualStartDate(), game.getTeamA().getStadiumName(), gameEventsResponses, squadTeamA, squadTeamB, substitutionsTeamA, substitutionsTeamB, game.getRound(), game.isBreak(), game.getPartOfGame(), game.getLengthOfPartOfGame());
+        }else{
+            return new GetGamesResponse();
         }
     }
 }
