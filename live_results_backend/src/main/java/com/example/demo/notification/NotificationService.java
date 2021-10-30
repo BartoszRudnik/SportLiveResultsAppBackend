@@ -6,4 +6,5 @@ import com.example.demo.notification.dto.NewTimeEventDto;
 public interface NotificationService {
     void sendNotification(NewEventDto request);
     void sendNotification(NewTimeEventDto request);
+    void sendNotification(Long gameId);
 }

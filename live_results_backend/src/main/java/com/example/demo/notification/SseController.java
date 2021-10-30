@@ -13,6 +13,11 @@ public class SseController {
     private final EmitterService  emitterService;
     private final NotificationService notificationService;
 
+    @PostMapping("/publishNewStatistic/{gameId}")
+    public void publishNewStatistic(@PathVariable Long gameId){
+        this.notificationService.sendNotification(gameId);
+    }
+
     @PostMapping("/publishNewEvent")
     public void publishNewEvent(@RequestBody NewEventDto request){
         this.notificationService.sendNotification(request);
@@ -23,8 +28,13 @@ public class SseController {
         this.notificationService.sendNotification(request);
     }
 
+    @GetMapping("/subscribeStatistics/{gameId}")
+    public SseEmitter subscribeToStatistics(@PathVariable Long gameId){
+        return this.emitterService.createEmitter(gameId + "stats");
+    }
+
     @GetMapping("/subscribe/{gameId}")
-    public SseEmitter subscribeToEvents(@PathVariable int gameId) {
-        return this.emitterService.createEmitter(Integer.toString(gameId));
+    public SseEmitter subscribeToEvents(@PathVariable Long gameId) {
+        return this.emitterService.createEmitter(Long.toString(gameId));
     }
 }

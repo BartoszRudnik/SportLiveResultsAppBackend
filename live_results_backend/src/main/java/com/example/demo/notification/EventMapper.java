@@ -10,6 +10,12 @@ import wiremock.org.apache.commons.lang3.RandomStringUtils;
 @Component
 @AllArgsConstructor
 public class EventMapper {
+    public SseEmitter.SseEventBuilder toSseEventBuilder(Long gameId){
+        return SseEmitter.event()
+                .id(RandomStringUtils.randomAlphanumeric(12))
+                .name(Long.toString(gameId));
+    }
+
     public SseEmitter.SseEventBuilder toSseEventBuilder(NewEventDto event) {
         return SseEmitter.event()
                 .id(RandomStringUtils.randomAlphanumeric(12))

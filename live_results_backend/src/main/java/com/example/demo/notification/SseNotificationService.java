@@ -1,6 +1,5 @@
 package com.example.demo.notification;
 
-import com.example.demo.appUser.AppUserRepository;
 import com.example.demo.notification.dto.NewEventDto;
 import com.example.demo.notification.dto.NewTimeEventDto;
 import lombok.AllArgsConstructor;
@@ -10,7 +9,6 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Primary
@@ -18,6 +16,11 @@ import java.util.Set;
 public class SseNotificationService implements NotificationService{
     private final EmitterRepository emitterRepository;
     private final EventMapper eventMapper;
+
+    @Override
+    public void sendNotification(Long gameId){
+        this.doSendNotification(gameId);
+    }
 
     @Override
     public void sendNotification(NewEventDto request) {
@@ -30,6 +33,22 @@ public class SseNotificationService implements NotificationService{
     public void sendNotification(NewTimeEventDto request){
         if(request != null){
             this.doSendNotification(request);
+        }
+    }
+
+    private void doSendNotification(Long gameId){
+        if(this.emitterRepository.get(gameId + "stats").isPresent()){
+            List<SseEmitter> emitters = this.emitterRepository.get(gameId + "stats").get();
+
+            for(SseEmitter emitter : emitters){
+                if(emitter != null){
+                    try{
+                        emitter.send(this.eventMapper.toSseEventBuilder(gameId));
+                    } catch (IOException | IllegalStateException e) {
+                        this.emitterRepository.remove(gameId + "stats", emitter);
+                    }
+                }
+            }
         }
     }
 
