@@ -3,6 +3,7 @@ package com.example.demo.game;
 import com.example.demo.appUser.AppUser;
 import com.example.demo.gameEvent.GameEvent;
 import com.example.demo.gamePlayer.GamePlayer;
+import com.example.demo.gameStatistics.GameStatistics;
 import com.example.demo.league.League;
 import com.example.demo.team.Team;
 import lombok.*;
@@ -13,7 +14,6 @@ import java.util.*;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -47,6 +47,10 @@ public class Game {
     @JoinColumn(name = "league_id")
     private League league;
 
+    @OneToOne
+    @JoinColumn(name = "game_statistics_id")
+    private GameStatistics gameStatistics;
+
     private LocalDateTime gameStartDate;
     private LocalDateTime actualStartDate;
     private GameStatus gameStatus;
@@ -70,7 +74,7 @@ public class Game {
     @OneToMany(mappedBy = "game")
     private Set<GamePlayer> players;
 
-    public Game(int scoreTeamA, int scoreTeamB, League league, Team teamA, Team teamB, LocalDateTime actualStartDate, LocalDateTime gameStartDate, GameStatus gameStatus, int round){
+    public Game(int scoreTeamA, int scoreTeamB, League league, Team teamA, Team teamB, LocalDateTime actualStartDate, LocalDateTime gameStartDate, GameStatus gameStatus, int round, GameStatistics gameStatistics){
         this.scoreTeamA = scoreTeamA;
         this.scoreTeamB = scoreTeamB;
         this.league = league;
@@ -83,9 +87,10 @@ public class Game {
         this.isBreak = false;
         this.partOfGame = 0;
         this.lengthOfPartOfGame = 45;
+        this.gameStatistics = gameStatistics;
     }
 
-    public Game(int scoreTeamA, int scoreTeamB, League league, Team teamA, Team teamB,  LocalDateTime actualStartDate, LocalDateTime gameStartDate, GameStatus gameStatus, List<GameEvent> gameEvents, int round){
+    public Game(int scoreTeamA, int scoreTeamB, League league, Team teamA, Team teamB, LocalDateTime actualStartDate, LocalDateTime gameStartDate, GameStatus gameStatus, List<GameEvent> gameEvents, int round, GameStatistics gameStatistics){
         this.scoreTeamA = scoreTeamA;
         this.scoreTeamB = scoreTeamB;
         this.league = league;
@@ -99,6 +104,7 @@ public class Game {
         this.isBreak = false;
         this.partOfGame = 0;
         this.lengthOfPartOfGame = 45;
+        this.gameStatistics = gameStatistics;
     }
 
     public void addGameEvent(GameEvent event){

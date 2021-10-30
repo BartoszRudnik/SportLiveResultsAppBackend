@@ -34,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 antMatchers("/api/v*/user/**").permitAll().
                 antMatchers("/api/v*/gameEvent/**").permitAll().
                 antMatchers("/api/v*/notification/**").permitAll().
+                antMatchers("/api/v*/gameStatistics/**").permitAll().
                 anyRequest().
                 authenticated().and()
                 .formLogin();

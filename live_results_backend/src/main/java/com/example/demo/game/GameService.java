@@ -6,6 +6,8 @@ import com.example.demo.gameEvent.GameEventRepository;
 import com.example.demo.gamePlayer.GamePlayer;
 import com.example.demo.gamePlayer.GamePlayerRepository;
 import com.example.demo.gamePlayer.GamePlayerStatus;
+import com.example.demo.gameStatistics.GameStatistics;
+import com.example.demo.gameStatistics.GameStatisticsRepository;
 import com.example.demo.league.League;
 import com.example.demo.league.LeagueService;
 import com.example.demo.league.dto.GameEventsResponse;
@@ -29,6 +31,7 @@ public class GameService {
     private final PlayerRepository playerRepository;
     private final GamePlayerRepository gamePlayerRepository;
     private final GameEventRepository gameEventRepository;
+    private final GameStatisticsRepository gameStatisticsRepository;
 
     public Game getGame(Long gameId) {
         if (this.gameRepository.findById(gameId).isPresent()){
@@ -83,9 +86,12 @@ public class GameService {
         teamB = this.teamService.getTeam(request.getTeamBId());
         gameStatus = this.getGameStatus(request.getGameStatus());
 
+        GameStatistics statistics = new GameStatistics();
 
-        Game game = new Game(0, 0, league, teamA, teamB, request.getGameStartDate(), request.getGameStartDate(), gameStatus, request.getRound());
+        Game game =
+                new Game(0, 0, league, teamA, teamB, request.getGameStartDate(), request.getGameStartDate(), gameStatus, request.getRound(), statistics);
 
+        this.gameStatisticsRepository.save(statistics);
        this.gameRepository.save(game);
 
        return game.getId();
