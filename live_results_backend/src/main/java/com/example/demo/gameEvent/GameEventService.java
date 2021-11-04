@@ -59,11 +59,27 @@ public class GameEventService {
         Player player = this.playerService.getPlayer(request.getPlayerId());
         Team team = this.teamService.getTeam(request.getTeamId());
 
-        event.setEventMinute(Duration.between(LocalDateTime.now(), game.getActualStartDate()).toMinutes() + (long) game.getLengthOfPartOfGame() * game.getPartOfGame() + 1);
+        if(event.getGameEventType() == GameEventType.GOAL){
+            if(event.getTeam() == game.getTeamA()){
+                game.setScoreTeamA(game.getScoreTeamA() - 1);
+            }else{
+                game.setScoreTeamB(game.getScoreTeamB() - 1);
+            }
+        }
+
         event.setGameEventType(this.gameEventTypeFromString(request.getEventType()));
         event.setPlayer(player);
         event.setTeam(team);
 
+        if(event.getGameEventType() == GameEventType.GOAL){
+            if(event.getTeam() == game.getTeamA()){
+                game.setScoreTeamA(game.getScoreTeamA() + 1);
+            }else{
+                game.setScoreTeamB(game.getScoreTeamB() + 1);
+            }
+        }
+
+        this.gameRepository.save(game);
         this.gameEventRepository.save(event);
     }
 

@@ -1,12 +1,12 @@
 package com.example.demo.notification;
-
+import com.example.demo.notification.dto.DeleteGameEventRequest;
 import com.example.demo.notification.dto.NewEventDto;
 import com.example.demo.notification.dto.NewTimeEventDto;
+import com.example.demo.notification.dto.UpdateGameEventRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -23,6 +23,20 @@ public class SseNotificationService implements NotificationService{
     }
 
     @Override
+    public void sendNotification(DeleteGameEventRequest request) {
+        if(request != null){
+            this.doSendNotification(request);
+        }
+    }
+
+    @Override
+    public void sendNotification(UpdateGameEventRequest request) {
+        if(request != null){
+            this.doSendNotification(request);
+        }
+    }
+
+    @Override
     public void sendNotification(NewEventDto request) {
         if(request != null){
             this.doSendNotification(request);
@@ -33,6 +47,38 @@ public class SseNotificationService implements NotificationService{
     public void sendNotification(NewTimeEventDto request){
         if(request != null){
             this.doSendNotification(request);
+        }
+    }
+
+    private void doSendNotification(UpdateGameEventRequest request){
+        if(this.emitterRepository.get(Long.toString(request.getGameId())).isPresent()){
+            List<SseEmitter> emitters = this.emitterRepository.get(Long.toString(request.getGameId())).get();
+
+            for(SseEmitter emitter : emitters){
+                if(emitter != null){
+                    try{
+                        emitter.send(this.eventMapper.toSseEventBuilder(request));
+                    }catch (IOException | IllegalStateException e) {
+                        this.emitterRepository.remove(Long.toString(request.getGameId()), emitter);
+                    }
+                }
+            }
+        }
+    }
+
+    private void doSendNotification(DeleteGameEventRequest request){
+        if(this.emitterRepository.get(Long.toString(request.getGameId())).isPresent()){
+            List<SseEmitter> emitters = this.emitterRepository.get(Long.toString(request.getGameId())).get();
+
+            for(SseEmitter emitter : emitters){
+                if(emitter != null){
+                    try{
+                        emitter.send(this.eventMapper.toSseEventBuilder(request));
+                    }catch (IOException | IllegalStateException e) {
+                        this.emitterRepository.remove(Long.toString(request.getGameId()), emitter);
+                    }
+                }
+            }
         }
     }
 

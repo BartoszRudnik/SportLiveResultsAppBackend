@@ -1,7 +1,9 @@
 package com.example.demo.notification;
 
+import com.example.demo.notification.dto.DeleteGameEventRequest;
 import com.example.demo.notification.dto.NewEventDto;
 import com.example.demo.notification.dto.NewTimeEventDto;
+import com.example.demo.notification.dto.UpdateGameEventRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -10,8 +12,18 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @RequestMapping(path = "api/v1/notification")
 @AllArgsConstructor
 public class SseController {
-    private final EmitterService  emitterService;
+    private final EmitterService emitterService;
     private final NotificationService notificationService;
+
+    @PostMapping("/publishUpdateGameEvent")
+    public void updateGameEvent(@RequestBody UpdateGameEventRequest request){
+        this.notificationService.sendNotification(request);
+    }
+
+    @PostMapping("/publishDeleteGameEvent")
+    public void deleteGameEvent(@RequestBody DeleteGameEventRequest request){
+        this.notificationService.sendNotification(request);
+    }
 
     @PostMapping("/publishNewStatistic/{gameId}")
     public void publishNewStatistic(@PathVariable Long gameId){
