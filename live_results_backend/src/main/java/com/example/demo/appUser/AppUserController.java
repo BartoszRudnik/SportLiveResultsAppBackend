@@ -30,6 +30,21 @@ public class AppUserController {
         this.appUserService.changeLeagueFavoriteStatus(userMail, leagueId);
     }
 
+    @PostMapping("/activateGameNotification/{userMail}/{gameId}")
+    public void activateGameNotification(@PathVariable String userMail, @PathVariable Long gameId){
+        this.appUserService.activateGameNotification(userMail, gameId);
+    }
+
+    @PostMapping("/deactivateGameNotification/{userMail}/{gameId}")
+    public void deactivateGameNotification(@PathVariable String userMail, @PathVariable Long gameId){
+        this.appUserService.deactivateGameNotification(userMail, gameId);
+    }
+
+    @PostMapping("/changeGameNotificationStatus/{userMail}/{gameId}")
+    public void changeGameNotificationStatus(@PathVariable String userMail, @PathVariable Long gameId){
+        this.appUserService.changeGameNotificationStatus(userMail, gameId);
+    }
+
     @GetMapping("/getUserFavorites/{userMail}")
     public UserFavoritesRequest getUserFavorites(@PathVariable String userMail){
         return this.appUserService.getUserFavorites(userMail);
@@ -48,6 +63,16 @@ public class AppUserController {
     @GetMapping("/getUserFavoriteTeams/{userMail}/{leagueId}")
     public Set<Long> getUserFavoriteTeams(@PathVariable String userMail, @PathVariable Long leagueId){
         return this.appUserService.getUserFavoriteTeams(userMail, leagueId);
+    }
+    
+    @GetMapping("/getUserAllNotificationGames/{userMail}")
+    public Set<Long> getUserAllNotificationGames(@PathVariable String userMail){
+        return this.appUserService.getUserAllNotificationGames(userMail);
+    }
+
+    @GetMapping("/getUserNotificationGames/{userMail}/{leagueId}/{round}")
+    public Set<Long> getUserNotificationGames(@PathVariable String userMail, @PathVariable Long leagueId, @PathVariable int round){
+        return this.appUserService.getUserNotificationGames(userMail, leagueId, round);
     }
 
     @GetMapping("/getUserAllFavoritesGames/{userMail}")

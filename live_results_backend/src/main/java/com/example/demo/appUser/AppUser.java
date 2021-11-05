@@ -48,6 +48,14 @@ public class AppUser implements UserDetails {
 
     @ManyToMany
     @JoinTable(
+            name = "notification_games",
+            joinColumns = @JoinColumn(name = "app_user_id"),
+            inverseJoinColumns = @JoinColumn(name = "game_id")
+    )
+    private Set<Game> notificationGames;
+
+    @ManyToMany
+    @JoinTable(
             name = "favorite_games",
             joinColumns = @JoinColumn(name = "app_user_id"),
             inverseJoinColumns = @JoinColumn(name = "game_id")
@@ -122,19 +130,35 @@ public class AppUser implements UserDetails {
         return this.enabled;
     }
 
+    public void addNotificationGame(Game game){
+        if(this.notificationGames == null){
+            this.notificationGames = new HashSet<>();
+        }
+
+        this.notificationGames.add(game);
+        game.addNotificationUser(this);
+    }
+
+    public void removeNotificationGame(Game game){
+        if(this.notificationGames != null){
+            this.notificationGames.remove(game);
+            game.removeNotificationUser(this);
+        }
+    }
+
     public void addFavoriteGame(Game game){
         if(this.favoriteGames == null){
             this.favoriteGames = new HashSet<>();
         }
 
         this.favoriteGames.add(game);
-        game.addUser(this);
+        game.addFavoriteUser(this);
     }
 
     public void removeFavoriteGame(Game game){
         if(this.favoriteGames != null){
             this.favoriteGames.remove(game);
-            game.removeUser(this);
+            game.removeFavoriteUser(this);
         }
     }
 

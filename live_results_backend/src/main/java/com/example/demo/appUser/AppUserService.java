@@ -170,6 +170,44 @@ public class AppUserService implements UserDetailsService {
         }
     }
 
+    public void activateGameNotification(String userMail, Long gameId) {
+        if(this.appUserRepository.findByEmail(userMail).isPresent() && this.gameRepository.findById(gameId).isPresent()){
+            AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
+            Game game = this.gameRepository.findById(gameId).get();
+
+            appUser.addNotificationGame(game);
+
+            this.appUserRepository.save(appUser);
+        }
+    }
+
+    public void deactivateGameNotification(String userMail, Long gameId) {
+        if(this.appUserRepository.findByEmail(userMail).isPresent() && this.gameRepository.findById(gameId).isPresent()){
+            AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
+            Game game = this.gameRepository.findById(gameId).get();
+
+            appUser.removeNotificationGame(game);
+
+            this.appUserRepository.save(appUser);
+        }
+    }
+
+    public void changeGameNotificationStatus(String userMail, Long gameId) {
+        if(this.appUserRepository.findByEmail(userMail).isPresent() && this.gameRepository.findById(gameId).isPresent()){
+
+            AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
+            Game game = this.gameRepository.findById(gameId).get();
+
+            if(appUser.getNotificationGames() != null && appUser.getNotificationGames().contains(game)){
+                appUser.removeNotificationGame(game);
+            }else{
+                appUser.addNotificationGame(game);
+            }
+
+            this.appUserRepository.save(appUser);
+        }
+    }
+
     public void changeGameFavoriteStatus(String userMail, Long gameId) {
         if(this.appUserRepository.findByEmail(userMail).isPresent() && this.gameRepository.findById(gameId).isPresent()){
 
@@ -266,6 +304,25 @@ public class AppUserService implements UserDetailsService {
         }
     }
 
+    public Set<Long> getUserNotificationGames(String userMail, Long leagueId, int round) {
+        if(this.appUserRepository.findByEmail(userMail).isPresent()){
+            AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
+
+            Set<Game> notificationGames = appUser.getNotificationGames();
+            Set<Long> result = new HashSet<>();
+
+            for(Game game : notificationGames){
+                if(Objects.equals(game.getLeague().getId(), leagueId) && Objects.equals(game.getRound(), round)) {
+                    result.add(game.getId());
+                }
+            }
+
+            return result;
+        }else{
+            return new HashSet<>();
+        }
+    }
+
     public Set<Long> getUserFavoriteGames(String userMail, Long leagueId, int round){
         if(this.appUserRepository.findByEmail(userMail).isPresent()){
             AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
@@ -317,5 +374,20 @@ public class AppUserService implements UserDetailsService {
         }else{
             return new HashSet<>();
         }
+    }
+
+
+    public Set<Long> getUserAllNotificationGames(String userMail) {
+        if(this.appUserRepository.findByEmail(userMail).isPresent()){
+            Set<Game> notificationGames = this.appUserRepository.findByEmail(userMail).get().getNotificationGames();
+            Set<Long> result = new HashSet<>();
+
+            for(Game game : notificationGames){
+                result.add(game.getId());
+            }
+
+            return result;
+        }
+        return new HashSet<>();
     }
 }

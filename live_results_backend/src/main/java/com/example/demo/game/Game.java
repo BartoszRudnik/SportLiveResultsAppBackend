@@ -69,7 +69,10 @@ public class Game {
     private List<GameEvent> gameEvents;
 
     @ManyToMany(mappedBy = "favoriteGames")
-    private Set<AppUser> users;
+    private Set<AppUser> favoriteUsers;
+
+    @ManyToMany(mappedBy = "notificationGames")
+    private Set<AppUser> notificationUsers;
 
     @OneToMany(mappedBy = "game")
     private Set<GamePlayer> players;
@@ -130,17 +133,31 @@ public class Game {
         }
     }
 
-    public void addUser(AppUser user){
-        if(this.users == null){
-            this.users = new HashSet<>();
+    public void addNotificationUser(AppUser user){
+        if(this.notificationUsers == null){
+            this.notificationUsers = new HashSet<>();
         }
 
-        this.users.add(user);
+        this.notificationUsers.add(user);
     }
 
-    public void removeUser(AppUser user){
-        if(this.users != null){
-            this.users.remove(user);
+    public void removeNotificationUser(AppUser user){
+        if(this.notificationUsers != null){
+            this.notificationUsers.remove(user);
+        }
+    }
+
+    public void addFavoriteUser(AppUser user){
+        if(this.favoriteUsers == null){
+            this.favoriteUsers = new HashSet<>();
+        }
+
+        this.favoriteUsers.add(user);
+    }
+
+    public void removeFavoriteUser(AppUser user){
+        if(this.favoriteUsers != null){
+            this.favoriteUsers.remove(user);
         }
     }
 
