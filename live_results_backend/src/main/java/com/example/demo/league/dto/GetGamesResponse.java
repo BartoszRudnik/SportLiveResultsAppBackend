@@ -29,4 +29,5 @@ public class GetGamesResponse {
     private boolean halfBreak;
     private int partOfGame;
     private int lengthOfPartOfGame;
+    private String reporterMail;
 }

@@ -68,6 +68,10 @@ public class Game {
     @OneToMany(mappedBy = "game")
     private List<GameEvent> gameEvents;
 
+    @OneToOne
+    @JoinColumn(name = "app_user_id")
+    private AppUser reporter;
+
     @ManyToMany(mappedBy = "favoriteGames")
     private Set<AppUser> favoriteUsers;
 

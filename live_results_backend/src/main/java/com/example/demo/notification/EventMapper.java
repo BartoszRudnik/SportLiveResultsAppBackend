@@ -30,6 +30,12 @@ public class EventMapper {
                 .name(Long.toString(gameId));
     }
 
+    public SseEmitter.SseEventBuilder toSseEventBuilder(Long gameId, Long leagueId){
+        return SseEmitter.event()
+                .id(RandomStringUtils.randomAlphanumeric(12))
+                .name(gameId + " " + leagueId);
+    }
+
     public SseEmitter.SseEventBuilder toSseEventBuilder(NewEventDto event) {
         return SseEmitter.event()
                 .id(RandomStringUtils.randomAlphanumeric(12))

@@ -1,5 +1,7 @@
 package com.example.demo.game;
 
+import com.example.demo.appUser.AppUser;
+import com.example.demo.appUser.AppUserRepository;
 import com.example.demo.game.dto.*;
 import com.example.demo.gameEvent.GameEvent;
 import com.example.demo.gameEvent.GameEventRepository;
@@ -32,6 +34,7 @@ public class GameService {
     private final GamePlayerRepository gamePlayerRepository;
     private final GameEventRepository gameEventRepository;
     private final GameStatisticsRepository gameStatisticsRepository;
+    private final AppUserRepository appUserRepository;
 
     public Game getGame(Long gameId) {
         if (this.gameRepository.findById(gameId).isPresent()){
@@ -231,9 +234,60 @@ public class GameService {
                 gameEventsResponses.add(new GameEventsResponse(gameEvent.getId(), gameEvent.getEventMinute(), gameEvent.getPlayer().getId(), gameEvent.getTeam().getId(), gameEvent.getGameEventType().toString()));
             }
 
-            return new GetGamesResponse(game.getId(), game.getTeamA().getId(), game.getTeamB().getId(), game.getScoreTeamA(), game.getScoreTeamB(), game.getGameStartDate(), game.getActualStartDate(), game.getTeamA().getStadiumName(), gameEventsResponses, squadTeamA, squadTeamB, substitutionsTeamA, substitutionsTeamB, game.getRound(), game.isBreak(), game.getPartOfGame(), game.getLengthOfPartOfGame());
+            String reporterMail = "";
+
+            if(game.getReporter() != null){
+                reporterMail = game.getReporter().getEmail();
+            }
+
+            return new GetGamesResponse(game.getId(), game.getTeamA().getId(), game.getTeamB().getId(), game.getScoreTeamA(), game.getScoreTeamB(), game.getGameStartDate(), game.getActualStartDate(), game.getTeamA().getStadiumName(), gameEventsResponses, squadTeamA, squadTeamB, substitutionsTeamA, substitutionsTeamB, game.getRound(), game.isBreak(), game.getPartOfGame(), game.getLengthOfPartOfGame(), reporterMail);
         }else{
             return new GetGamesResponse();
+        }
+    }
+
+    public void addReporter(String userMail, Long gameId) {
+        if(this.appUserRepository.findByEmail(userMail).isPresent() && this.gameRepository.findById(gameId).isPresent()){
+            AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
+            Game game = this.gameRepository.findById(gameId).get();
+
+            game.setReporter(appUser);
+
+            this.gameRepository.save(game);
+        }
+    }
+
+    public void removeReporter(Long gameId) {
+        if(this.gameRepository.findById(gameId).isPresent()){
+            Game game = this.gameRepository.findById(gameId).get();
+
+            game.setReporter(null);
+
+            this.gameRepository.save(game);
+        }
+    }
+
+    public boolean isReporter(Long gameId) {
+        if(this.gameRepository.findById(gameId).isPresent()){
+            Game game = this.gameRepository.findById(gameId).get();
+
+            return game.getReporter() != null;
+        }else{
+            return false;
+        }
+    }
+
+    public String getReporter(Long gameId) {
+        if(this.gameRepository.findById(gameId).isPresent()){
+            Game game = this.gameRepository.findById(gameId).get();
+
+            if(game.getReporter() != null){
+                return game.getReporter().getEmail();
+            }else{
+                return "";
+            }
+        }else{
+            return "";
         }
     }
 }

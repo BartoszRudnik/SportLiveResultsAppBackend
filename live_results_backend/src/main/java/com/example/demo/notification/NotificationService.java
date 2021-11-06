@@ -11,4 +11,5 @@ public interface NotificationService {
     void sendNotification(Long gameId);
     void sendNotification(DeleteGameEventRequest request);
     void sendNotification(UpdateGameEventRequest request);
+    void sendNotification(Long gameId, Long leagueId);
 }

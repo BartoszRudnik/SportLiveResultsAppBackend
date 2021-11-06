@@ -58,4 +58,24 @@ public class GameController {
     public void changeGameStatus(@PathVariable Long gameId, @PathVariable String newStatus){
         this.gameService.changeGameStatus(gameId, newStatus);
     }
+
+    @GetMapping("/getReporter/{gameId}")
+    public String getReporter(@PathVariable Long gameId){
+        return this.gameService.getReporter(gameId);
+    }
+
+    @PostMapping("/addReporter/{userMail}/{gameId}")
+    public void addReporter(@PathVariable String userMail, @PathVariable Long gameId){
+        this.gameService.addReporter(userMail, gameId);
+    }
+
+    @PostMapping("/removeReporter/{gameId}")
+    public void removeReporter(@PathVariable Long gameId){
+        this.gameService.removeReporter(gameId);
+    }
+
+    @GetMapping("/isReporter/{gameId}")
+    public boolean isReporter(@PathVariable Long gameId){
+        return this.gameService.isReporter(gameId);
+    }
 }

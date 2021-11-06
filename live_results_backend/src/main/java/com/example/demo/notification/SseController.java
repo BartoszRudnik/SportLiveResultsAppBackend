@@ -40,6 +40,16 @@ public class SseController {
         this.notificationService.sendNotification(request);
     }
 
+    @PostMapping("/publishNewReporterEvent/{gameId}/{leagueId}")
+    public void publishNewReporterEvent(@PathVariable Long gameId, @PathVariable Long leagueId){
+        this.notificationService.sendNotification(gameId, leagueId);
+    }
+
+    @GetMapping("/subscribeReporter/{gameId}")
+    public SseEmitter subscribeReporter(@PathVariable Long gameId){
+        return this.emitterService.createEmitter(gameId + "reporter");
+    }
+
     @GetMapping("/subscribeStatistics/{gameId}")
     public SseEmitter subscribeToStatistics(@PathVariable Long gameId){
         return this.emitterService.createEmitter(gameId + "stats");

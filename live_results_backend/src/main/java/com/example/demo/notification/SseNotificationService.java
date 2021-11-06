@@ -37,6 +37,11 @@ public class SseNotificationService implements NotificationService{
     }
 
     @Override
+    public void sendNotification(Long gameId, Long leagueId) {
+        this.doSendNotification(gameId, leagueId);
+    }
+
+    @Override
     public void sendNotification(NewEventDto request) {
         if(request != null){
             this.doSendNotification(request);
@@ -47,6 +52,22 @@ public class SseNotificationService implements NotificationService{
     public void sendNotification(NewTimeEventDto request){
         if(request != null){
             this.doSendNotification(request);
+        }
+    }
+
+    private void doSendNotification(Long gameId, Long leagueId){
+        if(this.emitterRepository.get(gameId + "reporter").isPresent()){
+            List<SseEmitter> emitters = this.emitterRepository.get(gameId + "reporter").get();
+
+            for(SseEmitter emitter : emitters){
+                if(emitter != null){
+                    try{
+                        emitter.send(this.eventMapper.toSseEventBuilder(gameId, leagueId));
+                    }catch(IOException | IllegalStateException e){
+                        this.emitterRepository.remove(gameId + "reporter", emitter);
+                    }
+                }
+            }
         }
     }
 
