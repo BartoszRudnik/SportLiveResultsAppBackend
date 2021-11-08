@@ -113,7 +113,7 @@ public class LeagueService {
         List<GetLeagueTableResponse> leagueTables = new ArrayList<>();
 
         for(Team team : leagueTeams){
-            leagueTables.add(new GetLeagueTableResponse(team.getLeagueTable().getTeam().getTeamName(), team.getLeagueTable().getGames(), team.getLeagueTable().getGoalsScored(), team.getLeagueTable().getGoalsConceded(), team.getLeagueTable().getPoints()));
+            leagueTables.add(new GetLeagueTableResponse(team.getTeamName(), team.getId(), team.getLeagueTable().getGames(), team.getLeagueTable().getGoalsScored(), team.getLeagueTable().getGoalsConceded(), team.getLeagueTable().getPoints()));
         }
         Collections.sort(leagueTables);
 

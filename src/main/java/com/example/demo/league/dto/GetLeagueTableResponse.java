@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class GetLeagueTableResponse implements Comparable<GetLeagueTableResponse>{
     private String teamName;
+    private Long teamId;
     private int games;
     private int goalScored;
     private int goalLost;

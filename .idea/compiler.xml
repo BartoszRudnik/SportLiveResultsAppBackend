@@ -8,10 +8,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="config-service" />
+        <module name="SportLiveResultsAppBackend" />
+        <module name="gateway-service" />
         <module name="team-service" />
         <module name="demo" />
         <module name="service-registry" />
-        <module name="gateway-service" />
         <module name="live-score-service" />
       </profile>
     </annotationProcessing>
@@ -21,11 +22,13 @@
       <module name="gateway-service" target="1.8" />
       <module name="live-score-service" target="1.8" />
       <module name="service-registry" target="1.8" />
+      <module name="SportLiveResultsAppBackend" target="11" />
       <module name="team-service" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="SportLiveResultsAppBackend" options="-parameters" />
       <module name="config-service" options="-parameters" />
       <module name="demo" options="-parameters" />
       <module name="gateway-service" options="-parameters" />

@@ -9,6 +9,7 @@
         <option value="$PROJECT_DIR$/service-registry/pom.xml" />
         <option value="$PROJECT_DIR$/live-score-service/pom.xml" />
         <option value="$PROJECT_DIR$/live_results_backend/pom.xml" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>
