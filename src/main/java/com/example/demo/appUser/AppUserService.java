@@ -8,6 +8,7 @@ import com.example.demo.game.GameRepository;
 import com.example.demo.league.League;
 import com.example.demo.league.LeagueRepository;
 import com.example.demo.league.dto.GetLeaguesResponse;
+import com.example.demo.signIn.dto.SignInAnon;
 import com.example.demo.signUp.dto.SignUpRequest;
 import com.example.demo.team.Team;
 import com.example.demo.team.TeamRepository;
@@ -63,6 +64,32 @@ public class AppUserService implements UserDetailsService {
         if(!this.bCryptPasswordEncoder.matches(password, appUser.getPassword()) || !appUser.getEnabled()){
             throw new IllegalStateException("Wrong email or password");
         }
+
+        String token = UUID.randomUUID().toString();
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(15),
+                appUser
+        );
+
+        this.confirmationTokenService.updateConfirmationToken(confirmationToken);
+
+        return confirmationToken;
+    }
+
+    public ConfirmationToken anonSignIn(SignInAnon request) {
+        boolean userExists = this.appUserRepository.findByEmail(request.getUuid()).isPresent();
+
+        if(!userExists){
+            AppUserRole appUserRole = AppUserRole.ANON;
+            AppUser appUser = new AppUser("", "", request.getUuid(), appUserRole);
+
+            this.appUserRepository.save(appUser);
+        }
+
+        AppUser appUser = this.appUserRepository.findByEmail(request.getUuid()).get();
 
         String token = UUID.randomUUID().toString();
 

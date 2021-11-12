@@ -1,6 +1,7 @@
 package com.example.demo.signIn;
 
 import com.example.demo.confirmationToken.ConfirmationToken;
+import com.example.demo.signIn.dto.SignInAnon;
 import com.example.demo.signIn.dto.SignInRequest;
 import com.example.demo.signUp.dto.SignUpRequest;
 import com.example.demo.appUser.AppUserService;
@@ -21,4 +22,7 @@ public class SignInService {
         return this.appUserService.googleSignIn(request);
     }
 
+    public ConfirmationToken anonSignIn(SignInAnon request) {
+        return this.appUserService.anonSignIn(request);
+    }
 }

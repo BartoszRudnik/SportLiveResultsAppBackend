@@ -4,6 +4,7 @@ public enum AppUserRole {
 
     MAIL_USER,
     GOOGLE_USER,
+    ANON,
     ADMIN
 
 }
