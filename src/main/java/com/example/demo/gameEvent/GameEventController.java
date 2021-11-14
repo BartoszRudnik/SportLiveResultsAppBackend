@@ -63,6 +63,6 @@ public class GameEventController {
 
     @DeleteMapping("/deleteGameEvent/{id}")
     public void deleteGameEvent(@PathVariable Long id){
-        this.gameEventService.deleteById(id);
+        this.gameEventService.deleteGameEvent(id);
     }
 }

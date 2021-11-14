@@ -44,6 +44,25 @@ public class GameEventService {
     }
 
     @Transactional
+    public void deleteGameEvent(Long gameEventId){
+        if(this.gameEventRepository.findById(gameEventId).isPresent()){
+            GameEvent gameEvent = this.gameEventRepository.findById(gameEventId).get();
+
+            if(gameEvent.getGameEventType() == GameEventType.GOAL){
+               if(gameEvent.getTeam() == gameEvent.getGame().getTeamA()){
+                   gameEvent.getGame().setScoreTeamA(gameEvent.getGame().getScoreTeamA() - 1);
+               }else{
+                   gameEvent.getGame().setScoreTeamB(gameEvent.getGame().getScoreTeamB() - 1);
+               }
+
+               this.gameRepository.save(gameEvent.getGame());
+            }
+
+            this.gameEventRepository.deleteById(gameEventId);
+        }
+    }
+
+    @Transactional
     public void deleteById(Long id){
         this.gameEventRepository.deleteById(id);
     }
