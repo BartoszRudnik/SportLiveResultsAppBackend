@@ -78,7 +78,7 @@ public class TeamService {
         }
 
         Team team = this.teamRepository.findById(teamId).get();
-        List<Game> games = this.gameRepository.findAllByLeagueAndGameStatusAndTeamAOrTeamB(team.getLeague(), GameStatus.FINISHED, team, team);
+        List<Game> games = this.gameRepository.findTeamFinishedGames(team, GameStatus.FINISHED);
 
         return this.leagueService.getGames(games);
     }
@@ -89,7 +89,7 @@ public class TeamService {
         }
 
         Team team = this.teamRepository.findById(teamId).get();
-        List<Game> games = this.gameRepository.findAllByLeagueAndGameStatusAndTeamAOrTeamB(team.getLeague(), GameStatus.SCHEDULED, team, team);
+        List<Game> games = this.gameRepository.findTeamScheduledGames(team, GameStatus.SCHEDULED);
 
         return this.leagueService.getGames(games);
     }
