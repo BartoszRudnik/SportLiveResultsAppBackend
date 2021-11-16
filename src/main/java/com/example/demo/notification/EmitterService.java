@@ -16,9 +16,9 @@ public class EmitterService {
     public SseEmitter createEmitter(String memberId){
         SseEmitter emitter = new SseEmitter(this.eventsTimeout);
 
-        emitter.onCompletion(() -> this.repository.remove(memberId, emitter));
-        emitter.onTimeout(() -> this.repository.remove(memberId, emitter));
-        emitter.onError(e -> this.repository.remove(memberId, emitter));
+//        emitter.onCompletion(() -> this.repository.remove(memberId, emitter));
+//        emitter.onTimeout(() -> this.repository.remove(memberId, emitter));
+//        emitter.onError(e -> this.repository.remove(memberId, emitter));
 
         this.repository.addOrReplaceEmitter(memberId, emitter);
 
