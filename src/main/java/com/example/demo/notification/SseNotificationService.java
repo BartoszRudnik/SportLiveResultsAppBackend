@@ -64,7 +64,7 @@ public class SseNotificationService implements NotificationService{
                     try{
                         emitter.send(this.eventMapper.toSseEventBuilder(gameId, leagueId));
                     }catch(IOException | IllegalStateException e){
-                        this.emitterRepository.remove(gameId + "reporter", emitter);
+//                        this.emitterRepository.remove(gameId + "reporter", emitter);
                     }
                 }
             }
@@ -80,7 +80,7 @@ public class SseNotificationService implements NotificationService{
                     try{
                         emitter.send(this.eventMapper.toSseEventBuilder(request));
                     }catch (IOException | IllegalStateException e) {
-                        this.emitterRepository.remove(Long.toString(request.getGameId()), emitter);
+//                        this.emitterRepository.remove(Long.toString(request.getGameId()), emitter);
                     }
                 }
             }
@@ -96,7 +96,7 @@ public class SseNotificationService implements NotificationService{
                     try{
                         emitter.send(this.eventMapper.toSseEventBuilder(request));
                     }catch (IOException | IllegalStateException e) {
-                        this.emitterRepository.remove(Long.toString(request.getGameId()), emitter);
+//                        this.emitterRepository.remove(Long.toString(request.getGameId()), emitter);
                     }
                 }
             }
@@ -112,7 +112,7 @@ public class SseNotificationService implements NotificationService{
                     try{
                         emitter.send(this.eventMapper.toSseEventBuilder(gameId));
                     } catch (IOException | IllegalStateException e) {
-                        this.emitterRepository.remove(gameId + "stats", emitter);
+//                        this.emitterRepository.remove(gameId + "stats", emitter);
                     }
                 }
             }
@@ -128,7 +128,7 @@ public class SseNotificationService implements NotificationService{
                     try {
                         emitter.send(this.eventMapper.toSseEventBuilder(request));
                     } catch (IOException | IllegalStateException e) {
-                        this.emitterRepository.remove(Long.toString(request.getGameId()), emitter);
+//                        this.emitterRepository.remove(Long.toString(request.getGameId()), emitter);
                     }
                 }
             }
@@ -144,7 +144,7 @@ public class SseNotificationService implements NotificationService{
                     try {
                         emitter.send(this.eventMapper.toSseEventBuilder(request));
                     } catch (IOException | IllegalStateException e) {
-                        this.emitterRepository.remove(Long.toString(request.getGameId()), emitter);
+//                        this.emitterRepository.remove(Long.toString(request.getGameId()), emitter);
                     }
                 }
             }
