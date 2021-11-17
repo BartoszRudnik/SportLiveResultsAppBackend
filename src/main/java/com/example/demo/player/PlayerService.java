@@ -1,5 +1,6 @@
 package com.example.demo.player;
 import com.example.demo.game.Game;
+import com.example.demo.game.GameStatus;
 import com.example.demo.gameEvent.GameEvent;
 import com.example.demo.gameEvent.GameEventType;
 import com.example.demo.gamePlayer.GamePlayer;
@@ -138,13 +139,17 @@ public class PlayerService {
         }
     }
 
-    public List<GetPlayerGamesResponse> getPlayerGames(Long playerId) {
+    public List<GetPlayerGamesResponse> getPlayerFinishedAndLiveGames(Long playerId) {
         if(this.playerRepository.findById(playerId).isPresent()){
             Player mainPlayer = this.playerRepository.findById(playerId).get();
-            List<GamePlayer> playerGames = this.gamePlayerRepository.findAllByPlayer(mainPlayer);
+
+            List<GamePlayer> playerGames = this.gamePlayerRepository.findAllByPlayerAndGameGameStatus(mainPlayer, GameStatus.FINISHED);
+            playerGames.addAll(this.gamePlayerRepository.findAllByPlayerAndGameGameStatus(mainPlayer, GameStatus.IN_PROGRESS));
+
             List<GetPlayerGamesResponse> response = new ArrayList<>();
 
             for(GamePlayer playerGame : playerGames){
+
                 Game game = playerGame.getGame();
 
                 List<Long> squadTeamA = new ArrayList<>();

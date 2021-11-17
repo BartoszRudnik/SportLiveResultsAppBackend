@@ -21,9 +21,9 @@ public class PlayerController {
         return this.playerService.getSinglePlayer(playerId);
     }
 
-    @GetMapping("/getPlayerGames/{playerId}")
-    public List<GetPlayerGamesResponse> getPlayerGames(@PathVariable Long playerId){
-        return this.playerService.getPlayerGames(playerId);
+    @GetMapping("/getPlayerFinishedAndLiveGames/{playerId}")
+    public List<GetPlayerGamesResponse> getPlayerFinishedAndLiveGames(@PathVariable Long playerId){
+        return this.playerService.getPlayerFinishedAndLiveGames(playerId);
     }
 
     @GetMapping("/getPlayersFromLeague/{leagueId}")
