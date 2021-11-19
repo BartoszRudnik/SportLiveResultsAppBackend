@@ -20,6 +20,22 @@ public class MessageService {
     private final GameRepository gameRepository;
     private final AppUserRepository appUserRepository;
 
+    public Long addReplyMessage(AddMessageRequest request, Long parentMessageId) {
+        if(this.gameRepository.findById(request.getGameId()).isPresent() && this.appUserRepository.findByEmail(request.getUserMail()).isPresent() && this.messageRepository.findById(parentMessageId).isPresent()){
+            Game game = this.gameRepository.findById(request.getGameId()).get();
+            AppUser appUser = this.appUserRepository.findByEmail(request.getUserMail()).get();
+            Message parentMessage = this.messageRepository.findById(parentMessageId).get();
+
+            Message newMessage = new Message(request.getText(), request.getDate(), game, appUser, parentMessage);
+
+            this.messageRepository.save(newMessage);
+
+            return newMessage.getId();
+        }else{
+            return -1L;
+        }
+    }
+
     public Long addMessage(AddMessageRequest request) {
         if(this.gameRepository.findById(request.getGameId()).isPresent() && this.appUserRepository.findByEmail(request.getUserMail()).isPresent()){
             Game game = this.gameRepository.findById(request.getGameId()).get();
@@ -47,14 +63,25 @@ public class MessageService {
     }
 
     public void deleteMessage(Long messageId){
-        this.messageRepository.deleteById(messageId);
+        if(this.messageRepository.findById(messageId).isPresent()){
+            Message message = this.messageRepository.findById(messageId).get();
+            message.setDeleted(true);
+
+            this.messageRepository.save(message);
+        }
     }
 
     public MessageResponse getSingleMessage(Long messageId) {
         if(this.messageRepository.findById(messageId).isPresent()){
             Message message = this.messageRepository.findById(messageId).get();
 
-            return new MessageResponse(message.getText(), message.getDateTime(), message.getAppUser().getEmail(), message.getGame().getId(), message.getId());
+            Long parentMessageId = -1L;
+
+            if(message.getParentMessage() != null){
+                parentMessageId = message.getParentMessage().getId();
+            }
+
+            return new MessageResponse(message.getText(), message.getDateTime(), message.getAppUser().getEmail(), message.getGame().getId(), message.getId(), message.isDeleted(), parentMessageId);
         }else{
             return new MessageResponse();
         }
@@ -67,7 +94,13 @@ public class MessageService {
             List<MessageResponse> response = new ArrayList<>();
 
             for(Message message : gameMessages){
-                response.add(new MessageResponse(message.getText(), message.getDateTime(), message.getAppUser().getEmail(), gameId, message.getId()));
+                Long parentMessageId = -1L;
+
+                if(message.getParentMessage() != null){
+                    parentMessageId = message.getParentMessage().getId();
+                }
+
+                response.add(new MessageResponse(message.getText(), message.getDateTime(), message.getAppUser().getEmail(), gameId, message.getId(), message.isDeleted(), parentMessageId));
             }
 
             return response;

@@ -55,8 +55,8 @@ public class EventMapper {
     }
 
     public SseEmitter.SseEventBuilder toSseEventBuilder(Long gameId, Long messageId, String sub) {
-        return  SseEmitter.event()
+        return SseEmitter.event()
                 .id(RandomStringUtils.randomAlphanumeric(12))
-                .name(Long.toString(messageId));
+                .name(messageId + " " + sub);
     }
 }

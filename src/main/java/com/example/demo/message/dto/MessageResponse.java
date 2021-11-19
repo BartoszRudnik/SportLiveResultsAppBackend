@@ -17,4 +17,15 @@ public class MessageResponse {
     private String userMail;
     private Long gameId;
     private Long messageId;
+    private boolean deleted;
+    private Long parentMessageId;
+
+    public MessageResponse(String text, LocalDateTime date, String userMail, Long gameId, Long messageId, boolean deleted){
+         this.text = text;
+         this.date = date;
+         this.userMail = userMail;
+         this.gameId = gameId;
+         this.messageId = messageId;
+         this.deleted = deleted;
+    }
 }

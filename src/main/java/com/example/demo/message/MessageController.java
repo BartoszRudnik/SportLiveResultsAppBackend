@@ -29,6 +29,11 @@ public class MessageController {
         this.messageService.deleteMessage(messageId);
     }
 
+    @PostMapping("/replyMessage/{parentMessageId}")
+    public Long addReply(@RequestBody AddMessageRequest request, @PathVariable Long parentMessageId){
+        return this.messageService.addReplyMessage(request, parentMessageId);
+    }
+
     @GetMapping("/getSingleMessage/{messageId}")
     public MessageResponse getSingleMessage(@PathVariable Long messageId){
         return this.messageService.getSingleMessage(messageId);
