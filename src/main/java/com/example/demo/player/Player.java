@@ -73,6 +73,12 @@ public class Player {
         game.setPlayer(this);
     }
 
+    public void removeGame(GamePlayer game){
+        if(this.games != null){
+            this.games.remove(game);
+        }
+    }
+
     public void addGameEvent(GameEvent event){
         if(this.gameEvents == null){
             this.gameEvents = new ArrayList<>();

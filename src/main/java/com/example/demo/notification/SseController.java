@@ -25,6 +25,9 @@ public class SseController {
         this.notificationService.sendNotification(request);
     }
 
+    @PostMapping("/publishNewLineup/{gameId}")
+    public void publishNewLineup(@PathVariable Long gameId){ this.notificationService.sendNotification(gameId, "subtitle");}
+
     @PostMapping("/publishNewStatistic/{gameId}")
     public void publishNewStatistic(@PathVariable Long gameId){
         this.notificationService.sendNotification(gameId);
@@ -43,6 +46,21 @@ public class SseController {
     @PostMapping("/publishNewReporterEvent/{gameId}/{leagueId}")
     public void publishNewReporterEvent(@PathVariable Long gameId, @PathVariable Long leagueId){
         this.notificationService.sendNotification(gameId, leagueId);
+    }
+
+    @PostMapping("/publishNewMessageEvent/{gameId}/{messageId}")
+    public void publishNewMessageEvent(@PathVariable Long gameId, @PathVariable Long messageId){
+        this.notificationService.sendNotification(gameId, messageId, "message");
+    }
+
+    @GetMapping("subscribeMessage/{gameId}")
+    public SseEmitter subscribeMessage(@PathVariable Long gameId){
+        return  this.emitterService.createEmitter(gameId + "message");
+    }
+
+    @GetMapping("/subscribeLineup/{gameId}")
+    public SseEmitter subscribeLineup(@PathVariable Long gameId){
+        return this.emitterService.createEmitter(gameId + "lineup");
     }
 
     @GetMapping("/subscribeReporter/{gameId}")

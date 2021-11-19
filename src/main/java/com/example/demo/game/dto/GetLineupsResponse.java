@@ -11,6 +11,8 @@ import java.util.Set;
 @NoArgsConstructor
 @Data
 public class GetLineupsResponse {
-    private Set<Player> teamAPlayers;
-    private Set<Player> teamBPlayers;
+    private Set<Long> squadTeamA;
+    private Set<Long> squadTeamB;
+    private Set<Long> substitutionsTeamA;
+    private Set<Long> substitutionsTeamB;
 }

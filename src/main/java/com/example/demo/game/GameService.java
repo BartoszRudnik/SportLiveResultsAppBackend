@@ -142,9 +142,7 @@ public class GameService {
         if(this.gameRepository.findById(gameId).isPresent()){
             Game game = this.gameRepository.findById(gameId).get();
 
-            if(game.getPlayers() != null){
-                game.setPlayers(game.getPlayers().stream().filter(player -> player.getPlayer().getTeam().getId() != request.getTeamId()).collect(Collectors.toSet()));
-            }else{
+            if(game.getPlayers() == null){
                 game.setPlayers(new HashSet<>());
             }
 
@@ -152,21 +150,28 @@ public class GameService {
 
             for(SinglePlayerRequest singlePlayerRequest : players){
                 if(this.playerRepository.findById(singlePlayerRequest.getPlayerId()).isPresent()){
-                    Player newPlayer = this.playerRepository.findById(singlePlayerRequest.getPlayerId()).get();
-                    GamePlayer newGamePlayer = new GamePlayer(newPlayer, game, this.getPlayerGameStatus(singlePlayerRequest.getPlayerStatus()));
+                    Player playerProfile = this.playerRepository.findById(singlePlayerRequest.getPlayerId()).get();
+                    GamePlayer gamePlayer = new GamePlayer(playerProfile, game, this.getPlayerGameStatus(singlePlayerRequest.getPlayerStatus()));
 
-                    game.addPlayer(newGamePlayer);
-                    newPlayer.addGame(newGamePlayer);
+                    if(game.getPlayers().contains(gamePlayer)){
+                        game.getPlayers().remove(gamePlayer);
+                        playerProfile.removeGame(gamePlayer);
 
-                    this.gamePlayerRepository.save(newGamePlayer);
-                    this.playerRepository.save(newPlayer);
+                        this.gamePlayerRepository.deleteByGameAndPlayer(game, gamePlayer.getPlayer());
+                    }
+
+                    game.addPlayer(gamePlayer);
+                    playerProfile.addGame(gamePlayer);
+
+                    this.gamePlayerRepository.save(gamePlayer);
+                    this.playerRepository.save(playerProfile);
                 }
             }
             this.gameRepository.save(game);
         }
     }
 
-    private GamePlayerStatus getPlayerGameStatus(String playerStatus) {
+    private GamePlayerStatus getPlayerGameStatus(String playerStatus){
         if(playerStatus.equalsIgnoreCase("INJURED")){
             return GamePlayerStatus.INJURED;
         }else if(playerStatus.equalsIgnoreCase("FIRST_SQUAD")){
@@ -180,21 +185,28 @@ public class GameService {
         if(this.gameRepository.findById(gameId).isPresent()){
             Game game = this.gameRepository.findById(gameId).get();
 
-            Team teamA = game.getTeamA();
-            Set<GamePlayer> gamePlayers = game.getPlayers();
+            Set<Long> squadTeamA = new HashSet<>();
+            Set<Long> squadTeamB = new HashSet<>();
+            Set<Long> substitutionsTeamA = new HashSet<>();
+            Set<Long> substitutionsTeamB = new HashSet<>();
 
-            Set<Player> teamAPlayers = new HashSet<>();
-            Set<Player> teamBPlayers = new HashSet<>();
-
-            for(GamePlayer player : gamePlayers){
-                if(player.getPlayer().getTeam() == teamA){
-                    teamAPlayers.add(player.getPlayer());
+            for(GamePlayer player : game.getPlayers()){
+                if(Objects.equals(player.getPlayer().getTeam().getId(), game.getTeamA().getId())){
+                    if(player.getGamePlayerStatus() == GamePlayerStatus.FIRST_SQUAD){
+                        squadTeamA.add(player.getPlayer().getId());
+                    }else{
+                        substitutionsTeamA.add(player.getPlayer().getId());
+                    }
                 }else{
-                    teamBPlayers.add(player.getPlayer());
+                    if(player.getGamePlayerStatus() == GamePlayerStatus.FIRST_SQUAD) {
+                        squadTeamB.add(player.getPlayer().getId());
+                    }else{
+                        substitutionsTeamB.add(player.getPlayer().getId());
+                    }
                 }
             }
 
-            return new GetLineupsResponse(teamAPlayers, teamBPlayers);
+            return new GetLineupsResponse(squadTeamA, squadTeamB, substitutionsTeamA, substitutionsTeamB);
         }else{
             return new GetLineupsResponse();
         }

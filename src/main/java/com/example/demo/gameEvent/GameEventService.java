@@ -255,8 +255,8 @@ public class GameEventService {
 
             Set<GamePlayer> players = game.getPlayers();
 
-            Optional<GamePlayer> playerOff = players.stream().filter(player -> Objects.equals(player.getId(), playerOffId)).findFirst();
-            Optional<GamePlayer> playerOn = players.stream().filter(player -> Objects.equals(player.getId(), playerOnId)).findFirst();
+            Optional<GamePlayer> playerOff = players.stream().filter(gamePlayer -> Objects.equals(gamePlayer.getPlayer().getId(), playerOffId)).findFirst();
+            Optional<GamePlayer> playerOn = players.stream().filter(gamePlayer -> Objects.equals(gamePlayer.getPlayer().getId(), playerOnId)).findFirst();
 
             if(playerOff.isPresent() && playerOn.isPresent()){
                 GamePlayer gamePlayerOff = playerOff.get();

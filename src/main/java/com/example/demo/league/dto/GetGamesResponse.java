@@ -11,7 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class GetGamesResponse {
-
     private Long gameId;
     private Long teamAId;
     private Long teamBId;

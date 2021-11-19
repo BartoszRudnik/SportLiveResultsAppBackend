@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -18,6 +16,14 @@ import java.util.List;
 public class SseNotificationService implements NotificationService{
     private final EmitterRepository emitterRepository;
     private final EventMapper eventMapper;
+
+    @Override
+    public void sendNotification(Long gameId, Long messageId, String sub){
+        this.doSendNotification(gameId, messageId, sub);
+    }
+
+    @Override
+    public void sendNotification(Long gameId, String subtitle) {this.doSendNotification(gameId, subtitle);}
 
     @Override
     public void sendNotification(Long gameId){
@@ -54,6 +60,22 @@ public class SseNotificationService implements NotificationService{
     public void sendNotification(NewTimeEventDto request){
         if(request != null){
             this.doSendNotification(request);
+        }
+    }
+
+    private void doSendNotification(Long gameId, Long messageId, String sub){
+        if(this.emitterRepository.get(gameId + "message").isPresent()){
+            List<SseEmitter> emitters = this.emitterRepository.get(gameId + "message").get();
+
+            for(SseEmitter emitter : emitters){
+                if(emitter != null){
+                    try{
+                        emitter.send(this.eventMapper.toSseEventBuilder(gameId, messageId, sub));
+                    }catch(IOException | IllegalStateException e){
+//                        this.emitterRepository.remove(gameId + "reporter", emitter);
+                    }
+                }
+            }
         }
     }
 
@@ -99,6 +121,22 @@ public class SseNotificationService implements NotificationService{
                         emitter.send(this.eventMapper.toSseEventBuilder(request));
                     }catch (IOException | IllegalStateException e) {
 //                        this.emitterRepository.remove(Long.toString(request.getGameId()), emitter);
+                    }
+                }
+            }
+        }
+    }
+
+    private void doSendNotification(Long gameId, String subtitle){
+        if(this.emitterRepository.get(gameId + "lineup").isPresent()){
+            List<SseEmitter> emitters = this.emitterRepository.get(gameId + "lineup").get();
+
+            for(SseEmitter emitter : emitters){
+                if(emitter != null){
+                    try{
+                        emitter.send(this.eventMapper.toSseEventBuilder(gameId, subtitle));
+                    } catch (IOException | IllegalStateException e) {
+//                        this.emitterRepository.remove(gameId + "stats", emitter);
                     }
                 }
             }

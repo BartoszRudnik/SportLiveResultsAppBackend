@@ -24,6 +24,12 @@ public class EventMapper {
                 .name("delete " + event.getGameId() + " " + event.getLeagueId() + " " + event.getEventId());
     }
 
+    public SseEmitter.SseEventBuilder toSseEventBuilder(Long gameId, String subtitle){
+        return SseEmitter.event()
+                .id(RandomStringUtils.randomAlphanumeric(12))
+                .name(Long.toString(gameId));
+    }
+
     public SseEmitter.SseEventBuilder toSseEventBuilder(Long gameId){
         return SseEmitter.event()
                 .id(RandomStringUtils.randomAlphanumeric(12))
@@ -46,5 +52,11 @@ public class EventMapper {
         return SseEmitter.event()
                 .id(RandomStringUtils.randomAlphanumeric(12))
                 .name("timeEvent" + " " + event.getGameId() + " " + event.getLeagueId() + " " + event.getEventType());
+    }
+
+    public SseEmitter.SseEventBuilder toSseEventBuilder(Long gameId, Long messageId, String sub) {
+        return  SseEmitter.event()
+                .id(RandomStringUtils.randomAlphanumeric(12))
+                .name(Long.toString(messageId));
     }
 }
