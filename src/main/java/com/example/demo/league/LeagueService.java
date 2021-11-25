@@ -63,7 +63,7 @@ public class LeagueService {
             List<GameEventsResponse> gameEventsResponses = new ArrayList<>();
 
             for(GameEvent gameEvent : gameEvents){
-                gameEventsResponses.add(new GameEventsResponse(gameEvent.getId(), gameEvent.getEventMinute(), gameEvent.getPlayer().getId(), gameEvent.getTeam().getId(), gameEvent.getGameEventType().toString()));
+                gameEventsResponses.add(new GameEventsResponse(gameEvent.getId(), gameEvent.getEventMinute(), gameEvent.getPlayer().getId(), gameEvent.getTeam().getId(), gameEvent.getGameEventType().toString(), gameEvent.getMessage()));
             }
 
             String reporterMail = "";

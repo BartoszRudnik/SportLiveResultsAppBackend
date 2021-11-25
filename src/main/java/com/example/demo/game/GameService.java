@@ -48,7 +48,7 @@ public class GameService {
         if(this.gameEventRepository.findById(gameEventId).isPresent()){
             GameEvent event = this.gameEventRepository.findById(gameEventId).get();
 
-            return new GameEventsResponse(event.getId(), event.getEventMinute(), event.getPlayer().getId(), event.getTeam().getId(), event.getGameEventType().toString());
+            return new GameEventsResponse(event.getId(), event.getEventMinute(), event.getPlayer().getId(), event.getTeam().getId(), event.getGameEventType().toString(), event.getMessage());
         }else{
             return new GameEventsResponse();
         }
@@ -243,7 +243,7 @@ public class GameService {
             List<GameEventsResponse> gameEventsResponses = new ArrayList<>();
 
             for(GameEvent gameEvent : gameEvents){
-                gameEventsResponses.add(new GameEventsResponse(gameEvent.getId(), gameEvent.getEventMinute(), gameEvent.getPlayer().getId(), gameEvent.getTeam().getId(), gameEvent.getGameEventType().toString()));
+                gameEventsResponses.add(new GameEventsResponse(gameEvent.getId(), gameEvent.getEventMinute(), gameEvent.getPlayer().getId(), gameEvent.getTeam().getId(), gameEvent.getGameEventType().toString(), gameEvent.getMessage()));
             }
 
             String reporterMail = "";

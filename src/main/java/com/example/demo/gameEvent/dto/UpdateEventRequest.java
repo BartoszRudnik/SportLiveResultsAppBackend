@@ -7,12 +7,11 @@ import lombok.*;
 @EqualsAndHashCode
 @ToString
 public class UpdateEventRequest {
-
     private Long eventId;
     private int minute;
     private String eventType;
     private Long teamId;
     private Long gameId;
     private Long playerId;
-
+    private String message;
 }

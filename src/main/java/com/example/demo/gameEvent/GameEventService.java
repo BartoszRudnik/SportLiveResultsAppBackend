@@ -62,11 +62,6 @@ public class GameEventService {
         }
     }
 
-    @Transactional
-    public void deleteById(Long id){
-        this.gameEventRepository.deleteById(id);
-    }
-
     public void updateEvent(UpdateEventRequest request){
         if(this.gameEventRepository.findById(request.getEventId()).isEmpty()){
             throw new IllegalStateException("Event doesn't exist");
@@ -89,6 +84,7 @@ public class GameEventService {
         event.setGameEventType(this.gameEventTypeFromString(request.getEventType()));
         event.setPlayer(player);
         event.setTeam(team);
+        event.setMessage(request.getMessage());
 
         if(event.getGameEventType() == GameEventType.GOAL){
             if(event.getTeam() == game.getTeamA()){
@@ -108,7 +104,7 @@ public class GameEventService {
         Team team = this.teamService.getTeam(request.getTeamId());
         Game game = this.gameService.getGame(request.getGameId());
 
-        GameEvent newGameEvent = new GameEvent(Duration.between(LocalDateTime.now(), game.getActualStartDate()).toMinutes() + (long) game.getLengthOfPartOfGame() * game.getPartOfGame() + 1, eventType, team, game);
+        GameEvent newGameEvent = new GameEvent(Duration.between(LocalDateTime.now(), game.getActualStartDate()).toMinutes() + (long) game.getLengthOfPartOfGame() * game.getPartOfGame() + 1, eventType, team, game, request.getMessage());
 
         team.addGameEvent(newGameEvent);
         game.addGameEvent(newGameEvent);
@@ -133,7 +129,7 @@ public class GameEventService {
             }
         }
 
-        GameEvent newGameEvent = new GameEvent(Duration.between(game.getActualStartDate(), LocalDateTime.now()).toMinutes() + (long) game.getLengthOfPartOfGame() * game.getPartOfGame() + 1, eventType, team, game, player);
+        GameEvent newGameEvent = new GameEvent(Duration.between(game.getActualStartDate(), LocalDateTime.now()).toMinutes() + (long) game.getLengthOfPartOfGame() * game.getPartOfGame() + 1, eventType, team, game, player, request.getMessage());
 
         team.addGameEvent(newGameEvent);
         game.addGameEvent(newGameEvent);
@@ -249,7 +245,7 @@ public class GameEventService {
         }
     }
 
-    public List<Long> substitution(Long playerOffId, Long playerOnId, Long gameId) {
+    public List<Long> substitution(Long playerOffId, Long playerOnId, Long gameId, String message) {
         if(this.gameRepository.findById(gameId).isPresent()){
             Game game = this.gameRepository.findById(gameId).get();
 
@@ -267,8 +263,8 @@ public class GameEventService {
 
                 this.gameRepository.save(game);
 
-                GameEvent eventOff = new GameEvent(Duration.between(game.getActualStartDate(), LocalDateTime.now()).toMinutes() + (long) game.getLengthOfPartOfGame() * game.getPartOfGame() + 1, GameEventType.SUBSTITUTION_OF, gamePlayerOff.getPlayer().getTeam(), game, gamePlayerOff.getPlayer());
-                GameEvent eventOn = new GameEvent(Duration.between(game.getActualStartDate(), LocalDateTime.now()).toMinutes() + (long) game.getLengthOfPartOfGame() * game.getPartOfGame() + 1, GameEventType.SUBSTITUTION_ON, gamePlayerOn.getPlayer().getTeam(), game, gamePlayerOn.getPlayer());
+                GameEvent eventOff = new GameEvent(Duration.between(game.getActualStartDate(), LocalDateTime.now()).toMinutes() + (long) game.getLengthOfPartOfGame() * game.getPartOfGame() + 1, GameEventType.SUBSTITUTION_OF, gamePlayerOff.getPlayer().getTeam(), game, gamePlayerOff.getPlayer(), message);
+                GameEvent eventOn = new GameEvent(Duration.between(game.getActualStartDate(), LocalDateTime.now()).toMinutes() + (long) game.getLengthOfPartOfGame() * game.getPartOfGame() + 1, GameEventType.SUBSTITUTION_ON, gamePlayerOn.getPlayer().getTeam(), game, gamePlayerOn.getPlayer(), message);
 
                 game.addGameEvent(eventOff);
                 game.addGameEvent(eventOn);

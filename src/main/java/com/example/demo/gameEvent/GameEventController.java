@@ -16,9 +16,9 @@ import java.util.List;
 public class GameEventController {
     private final GameEventService gameEventService;
 
-    @PostMapping("/substitution/{playerOffId}/{playerOnId}/{gameId}")
-    public List<Long> substitution(@PathVariable Long playerOffId, @PathVariable Long playerOnId, @PathVariable Long gameId){
-        return this.gameEventService.substitution(playerOffId, playerOnId, gameId);
+    @PostMapping("/substitution/{playerOffId}/{playerOnId}/{gameId}/{message}")
+    public List<Long> substitution(@PathVariable Long playerOffId, @PathVariable Long playerOnId, @PathVariable Long gameId, @PathVariable String message){
+        return this.gameEventService.substitution(playerOffId, playerOnId, gameId, message);
     }
 
     @PostMapping("/gameStart/{gameId}")
