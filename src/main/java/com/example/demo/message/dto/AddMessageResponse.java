@@ -5,11 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class UpdateMessageRequest {
-    private String text;
+public class AddMessageResponse {
     private Long messageId;
+    private LocalDateTime date;
 }

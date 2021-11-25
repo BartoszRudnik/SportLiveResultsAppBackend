@@ -1,5 +1,6 @@
 package com.example.demo.message;
 import com.example.demo.message.dto.AddMessageRequest;
+import com.example.demo.message.dto.AddMessageResponse;
 import com.example.demo.message.dto.MessageResponse;
 import com.example.demo.message.dto.UpdateMessageRequest;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ public class MessageController {
     private final MessageService messageService;
 
     @PostMapping("/addMessage")
-    public Long addMessage(@RequestBody AddMessageRequest request){
+    public AddMessageResponse addMessage(@RequestBody AddMessageRequest request){
         return this.messageService.addMessage(request);
     }
 
@@ -30,7 +31,7 @@ public class MessageController {
     }
 
     @PostMapping("/replyMessage/{parentMessageId}")
-    public Long addReply(@RequestBody AddMessageRequest request, @PathVariable Long parentMessageId){
+    public AddMessageResponse addReply(@RequestBody AddMessageRequest request, @PathVariable Long parentMessageId){
         return this.messageService.addReplyMessage(request, parentMessageId);
     }
 

@@ -5,11 +5,13 @@ import com.example.demo.appUser.AppUserRepository;
 import com.example.demo.game.Game;
 import com.example.demo.game.GameRepository;
 import com.example.demo.message.dto.AddMessageRequest;
+import com.example.demo.message.dto.AddMessageResponse;
 import com.example.demo.message.dto.MessageResponse;
 import com.example.demo.message.dto.UpdateMessageRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,43 +22,43 @@ public class MessageService {
     private final GameRepository gameRepository;
     private final AppUserRepository appUserRepository;
 
-    public Long addReplyMessage(AddMessageRequest request, Long parentMessageId) {
+    public AddMessageResponse addReplyMessage(AddMessageRequest request, Long parentMessageId) {
         if(this.gameRepository.findById(request.getGameId()).isPresent() && this.appUserRepository.findByEmail(request.getUserMail()).isPresent() && this.messageRepository.findById(parentMessageId).isPresent()){
             Game game = this.gameRepository.findById(request.getGameId()).get();
             AppUser appUser = this.appUserRepository.findByEmail(request.getUserMail()).get();
             Message parentMessage = this.messageRepository.findById(parentMessageId).get();
+            LocalDateTime date = LocalDateTime.now();
 
-            Message newMessage = new Message(request.getText(), request.getDate(), game, appUser, parentMessage);
+            Message newMessage = new Message(request.getText(), date, game, appUser, parentMessage);
 
             this.messageRepository.save(newMessage);
 
-            return newMessage.getId();
+            return new AddMessageResponse(newMessage.getId(), date);
         }else{
-            return -1L;
+            return new AddMessageResponse();
         }
     }
 
-    public Long addMessage(AddMessageRequest request) {
+    public AddMessageResponse addMessage(AddMessageRequest request) {
         if(this.gameRepository.findById(request.getGameId()).isPresent() && this.appUserRepository.findByEmail(request.getUserMail()).isPresent()){
             Game game = this.gameRepository.findById(request.getGameId()).get();
             AppUser appUser = this.appUserRepository.findByEmail(request.getUserMail()).get();
+            LocalDateTime date = LocalDateTime.now();
 
-            Message newMessage = new Message(request.getText(), request.getDate(), game, appUser);
+            Message newMessage = new Message(request.getText(), date, game, appUser);
 
             this.messageRepository.save(newMessage);
 
-            return newMessage.getId();
+            return new AddMessageResponse(newMessage.getId(), date);
         }else{
-            return -1L;
+            return new AddMessageResponse();
         }
     }
 
     public void updateMessage(UpdateMessageRequest request){
         if(this.messageRepository.findById(request.getMessageId()).isPresent()){
             Message message = this.messageRepository.findById(request.getMessageId()).get();
-
             message.setText(request.getText());
-            message.setDateTime(request.getDate());
 
             this.messageRepository.save(message);
         }
