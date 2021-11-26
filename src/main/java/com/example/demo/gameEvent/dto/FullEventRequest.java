@@ -12,5 +12,4 @@ public class FullEventRequest {
     private Long teamId;
     private Long gameId;
     private Long playerId;
-    private String message;
 }

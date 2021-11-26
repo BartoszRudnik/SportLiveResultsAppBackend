@@ -13,5 +13,4 @@ public class UpdateEventRequest {
     private Long teamId;
     private Long gameId;
     private Long playerId;
-    private String message;
 }

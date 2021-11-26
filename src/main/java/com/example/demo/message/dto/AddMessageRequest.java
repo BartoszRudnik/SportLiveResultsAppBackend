@@ -13,4 +13,5 @@ public class AddMessageRequest {
     private String text;
     private String userMail;
     private Long gameId;
+    private String eventName;
 }

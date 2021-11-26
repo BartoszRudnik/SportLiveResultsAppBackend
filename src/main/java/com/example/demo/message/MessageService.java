@@ -29,7 +29,7 @@ public class MessageService {
             Message parentMessage = this.messageRepository.findById(parentMessageId).get();
             LocalDateTime date = LocalDateTime.now();
 
-            Message newMessage = new Message(request.getText(), date, game, appUser, parentMessage);
+            Message newMessage = new Message(request.getText(), date, game, appUser, parentMessage, request.getEventName());
 
             this.messageRepository.save(newMessage);
 
@@ -45,7 +45,7 @@ public class MessageService {
             AppUser appUser = this.appUserRepository.findByEmail(request.getUserMail()).get();
             LocalDateTime date = LocalDateTime.now();
 
-            Message newMessage = new Message(request.getText(), date, game, appUser);
+            Message newMessage = new Message(request.getText(), date, game, appUser, request.getEventName());
 
             this.messageRepository.save(newMessage);
 
@@ -83,7 +83,7 @@ public class MessageService {
                 parentMessageId = message.getParentMessage().getId();
             }
 
-            return new MessageResponse(message.getText(), message.getDateTime(), message.getAppUser().getEmail(), message.getGame().getId(), message.getId(), message.isDeleted(), parentMessageId);
+            return new MessageResponse(message.getText(), message.getDateTime(), message.getAppUser().getEmail(), message.getGame().getId(), message.getId(), message.isDeleted(), parentMessageId, message.getEventName());
         }else{
             return new MessageResponse();
         }
@@ -102,7 +102,7 @@ public class MessageService {
                     parentMessageId = message.getParentMessage().getId();
                 }
 
-                response.add(new MessageResponse(message.getText(), message.getDateTime(), message.getAppUser().getEmail(), gameId, message.getId(), message.isDeleted(), parentMessageId));
+                response.add(new MessageResponse(message.getText(), message.getDateTime(), message.getAppUser().getEmail(), gameId, message.getId(), message.isDeleted(), parentMessageId, message.getEventName()));
             }
 
             return response;

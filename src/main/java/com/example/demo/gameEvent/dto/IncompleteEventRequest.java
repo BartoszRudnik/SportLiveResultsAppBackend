@@ -11,5 +11,4 @@ public class IncompleteEventRequest {
     private String eventType;
     private Long teamId;
     private Long gameId;
-    private String message;
 }

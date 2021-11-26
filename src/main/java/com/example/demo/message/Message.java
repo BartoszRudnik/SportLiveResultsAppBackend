@@ -29,6 +29,7 @@ public class Message {
     private String text;
     private LocalDateTime dateTime;
     private boolean deleted;
+    private String eventName;
 
     @ManyToOne
     @JoinColumn(name = "parent_message")
@@ -42,20 +43,22 @@ public class Message {
     @JoinColumn(name = "app_user_id")
     private AppUser appUser;
 
-    public Message(String text, LocalDateTime dateTime, Game game, AppUser appUser, Message parentMessage){
+    public Message(String text, LocalDateTime dateTime, Game game, AppUser appUser, Message parentMessage, String eventName){
         this.text = text;
         this.dateTime = dateTime;
         this.game = game;
         this.appUser = appUser;
         this.deleted = false;
         this.parentMessage = parentMessage;
+        this.eventName = eventName;
     }
 
-    public Message(String text, LocalDateTime dateTime, Game game, AppUser appUser){
+    public Message(String text, LocalDateTime dateTime, Game game, AppUser appUser, String eventName){
         this.text = text;
         this.dateTime = dateTime;
         this.game = game;
         this.appUser = appUser;
         this.deleted = false;
+        this.eventName = eventName;
     }
 }

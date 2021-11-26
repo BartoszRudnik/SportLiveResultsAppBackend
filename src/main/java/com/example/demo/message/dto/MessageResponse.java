@@ -19,13 +19,15 @@ public class MessageResponse {
     private Long messageId;
     private boolean deleted;
     private Long parentMessageId;
+    private String eventName;
 
-    public MessageResponse(String text, LocalDateTime date, String userMail, Long gameId, Long messageId, boolean deleted){
+    public MessageResponse(String text, LocalDateTime date, String userMail, Long gameId, Long messageId, boolean deleted, String eventName){
          this.text = text;
          this.date = date;
          this.userMail = userMail;
          this.gameId = gameId;
          this.messageId = messageId;
          this.deleted = deleted;
+         this.eventName = eventName;
     }
 }

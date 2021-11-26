@@ -13,5 +13,4 @@ public class GameEventsResponse {
     private Long playerId;
     private Long teamId;
     private String eventType;
-    private String message;
 }
