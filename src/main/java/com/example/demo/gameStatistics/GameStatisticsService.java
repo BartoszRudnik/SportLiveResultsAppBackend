@@ -6,6 +6,8 @@ import com.example.demo.gameStatistics.dto.GetGameStatistics;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Service
@@ -24,7 +26,7 @@ public class GameStatisticsService {
         }
     }
 
-    public void addFoul(Long teamId, Long gameId){
+    public Long addFoul(Long teamId, Long gameId){
         if(this.gameRepository.findById(gameId).isPresent()){
             Game game = this.gameRepository.findById(gameId).get();
             GameStatistics gameStatistics = game.getGameStatistics();
@@ -36,10 +38,14 @@ public class GameStatisticsService {
             }
 
             this.gameStatisticsRepository.save(gameStatistics);
+
+            return Duration.between(game.getActualStartDate(), LocalDateTime.now()).toMinutes() + (long) game.getLengthOfPartOfGame() * game.getPartOfGame() + 1;
         }
+
+        return 0L;
     }
 
-    public void addCorner(Long teamId, Long gameId){
+    public Long addCorner(Long teamId, Long gameId){
         if(this.gameRepository.findById(gameId).isPresent()){
             Game game = this.gameRepository.findById(gameId).get();
             GameStatistics gameStatistics = game.getGameStatistics();
@@ -51,10 +57,14 @@ public class GameStatisticsService {
             }
 
             this.gameStatisticsRepository.save(gameStatistics);
+
+            return Duration.between(game.getActualStartDate(), LocalDateTime.now()).toMinutes() + (long) game.getLengthOfPartOfGame() * game.getPartOfGame() + 1;
         }
+
+        return 0L;
     }
 
-    public void addShoot(Long teamId, Long gameId){
+    public Long addShoot(Long teamId, Long gameId){
         if(this.gameRepository.findById(gameId).isPresent()){
             Game game = this.gameRepository.findById(gameId).get();
             GameStatistics gameStatistics = game.getGameStatistics();
@@ -66,10 +76,14 @@ public class GameStatisticsService {
             }
 
             this.gameStatisticsRepository.save(gameStatistics);
+
+            return Duration.between(game.getActualStartDate(), LocalDateTime.now()).toMinutes() + (long) game.getLengthOfPartOfGame() * game.getPartOfGame() + 1;
         }
+
+        return 0L;
     }
 
-    public void addOffside(Long teamId, Long gameId){
+    public Long addOffside(Long teamId, Long gameId){
         if(this.gameRepository.findById(gameId).isPresent()){
             Game game = this.gameRepository.findById(gameId).get();
             GameStatistics gameStatistics = game.getGameStatistics();
@@ -81,6 +95,10 @@ public class GameStatisticsService {
             }
 
             this.gameStatisticsRepository.save(gameStatistics);
+
+            return Duration.between(game.getActualStartDate(), LocalDateTime.now()).toMinutes() + (long) game.getLengthOfPartOfGame() * game.getPartOfGame() + 1;
         }
+
+        return 0L;
     }
 }

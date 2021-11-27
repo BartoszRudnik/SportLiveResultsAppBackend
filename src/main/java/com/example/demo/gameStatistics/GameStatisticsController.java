@@ -18,22 +18,22 @@ public class GameStatisticsController {
     }
 
     @PostMapping("/addShoot/{gameId}/{teamId}")
-    public void addShoot(@PathVariable Long gameId, @PathVariable Long teamId){
-        this.gameStatisticsService.addShoot(teamId, gameId);
+    public Long addShoot(@PathVariable Long gameId, @PathVariable Long teamId){
+        return this.gameStatisticsService.addShoot(teamId, gameId);
     }
 
     @PostMapping("/addCorner/{gameId}/{teamId}")
-    public void addCorner(@PathVariable Long gameId, @PathVariable Long teamId){
-        this.gameStatisticsService.addCorner(teamId, gameId);
+    public Long addCorner(@PathVariable Long gameId, @PathVariable Long teamId){
+        return this.gameStatisticsService.addCorner(teamId, gameId);
     }
 
     @PostMapping("/addFoul/{gameId}/{teamId}")
-    public void addFoul(@PathVariable Long gameId, @PathVariable Long teamId){
-        this.gameStatisticsService.addFoul(teamId, gameId);
+    public Long addFoul(@PathVariable Long gameId, @PathVariable Long teamId){
+        return this.gameStatisticsService.addFoul(teamId, gameId);
     }
 
     @PostMapping("/addOffside/{gameId}/{teamId}")
-    public void addOffside(@PathVariable Long gameId, @PathVariable Long teamId){
-        this.gameStatisticsService.addOffside(teamId, gameId);
+    public Long addOffside(@PathVariable Long gameId, @PathVariable Long teamId){
+        return this.gameStatisticsService.addOffside(teamId, gameId);
     }
 }
