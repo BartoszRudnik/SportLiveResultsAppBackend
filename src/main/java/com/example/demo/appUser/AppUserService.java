@@ -1,18 +1,27 @@
 package com.example.demo.appUser;
 
+import com.example.demo.appUser.dto.GetFavoriteGamesResponse;
 import com.example.demo.appUser.dto.UserFavoritesRequest;
 import com.example.demo.confirmationToken.ConfirmationToken;
 import com.example.demo.confirmationToken.ConfirmationTokenService;
 import com.example.demo.game.Game;
 import com.example.demo.game.GameRepository;
+import com.example.demo.game.GameService;
+import com.example.demo.gameEvent.GameEvent;
+import com.example.demo.gameEvent.GameEventType;
+import com.example.demo.gamePlayer.GamePlayer;
+import com.example.demo.gamePlayer.GamePlayerStatus;
 import com.example.demo.league.League;
 import com.example.demo.league.LeagueRepository;
+import com.example.demo.league.dto.GameEventsResponse;
 import com.example.demo.league.dto.GetLeaguesResponse;
+import com.example.demo.player.dto.SinglePlayerResponse;
 import com.example.demo.signIn.dto.SignInAnon;
 import com.example.demo.signUp.dto.SignUpRequest;
 import com.example.demo.team.Team;
 import com.example.demo.team.TeamRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,20 +42,23 @@ public class AppUserService implements UserDetailsService {
     private final TeamRepository teamRepository;
     private final GameRepository gameRepository;
     private final LeagueRepository leagueRepository;
+    private final GameService gameService;
 
     public Optional<AppUser> findByEmail(String email){
         return this.appUserRepository.findByEmail(email);
     }
 
-    public void deleteUser(AppUser appUser){
-        this.appUserRepository.delete(appUser);
-    }
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return this.appUserRepository.
+        AppUser user =  this.appUserRepository.
                 findByEmail(email).
                 orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
+
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+        authorities.add(new SimpleGrantedAuthority(user.getAppUserRole().name()));
+
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
     }
 
     public ConfirmationToken signInUser(String email, String password){
@@ -416,5 +428,80 @@ public class AppUserService implements UserDetailsService {
             return result;
         }
         return new HashSet<>();
+    }
+
+    private List<GetFavoriteGamesResponse> getGamesWithFullPlayerInfo(Set<Game> games, Set<Game> notificationGames){
+        List<GetFavoriteGamesResponse> result = new ArrayList<>();
+
+        for(Game game : games){
+            List<SinglePlayerResponse> squadTeamA = new ArrayList<>();
+            List<SinglePlayerResponse> squadTeamB = new ArrayList<>();
+            List<SinglePlayerResponse> substitutionsTeamA = new ArrayList<>();
+            List<SinglePlayerResponse> substitutionsTeamB = new ArrayList<>();
+
+            for(GamePlayer player : game.getPlayers()){
+                int numberOfGoals = (int) player.getPlayer().getGameEvents().stream().filter(event -> event.getGameEventType() == GameEventType.GOAL).count();
+
+                if(Objects.equals(player.getPlayer().getTeam().getId(), game.getTeamA().getId())){
+                    if(player.getGamePlayerStatus() == GamePlayerStatus.FIRST_SQUAD){
+                        squadTeamA.add(new SinglePlayerResponse(player.getPlayer().getId(), player.getPlayer().getFirstName(), player.getPlayer().getLastName(), player.getPlayer().getPosition(), numberOfGoals, 0, player.getPlayer().getTeam().getId()));
+                    }else{
+                        substitutionsTeamA.add(new SinglePlayerResponse(player.getPlayer().getId(), player.getPlayer().getFirstName(), player.getPlayer().getLastName(), player.getPlayer().getPosition(), numberOfGoals, 0, player.getPlayer().getTeam().getId()));
+                    }
+                }else{
+                    if(player.getGamePlayerStatus() == GamePlayerStatus.FIRST_SQUAD) {
+                        squadTeamB.add(new SinglePlayerResponse(player.getPlayer().getId(), player.getPlayer().getFirstName(), player.getPlayer().getLastName(), player.getPlayer().getPosition(), numberOfGoals, 0, player.getPlayer().getTeam().getId()));
+                    }else{
+                        substitutionsTeamB.add(new SinglePlayerResponse(player.getPlayer().getId(), player.getPlayer().getFirstName(), player.getPlayer().getLastName(), player.getPlayer().getPosition(), numberOfGoals, 0, player.getPlayer().getTeam().getId()));
+                    }
+                }
+            }
+
+            List<GameEventsResponse> gameEventsResponses = new ArrayList<>();
+
+            for(GameEvent gameEvent : game.getGameEvents()){
+                gameEventsResponses.add(new GameEventsResponse(gameEvent.getId(), gameEvent.getEventMinute(), gameEvent.getPlayer().getId(), gameEvent.getTeam().getId(), gameEvent.getGameEventType().toString()));
+            }
+
+            String reporterMail = "";
+
+            if(game.getReporter() != null){
+                reporterMail = game.getReporter().getEmail();
+            }
+
+            boolean isNotification = notificationGames.contains(game);
+
+            result.add(new GetFavoriteGamesResponse(game.getId(), game.getLeague().getId(), game.getTeamA().getId(), game.getTeamB().getId(), game.getScoreTeamA(), game.getScoreTeamB(), game.getGameStartDate(), game.getActualStartDate(), game.getTeamA().getStadiumName(), gameEventsResponses, squadTeamA, squadTeamB, substitutionsTeamA, substitutionsTeamB, game.getRound(), game.isBreak(), game.getPartOfGame(), game.getLengthOfPartOfGame(), reporterMail, isNotification, game.getGameStatus().toString()));
+        }
+
+        return result;
+    }
+
+    public List<GetFavoriteGamesResponse> getAllFavoriteUserTeamGames(String userMail) {
+        if(this.appUserRepository.findByEmail(userMail).isPresent()){
+            AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
+
+            Set<Team> favoriteTeams = appUser.getFavoriteTeams();
+
+            Set<Game> games = new HashSet<>();
+
+            for(Team team : favoriteTeams){
+                games.addAll(this.gameService.findTeamLiveAndScheduledGames(team));
+            }
+
+            return this.getGamesWithFullPlayerInfo(games, appUser.getNotificationGames());
+        }else{
+            return new ArrayList<>();
+        }
+    }
+
+    public List<GetFavoriteGamesResponse> getAllFavoriteUserGames(String userMail) {
+        if(this.appUserRepository.findByEmail(userMail).isPresent()) {
+            AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
+
+            return this.getGamesWithFullPlayerInfo(appUser.getFavoriteGames(), appUser.getNotificationGames());
+        }else{
+            return new ArrayList<>();
+        }
     }
 }

@@ -252,7 +252,7 @@ public class GameService {
                 reporterMail = game.getReporter().getEmail();
             }
 
-            return new GetGamesResponse(game.getId(), game.getTeamA().getId(), game.getTeamB().getId(), game.getScoreTeamA(), game.getScoreTeamB(), game.getGameStartDate(), game.getActualStartDate(), game.getTeamA().getStadiumName(), gameEventsResponses, squadTeamA, squadTeamB, substitutionsTeamA, substitutionsTeamB, game.getRound(), game.isBreak(), game.getPartOfGame(), game.getLengthOfPartOfGame(), reporterMail);
+            return new GetGamesResponse(game.getId(), game.getTeamA().getId(), game.getTeamB().getId(), game.getScoreTeamA(), game.getScoreTeamB(), game.getGameStartDate(), game.getActualStartDate(), game.getTeamA().getStadiumName(), gameEventsResponses, squadTeamA, squadTeamB, substitutionsTeamA, substitutionsTeamB, game.getRound(), game.isBreak(), game.getPartOfGame(), game.getLengthOfPartOfGame(), reporterMail, game.getGameStatus().toString());
         }else{
             return new GetGamesResponse();
         }
@@ -267,6 +267,15 @@ public class GameService {
 
             this.gameRepository.save(game);
         }
+    }
+
+    public List<Game> findTeamLiveAndScheduledGames(Team team){
+        List<Game> games;
+
+        games = this.gameRepository.findTeamLiveGames(team, GameStatus.IN_PROGRESS);
+        games.addAll(this.gameRepository.findTeamScheduledGames(team, GameStatus.SCHEDULED).stream().filter((game -> game.getGameStartDate().isBefore(LocalDateTime.now().plusDays(8)))).collect(Collectors.toList()));
+
+        return games;
     }
 
     public void removeReporter(Long gameId) {

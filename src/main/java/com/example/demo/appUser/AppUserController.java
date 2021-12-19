@@ -1,5 +1,6 @@
 package com.example.demo.appUser;
 
+import com.example.demo.appUser.dto.GetFavoriteGamesResponse;
 import com.example.demo.appUser.dto.UserFavoritesRequest;
 import com.example.demo.league.dto.GetLeaguesResponse;
 import lombok.AllArgsConstructor;
@@ -83,5 +84,15 @@ public class AppUserController {
     @GetMapping("/getUserFavoriteGames/{userMail}/{leagueId}/{round}")
     public Set<Long> getUserFavoriteGames(@PathVariable String userMail, @PathVariable Long leagueId, @PathVariable int round){
         return this.appUserService.getUserFavoriteGames(userMail, leagueId, round);
+    }
+
+    @GetMapping("/getAllFavoriteUserTeamGames/{userMail}")
+    public List<GetFavoriteGamesResponse> getFavoriteGamesResponses(@PathVariable String userMail){
+        return this.appUserService.getAllFavoriteUserTeamGames(userMail);
+    }
+
+    @GetMapping("/getAllFavoriteUserGames/{userMail}")
+    public List<GetFavoriteGamesResponse> getAllFavoriteUserGames(@PathVariable String userMail){
+        return this.appUserService.getAllFavoriteUserGames(userMail);
     }
 }

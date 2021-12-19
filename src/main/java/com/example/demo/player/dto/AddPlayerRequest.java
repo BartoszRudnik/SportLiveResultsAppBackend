@@ -9,12 +9,10 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 public class AddPlayerRequest {
-
     private String firstName;
     private String lastName;
     private String position;
     private int numberOfGoals;
     private int numberOfAssists;
     private Long teamId;
-
 }

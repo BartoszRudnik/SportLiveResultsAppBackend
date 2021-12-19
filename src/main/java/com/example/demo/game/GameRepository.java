@@ -16,8 +16,13 @@ public interface GameRepository extends JpaRepository<Game, Long> {
     @Query("select g from Game g where (g.teamA = ?1 OR g.teamB = ?1) AND g.gameStatus = ?2")
     List<Game> findTeamFinishedGames(Team team, GameStatus gameStatus);
 
-    @Query("select g from Game g where (g.teamA = ?1 OR g.teamB = ?1) AND g.gameStatus = ?2")
+    @Query("select g from Game g" +
+            " where (g.teamA = ?1 OR g.teamB = ?1) AND g.gameStatus = ?2")
     List<Game> findTeamScheduledGames(Team team, GameStatus gameStatus);
+
+    @Query("select g from Game g" +
+            " where (g.teamA = ?1 OR g.teamB = ?1) AND g.gameStatus = ?2")
+    List<Game> findTeamLiveGames(Team team, GameStatus gameStatus);
 
     List<Game> findAllByLeagueAndGameStatusAndTeamAOrTeamB(League league, GameStatus gameStatus, Team teamA, Team teamB);
     List<Game> findAllByLeagueAndTeamAOrTeamB(League league, Team teamA, Team teamB);

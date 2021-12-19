@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "api/v1/fcm")
 @AllArgsConstructor
 public class FcmController {
-
     private final FcmService fcmService;
 
     @PostMapping("/message/{gameId}")
