@@ -35,11 +35,13 @@ public class GamePlayer {
     private Game game;
 
     private GamePlayerStatus gamePlayerStatus;
+    private GamePlayerPosition gamePlayerPosition;
 
-    public GamePlayer(Player player, Game game, GamePlayerStatus gamePlayerStatus){
+    public GamePlayer(Player player, Game game, GamePlayerStatus gamePlayerStatus, GamePlayerPosition gamePlayerPosition){
         this.player = player;
         this.game = game;
         this.gamePlayerStatus = gamePlayerStatus;
+        this.gamePlayerPosition = gamePlayerPosition;
     }
 
     @Override

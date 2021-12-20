@@ -1,5 +1,6 @@
 package com.example.demo.league.dto;
 
+import com.example.demo.player.dto.GamePlayerResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,10 +21,10 @@ public class GetGamesResponse {
     private LocalDateTime actualGameStart;
     private String stadiumName;
     private List<GameEventsResponse> events;
-    private List<Long> squadTeamA;
-    private List<Long> squadTeamB;
-    private List<Long> substitutionsTeamA;
-    private List<Long> substitutionsTeamB;
+    private List<GamePlayerResponse> squadTeamA;
+    private List<GamePlayerResponse> squadTeamB;
+    private List<GamePlayerResponse> substitutionsTeamA;
+    private List<GamePlayerResponse> substitutionsTeamB;
     private int round;
     private boolean halfBreak;
     private int partOfGame;

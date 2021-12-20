@@ -78,7 +78,7 @@ public class PlayerService {
 
             int numberOfGoals = (int) player.getGameEvents().stream().filter(event -> event.getGameEventType() == GameEventType.GOAL).count();
 
-            return new SinglePlayerResponse(player.getId(), player.getFirstName(), player.getLastName(), player.getPosition(), numberOfGoals, player.getNumberOfAssists(), player.getTeam().getId());
+            return new SinglePlayerResponse(player.getId(), player.getFirstName(), player.getLastName(), player.getPosition(), numberOfGoals, player.getNumberOfAssists(), player.getTeam().getId(), "");
         }else{
             return new SinglePlayerResponse();
         }
@@ -94,7 +94,7 @@ public class PlayerService {
             for(Player player : players){
                 int numberOfGoals = (int) player.getGameEvents().stream().filter(event -> event.getGameEventType() == GameEventType.GOAL).count();
 
-                result.add(new SinglePlayerResponse(player.getId(), player.getFirstName(), player.getLastName(), player.getPosition(), numberOfGoals, player.getNumberOfAssists(), player.getTeam().getId()));
+                result.add(new SinglePlayerResponse(player.getId(), player.getFirstName(), player.getLastName(), player.getPosition(), numberOfGoals, player.getNumberOfAssists(), player.getTeam().getId(), ""));
             }
 
             return result;

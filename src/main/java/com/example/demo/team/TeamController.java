@@ -23,9 +23,9 @@ public class TeamController {
         return this.teamService.getTeamsFromLeague(leagueId);
     }
 
-    @GetMapping("/getSingleTeam/{teamId}")
-    public SingleTeamResponse getSingleTeam(@PathVariable Long teamId){
-        return this.teamService.getSingleTeam(teamId);
+    @GetMapping("/getSingleTeam/{teamId}/{email}")
+    public SingleTeamResponse getSingleTeam(@PathVariable Long teamId, @PathVariable String email){
+        return this.teamService.getSingleTeam(teamId, email);
     }
 
     @PostMapping("/addTeamSocialMedia")

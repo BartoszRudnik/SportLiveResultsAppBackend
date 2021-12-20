@@ -1,5 +1,6 @@
 package com.example.demo.player.dto;
 
+import com.example.demo.gamePlayer.GamePlayerPosition;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,13 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class SinglePlayerResponse {
+public class GamePlayerResponse {
     private Long playerId;
-    private String firstName;
-    private String lastName;
     private String position;
-    private int numberOfGoals;
-    private int numberOfAssists;
-    private Long teamId;
-    private String exactPosition;
 }

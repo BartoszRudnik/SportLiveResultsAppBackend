@@ -1,5 +1,6 @@
 package com.example.demo.team;
 
+import com.example.demo.appUser.AppUserRepository;
 import com.example.demo.game.Game;
 import com.example.demo.game.GameRepository;
 import com.example.demo.game.GameStatus;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @Service
@@ -33,6 +35,7 @@ public class TeamService {
     private final LeagueTableRepository leagueTableRepository;
     private final LeagueService leagueService;
     private final SocialMediaRepository socialMediaRepository;
+    private final AppUserRepository appUserRepository;
 
     public void addSocialMedia(AddTeamSocialMedia request){
         if(this.teamRepository.findById(request.getTeamId()).isPresent()){
@@ -146,7 +149,7 @@ public class TeamService {
                     instagramUrl = team.getSocialMedia().getInstagramUrl();
                 }
 
-                resultList.add(new SingleTeamResponse(team.getId(), team.getTeamName(), team.getCity(), team.getStadiumName(), facebookUrl, twitterUrl, instagramUrl));
+                resultList.add(new SingleTeamResponse(team.getId(), team.getTeamName(), team.getCity(), team.getStadiumName(), facebookUrl, twitterUrl, instagramUrl, false));
             }
 
             return resultList;
@@ -155,9 +158,10 @@ public class TeamService {
         }
     }
 
-    public SingleTeamResponse getSingleTeam(Long teamId) {
-        if(this.teamRepository.findById(teamId).isPresent()){
+    public SingleTeamResponse getSingleTeam(Long teamId, String email) {
+        if(this.teamRepository.findById(teamId).isPresent() && this.appUserRepository.findByEmail(email).isPresent()){
             Team team = this.teamRepository.findById(teamId).get();
+            Set<Team> userFavoriteTeams = this.appUserRepository.findByEmail(email).get().getFavoriteTeams();
 
             String facebookUrl = "";
             String twitterUrl = "";
@@ -169,7 +173,7 @@ public class TeamService {
                 instagramUrl = team.getSocialMedia().getInstagramUrl();
             }
 
-            return new SingleTeamResponse(team.getId(), team.getTeamName(), team.getCity(), team.getStadiumName(), facebookUrl, twitterUrl, instagramUrl);
+            return new SingleTeamResponse(team.getId(), team.getTeamName(), team.getCity(), team.getStadiumName(), facebookUrl, twitterUrl, instagramUrl, userFavoriteTeams.contains(team));
         }else{
             return new SingleTeamResponse();
         }

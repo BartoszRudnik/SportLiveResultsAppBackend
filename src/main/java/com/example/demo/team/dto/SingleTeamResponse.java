@@ -15,4 +15,5 @@ public class SingleTeamResponse {
     private String facebookUrl;
     private String twitterUrl;
     private String instagramUrl;
+    private boolean userFavorite;
 }

@@ -7,6 +7,7 @@ import com.example.demo.gameEvent.GameEvent;
 import com.example.demo.gamePlayer.GamePlayer;
 import com.example.demo.gamePlayer.GamePlayerStatus;
 import com.example.demo.league.dto.*;
+import com.example.demo.player.dto.GamePlayerResponse;
 import com.example.demo.team.Team;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,25 +37,25 @@ public class LeagueService {
         List<GetGamesResponse> result = new ArrayList<>();
 
         for(Game game : games){
-            List<Long> squadTeamA = new ArrayList<>();
-            List<Long> squadTeamB = new ArrayList<>();
-            List<Long> substitutionsTeamA = new ArrayList<>();
-            List<Long> substitutionsTeamB = new ArrayList<>();
+            List<GamePlayerResponse> squadTeamA = new ArrayList<>();
+            List<GamePlayerResponse> squadTeamB = new ArrayList<>();
+            List<GamePlayerResponse> substitutionsTeamA = new ArrayList<>();
+            List<GamePlayerResponse> substitutionsTeamB = new ArrayList<>();
 
             Set<GamePlayer> players = game.getPlayers();
 
             for(GamePlayer player : players){
                 if(Objects.equals(player.getPlayer().getTeam().getId(), game.getTeamA().getId())){
                     if(player.getGamePlayerStatus() == GamePlayerStatus.FIRST_SQUAD){
-                        squadTeamA.add(player.getPlayer().getId());
+                        squadTeamA.add(new GamePlayerResponse(player.getPlayer().getId(), player.getGamePlayerPosition().toString()));
                     }else{
-                        substitutionsTeamA.add(player.getPlayer().getId());
+                        substitutionsTeamA.add(new GamePlayerResponse(player.getPlayer().getId(), player.getGamePlayerPosition().toString()));
                     }
                 }else{
                     if(player.getGamePlayerStatus() == GamePlayerStatus.FIRST_SQUAD) {
-                        squadTeamB.add(player.getPlayer().getId());
+                        squadTeamB.add(new GamePlayerResponse(player.getPlayer().getId(), player.getGamePlayerPosition().toString()));
                     }else{
-                        substitutionsTeamB.add(player.getPlayer().getId());
+                        substitutionsTeamB.add(new GamePlayerResponse(player.getPlayer().getId(), player.getGamePlayerPosition().toString()));
                     }
                 }
             }

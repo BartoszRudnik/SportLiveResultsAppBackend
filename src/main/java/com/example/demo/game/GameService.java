@@ -6,6 +6,7 @@ import com.example.demo.game.dto.*;
 import com.example.demo.gameEvent.GameEvent;
 import com.example.demo.gameEvent.GameEventRepository;
 import com.example.demo.gamePlayer.GamePlayer;
+import com.example.demo.gamePlayer.GamePlayerPosition;
 import com.example.demo.gamePlayer.GamePlayerRepository;
 import com.example.demo.gamePlayer.GamePlayerStatus;
 import com.example.demo.gameStatistics.GameStatistics;
@@ -15,6 +16,7 @@ import com.example.demo.league.LeagueService;
 import com.example.demo.league.dto.GameEventsResponse;
 import com.example.demo.league.dto.GetGamesResponse;
 import com.example.demo.player.*;
+import com.example.demo.player.dto.GamePlayerResponse;
 import com.example.demo.team.Team;
 import com.example.demo.team.TeamService;
 import lombok.AllArgsConstructor;
@@ -151,7 +153,7 @@ public class GameService {
             for(SinglePlayerRequest singlePlayerRequest : players){
                 if(this.playerRepository.findById(singlePlayerRequest.getPlayerId()).isPresent()){
                     Player playerProfile = this.playerRepository.findById(singlePlayerRequest.getPlayerId()).get();
-                    GamePlayer gamePlayer = new GamePlayer(playerProfile, game, this.getPlayerGameStatus(singlePlayerRequest.getPlayerStatus()));
+                    GamePlayer gamePlayer = new GamePlayer(playerProfile, game, this.getPlayerGameStatus(singlePlayerRequest.getPlayerStatus()), this.getPlayerGamePosition(singlePlayerRequest.getPlayerPosition()));
 
                     if(game.getPlayers().contains(gamePlayer)){
                         game.getPlayers().remove(gamePlayer);
@@ -171,6 +173,32 @@ public class GameService {
         }
     }
 
+    private GamePlayerPosition getPlayerGamePosition(String playerPosition){
+        if(playerPosition.equalsIgnoreCase("goalkeeper")){
+            return GamePlayerPosition.GOALKEEPER;
+        }else if(playerPosition.equalsIgnoreCase("left_defender")){
+            return GamePlayerPosition.LEFT_DEFENDER;
+        } else if(playerPosition.equalsIgnoreCase("center_defender")){
+            return GamePlayerPosition.CENTER_DEFENDER;
+        } else if(playerPosition.equalsIgnoreCase("right_defender")){
+            return GamePlayerPosition.RIGHT_DEFENDER;
+        }else if(playerPosition.equalsIgnoreCase("left_midfielder")){
+            return GamePlayerPosition.LEFT_MIDFIELDER;
+        }else if(playerPosition.equalsIgnoreCase("center_midfielder")){
+            return GamePlayerPosition.CENTER_MIDFIELDER;
+        }else if(playerPosition.equalsIgnoreCase("right_midfielder")){
+            return GamePlayerPosition.RIGHT_MIDFIELDER;
+        }else if(playerPosition.equalsIgnoreCase("left_forward")){
+            return GamePlayerPosition.LEFT_FORWARD;
+        }else if(playerPosition.equalsIgnoreCase("center_forward")){
+            return GamePlayerPosition.CENTER_FORWARD;
+        }else  if(playerPosition.equalsIgnoreCase("right_forward")){
+            return GamePlayerPosition.RIGHT_FORWARD;
+        }else{
+            return GamePlayerPosition.BENCH;
+        }
+    }
+
     private GamePlayerStatus getPlayerGameStatus(String playerStatus){
         if(playerStatus.equalsIgnoreCase("INJURED")){
             return GamePlayerStatus.INJURED;
@@ -185,23 +213,23 @@ public class GameService {
         if(this.gameRepository.findById(gameId).isPresent()){
             Game game = this.gameRepository.findById(gameId).get();
 
-            Set<Long> squadTeamA = new HashSet<>();
-            Set<Long> squadTeamB = new HashSet<>();
-            Set<Long> substitutionsTeamA = new HashSet<>();
-            Set<Long> substitutionsTeamB = new HashSet<>();
+            Set<GamePlayerResponse> squadTeamA = new HashSet<>();
+            Set<GamePlayerResponse> squadTeamB = new HashSet<>();
+            Set<GamePlayerResponse> substitutionsTeamA = new HashSet<>();
+            Set<GamePlayerResponse> substitutionsTeamB = new HashSet<>();
 
             for(GamePlayer player : game.getPlayers()){
                 if(Objects.equals(player.getPlayer().getTeam().getId(), game.getTeamA().getId())){
                     if(player.getGamePlayerStatus() == GamePlayerStatus.FIRST_SQUAD){
-                        squadTeamA.add(player.getPlayer().getId());
+                        squadTeamA.add(new GamePlayerResponse(player.getPlayer().getId(), player.getGamePlayerPosition().toString()));
                     }else{
-                        substitutionsTeamA.add(player.getPlayer().getId());
+                        substitutionsTeamA.add(new GamePlayerResponse(player.getPlayer().getId(), player.getGamePlayerPosition().toString()));
                     }
                 }else{
                     if(player.getGamePlayerStatus() == GamePlayerStatus.FIRST_SQUAD) {
-                        squadTeamB.add(player.getPlayer().getId());
+                        squadTeamB.add(new GamePlayerResponse(player.getPlayer().getId(), player.getGamePlayerPosition().toString()));
                     }else{
-                        substitutionsTeamB.add(player.getPlayer().getId());
+                        substitutionsTeamB.add(new GamePlayerResponse(player.getPlayer().getId(), player.getGamePlayerPosition().toString()));
                     }
                 }
             }
@@ -216,25 +244,25 @@ public class GameService {
         if(this.gameRepository.findById(gameId).isPresent()){
             Game game = this.gameRepository.findById(gameId).get();
 
-            List<Long> squadTeamA = new ArrayList<>();
-            List<Long> squadTeamB = new ArrayList<>();
-            List<Long> substitutionsTeamA = new ArrayList<>();
-            List<Long> substitutionsTeamB = new ArrayList<>();
+            List<GamePlayerResponse> squadTeamA = new ArrayList<>();
+            List<GamePlayerResponse> squadTeamB = new ArrayList<>();
+            List<GamePlayerResponse> substitutionsTeamA = new ArrayList<>();
+            List<GamePlayerResponse> substitutionsTeamB = new ArrayList<>();
 
             Set<GamePlayer> players = game.getPlayers();
 
             for(GamePlayer player : players){
                 if(Objects.equals(player.getPlayer().getTeam().getId(), game.getTeamA().getId())){
                     if(player.getGamePlayerStatus() == GamePlayerStatus.FIRST_SQUAD){
-                        squadTeamA.add(player.getPlayer().getId());
+                        squadTeamA.add(new GamePlayerResponse(player.getPlayer().getId(), player.getGamePlayerPosition().toString()));
                     }else{
-                        substitutionsTeamA.add(player.getPlayer().getId());
+                        substitutionsTeamA.add(new GamePlayerResponse(player.getPlayer().getId(), player.getGamePlayerPosition().toString()));
                     }
                 }else{
                     if(player.getGamePlayerStatus() == GamePlayerStatus.FIRST_SQUAD) {
-                        squadTeamB.add(player.getPlayer().getId());
+                        squadTeamB.add(new GamePlayerResponse(player.getPlayer().getId(), player.getGamePlayerPosition().toString()));
                     }else{
-                        substitutionsTeamB.add(player.getPlayer().getId());
+                        substitutionsTeamB.add(new GamePlayerResponse(player.getPlayer().getId(), player.getGamePlayerPosition().toString()));
                     }
                 }
             }
