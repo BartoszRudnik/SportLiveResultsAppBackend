@@ -47,15 +47,15 @@ public class LeagueService {
             for(GamePlayer player : players){
                 if(Objects.equals(player.getPlayer().getTeam().getId(), game.getTeamA().getId())){
                     if(player.getGamePlayerStatus() == GamePlayerStatus.FIRST_SQUAD){
-                        squadTeamA.add(new GamePlayerResponse(player.getPlayer().getId(), player.getGamePlayerPosition().toString()));
+                        squadTeamA.add(new GamePlayerResponse(player.getPlayer().getId(), player.getGamePlayerPosition().toString(), player.getShirtNumber()));
                     }else{
-                        substitutionsTeamA.add(new GamePlayerResponse(player.getPlayer().getId(), player.getGamePlayerPosition().toString()));
+                        substitutionsTeamA.add(new GamePlayerResponse(player.getPlayer().getId(), player.getGamePlayerPosition().toString(), player.getShirtNumber()));
                     }
                 }else{
                     if(player.getGamePlayerStatus() == GamePlayerStatus.FIRST_SQUAD) {
-                        squadTeamB.add(new GamePlayerResponse(player.getPlayer().getId(), player.getGamePlayerPosition().toString()));
+                        squadTeamB.add(new GamePlayerResponse(player.getPlayer().getId(), player.getGamePlayerPosition().toString(), player.getShirtNumber()));
                     }else{
-                        substitutionsTeamB.add(new GamePlayerResponse(player.getPlayer().getId(), player.getGamePlayerPosition().toString()));
+                        substitutionsTeamB.add(new GamePlayerResponse(player.getPlayer().getId(), player.getGamePlayerPosition().toString(), player.getShirtNumber()));
                     }
                 }
             }

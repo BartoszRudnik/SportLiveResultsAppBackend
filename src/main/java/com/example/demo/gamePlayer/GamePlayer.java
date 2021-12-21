@@ -36,12 +36,14 @@ public class GamePlayer {
 
     private GamePlayerStatus gamePlayerStatus;
     private GamePlayerPosition gamePlayerPosition;
+    private int shirtNumber;
 
-    public GamePlayer(Player player, Game game, GamePlayerStatus gamePlayerStatus, GamePlayerPosition gamePlayerPosition){
+    public GamePlayer(Player player, Game game, GamePlayerStatus gamePlayerStatus, GamePlayerPosition gamePlayerPosition, int shirtNumber){
         this.player = player;
         this.game = game;
         this.gamePlayerStatus = gamePlayerStatus;
         this.gamePlayerPosition = gamePlayerPosition;
+        this.shirtNumber = shirtNumber;
     }
 
     @Override

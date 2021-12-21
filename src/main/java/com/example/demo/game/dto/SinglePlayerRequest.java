@@ -13,4 +13,5 @@ public class SinglePlayerRequest {
     private Long playerId;
     private String playerStatus;
     private String playerPosition;
+    private int shirtNumber;
 }
