@@ -44,10 +44,10 @@ public class Player {
     private Team team;
 
     @OneToMany(mappedBy = "player")
-    List<GameEvent> gameEvents;
+    private List<GameEvent> gameEvents;
 
     @OneToMany(mappedBy = "player")
-    private Set<GamePlayer> games;
+    private List<GamePlayer> games;
 
     public Player(String firstName, String lastName, String position, int numberOfAssists){
         this.firstName = firstName;
@@ -66,7 +66,7 @@ public class Player {
 
     public void addGame(GamePlayer game){
         if(this.games == null){
-            this.games = new HashSet<>();
+            this.games = new ArrayList<>();
         }
 
         this.games.add(game);

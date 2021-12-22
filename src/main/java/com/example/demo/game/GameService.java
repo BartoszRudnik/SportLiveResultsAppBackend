@@ -347,7 +347,7 @@ public class GameService {
         for(Player player : players){
             if(player.getGames().size() > 0){
                 GamePlayer latestGame = player.getGames().stream()
-                        .sorted(Comparator.comparing(gamePlayer -> gamePlayer.getGame().getGameStartDate()))
+                        .sorted(Comparator.comparing((GamePlayer gamePlayer) -> gamePlayer.getGame().getGameStartDate()).reversed())
                         .collect(Collectors.toList()).get(0);
 
                 result.add(new SquadPlayerInfo(player.getId(), latestGame.getShirtNumber(), latestGame.getGamePlayerPosition().toString()));
