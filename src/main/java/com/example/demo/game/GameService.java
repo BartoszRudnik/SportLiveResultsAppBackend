@@ -339,4 +339,23 @@ public class GameService {
             return "";
         }
     }
+
+    public List<SquadPlayerInfo> getSquadPlayerInfo(Long teamId) {
+        List<SquadPlayerInfo> result = new ArrayList<>();
+        List<Player> players = this.teamService.getTeam(teamId).getPlayers();
+
+        for(Player player : players){
+            if(player.getGames().size() > 0){
+                GamePlayer latestGame = player.getGames().stream()
+                        .sorted(Comparator.comparing(gamePlayer -> gamePlayer.getGame().getGameStartDate()))
+                        .collect(Collectors.toList()).get(0);
+
+                result.add(new SquadPlayerInfo(player.getId(), latestGame.getShirtNumber(), latestGame.getGamePlayerPosition().toString()));
+            }else{
+                result.add(new SquadPlayerInfo(player.getId(), 1, "bench"));
+            }
+        }
+
+        return result;
+    }
 }

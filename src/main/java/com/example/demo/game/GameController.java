@@ -1,9 +1,6 @@
 package com.example.demo.game;
 
-import com.example.demo.game.dto.AddGameRequest;
-import com.example.demo.game.dto.AddLineupsRequest;
-import com.example.demo.game.dto.GetLineupsResponse;
-import com.example.demo.game.dto.UpdateScoreRequest;
+import com.example.demo.game.dto.*;
 import com.example.demo.gameEvent.GameEvent;
 import com.example.demo.league.dto.GameEventsResponse;
 import com.example.demo.league.dto.GetGamesResponse;
@@ -77,5 +74,10 @@ public class GameController {
     @GetMapping("/isReporter/{gameId}")
     public boolean isReporter(@PathVariable Long gameId){
         return this.gameService.isReporter(gameId);
+    }
+
+    @GetMapping("/getSquadPlayerInfo/{teamId}")
+    public List<SquadPlayerInfo> getSquadPlayerInfo(@PathVariable Long teamId){
+        return this.gameService.getSquadPlayerInfo(teamId);
     }
 }
