@@ -8,9 +8,11 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface GamePlayerRepository extends JpaRepository<GamePlayer, Long> {
+    Optional<List<GamePlayer>> findAllByPlayerId(Long playerId);
     List<GamePlayer> findAllByPlayer(Player player);
     List<GamePlayer> findAllByPlayerAndGameGameStatus(Player player, GameStatus gameStatus);
     @Transactional

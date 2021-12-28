@@ -8,6 +8,7 @@ import com.example.demo.gameEvent.dto.FullEventRequest;
 import com.example.demo.gameEvent.dto.IncompleteEventRequest;
 import com.example.demo.gameEvent.dto.UpdateEventRequest;
 import com.example.demo.gamePlayer.GamePlayer;
+import com.example.demo.gamePlayer.GamePlayerPosition;
 import com.example.demo.gamePlayer.GamePlayerStatus;
 import com.example.demo.leagueTable.LeagueTable;
 import com.example.demo.leagueTable.LeagueTableRepository;
@@ -256,6 +257,9 @@ public class GameEventService {
             if(playerOff.isPresent() && playerOn.isPresent()){
                 GamePlayer gamePlayerOff = playerOff.get();
                 GamePlayer gamePlayerOn = playerOn.get();
+
+                gamePlayerOn.setGamePlayerPosition(gamePlayerOff.getGamePlayerPosition());
+                gamePlayerOff.setGamePlayerPosition(GamePlayerPosition.BENCH);
 
                 gamePlayerOff.setGamePlayerStatus(GamePlayerStatus.SUBSTITUTION);
                 gamePlayerOn.setGamePlayerStatus(GamePlayerStatus.FIRST_SQUAD);

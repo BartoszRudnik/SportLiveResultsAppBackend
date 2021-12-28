@@ -1,9 +1,6 @@
 package com.example.demo.player;
 
-import com.example.demo.player.dto.AddPlayerRequest;
-import com.example.demo.player.dto.GetPlayerGamesResponse;
-import com.example.demo.player.dto.SinglePlayerResponse;
-import com.example.demo.player.dto.UpdatePlayerDataRequest;
+import com.example.demo.player.dto.*;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +12,12 @@ import java.util.List;
 @AllArgsConstructor
 public class PlayerController {
     private final PlayerService playerService;
+
+    @GetMapping("/getPlayerStatistics/{playerId}")
+    public SinglePlayerStatistics getSinglePlayerStatistics(@PathVariable Long playerId){
+        return this.playerService.getSinglePlayerStatistics(playerId);
+    }
+
 
     @GetMapping("/getSinglePlayer/{playerId}")
     public SinglePlayerResponse getSinglePlayer(@PathVariable Long playerId){
