@@ -15,4 +15,6 @@ public class SinglePlayerStatistics {
     private int assists;
     private int yellowCards;
     private int redCards;
+    private int teamGames;
+    private int teamGoals;
 }

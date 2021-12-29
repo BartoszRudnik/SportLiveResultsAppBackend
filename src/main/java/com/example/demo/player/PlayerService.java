@@ -1,6 +1,7 @@
 package com.example.demo.player;
 
 import com.example.demo.game.Game;
+import com.example.demo.game.GameService;
 import com.example.demo.game.GameStatus;
 import com.example.demo.gameEvent.GameEvent;
 import com.example.demo.gameEvent.GameEventType;
@@ -27,6 +28,7 @@ public class PlayerService {
     private final TeamRepository teamRepository;
     private final LeagueRepository leagueRepository;
     private final GamePlayerRepository gamePlayerRepository;
+    private final GameService gameService;
 
     public void addPlayer(AddPlayerRequest request) {
         Team team = this.teamService.getTeam(request.getTeamId());
@@ -241,12 +243,14 @@ public class PlayerService {
             int red = (int) player.getGameEvents().stream().filter((gameEvent -> gameEvent.getGameEventType() == GameEventType.RED_CARD)).count();
             int firstSquadGames = games.size() - (int) player.getGameEvents().stream().filter((gameEvent -> gameEvent.getGameEventType() == GameEventType.SUBSTITUTION_ON)).count();
             int minutes = 0;
+            int teamGoals = (int) player.getTeam().getGameEvents().stream().filter(gameEvent -> gameEvent.getGameEventType() == GameEventType.GOAL).count();
+            int teamFinishedGames = this.gameService.countTeamFinishedGames(player.getTeam());
 
             for (GamePlayer gamePlayer : games) {
                 minutes += this.numberOfMinutesPlayed(player, gamePlayer);
             }
 
-            return new SinglePlayerStatistics(games.size(), firstSquadGames, minutes, goals, assists, yellow, red);
+            return new SinglePlayerStatistics(games.size(), firstSquadGames, minutes, goals, assists, yellow, red, teamFinishedGames, teamGoals);
         } else {
             return new SinglePlayerStatistics();
         }

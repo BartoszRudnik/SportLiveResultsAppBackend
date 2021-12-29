@@ -7,6 +7,7 @@ import com.example.demo.confirmationToken.ConfirmationTokenService;
 import com.example.demo.game.Game;
 import com.example.demo.game.GameRepository;
 import com.example.demo.game.GameService;
+import com.example.demo.game.GameStatus;
 import com.example.demo.gameEvent.GameEvent;
 import com.example.demo.gameEvent.GameEventType;
 import com.example.demo.gamePlayer.GamePlayer;
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -498,8 +500,9 @@ public class AppUserService implements UserDetailsService {
     public List<GetFavoriteGamesResponse> getAllFavoriteUserGames(String userMail) {
         if(this.appUserRepository.findByEmail(userMail).isPresent()) {
             AppUser appUser = this.appUserRepository.findByEmail(userMail).get();
+            Set<Game> favoriteUserGames = appUser.getFavoriteGames().stream().filter(game -> game.getGameStatus() == GameStatus.IN_PROGRESS || game.getGameStatus() == GameStatus.SCHEDULED).collect(Collectors.toSet());
 
-            return this.getGamesWithFullPlayerInfo(appUser.getFavoriteGames(), appUser.getNotificationGames());
+            return this.getGamesWithFullPlayerInfo(favoriteUserGames, appUser.getNotificationGames());
         }else{
             return new ArrayList<>();
         }

@@ -297,6 +297,11 @@ public class GameService {
         }
     }
 
+    public int countTeamFinishedGames(Team team){
+        return this.gameRepository.findTeamFinishedGames(team, GameStatus.FINISHED).size();
+    }
+
+
     public List<Game> findTeamLiveAndScheduledGames(Team team){
         List<Game> games;
 
