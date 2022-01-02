@@ -77,8 +77,10 @@ public class PlayerService {
             Player player = this.playerRepository.findById(playerId).get();
 
             int numberOfGoals = (int) player.getGameEvents().stream().filter(event -> event.getGameEventType() == GameEventType.GOAL).count();
+            int numberOfRed = (int) player.getGameEvents().stream().filter(event -> event.getGameEventType() == GameEventType.RED_CARD).count();
+            int numberOfYellow = (int) player.getGameEvents().stream().filter(event -> event.getGameEventType() == GameEventType.YELLOW_CARD).count();
 
-            return new SinglePlayerResponse(player.getId(), player.getFirstName(), player.getLastName(), player.getPosition(), numberOfGoals, player.getNumberOfAssists(), player.getTeam().getId(), "", 0);
+            return new SinglePlayerResponse(player.getId(), player.getFirstName(), player.getLastName(), player.getPosition(), numberOfGoals, player.getNumberOfAssists(), player.getTeam().getId(), "", 0, numberOfRed, numberOfYellow);
         } else {
             return new SinglePlayerResponse();
         }
@@ -93,8 +95,10 @@ public class PlayerService {
 
             for (Player player : players) {
                 int numberOfGoals = (int) player.getGameEvents().stream().filter(event -> event.getGameEventType() == GameEventType.GOAL).count();
+                int numberOfRed = (int) player.getGameEvents().stream().filter(event -> event.getGameEventType() == GameEventType.RED_CARD).count();
+                int numberOfYellow = (int) player.getGameEvents().stream().filter(event -> event.getGameEventType() == GameEventType.YELLOW_CARD).count();
 
-                result.add(new SinglePlayerResponse(player.getId(), player.getFirstName(), player.getLastName(), player.getPosition(), numberOfGoals, player.getNumberOfAssists(), player.getTeam().getId(), "", 0));
+                result.add(new SinglePlayerResponse(player.getId(), player.getFirstName(), player.getLastName(), player.getPosition(), numberOfGoals, player.getNumberOfAssists(), player.getTeam().getId(), "", 0, numberOfRed, numberOfYellow));
             }
 
             return result;

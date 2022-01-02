@@ -17,4 +17,6 @@ public class SinglePlayerResponse {
     private Long teamId;
     private String exactPosition;
     private int shirtNumber;
+    private int numberOfRed;
+    private int numberOfYellow;
 }

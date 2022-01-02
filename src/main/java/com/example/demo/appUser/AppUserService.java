@@ -443,18 +443,21 @@ public class AppUserService implements UserDetailsService {
 
             for(GamePlayer player : game.getPlayers()){
                 int numberOfGoals = (int) player.getPlayer().getGameEvents().stream().filter(event -> event.getGameEventType() == GameEventType.GOAL).count();
+                int numberOfRed = (int) player.getPlayer().getGameEvents().stream().filter(event -> event.getGameEventType() == GameEventType.RED_CARD).count();
+                int numberOfYellow = (int) player.getPlayer().getGameEvents().stream().filter(event -> event.getGameEventType() == GameEventType.YELLOW_CARD).count();
 
                 if(Objects.equals(player.getPlayer().getTeam().getId(), game.getTeamA().getId())){
                     if(player.getGamePlayerStatus() == GamePlayerStatus.FIRST_SQUAD){
-                        squadTeamA.add(new SinglePlayerResponse(player.getPlayer().getId(), player.getPlayer().getFirstName(), player.getPlayer().getLastName(), player.getPlayer().getPosition(), numberOfGoals, 0, player.getPlayer().getTeam().getId(), player.getGamePlayerPosition().toString(), player.getShirtNumber()));
+                        squadTeamA.add(new SinglePlayerResponse(player.getPlayer().getId(), player.getPlayer().getFirstName(), player.getPlayer().getLastName(), player.getPlayer().getPosition(), numberOfGoals, 0, player.getPlayer().getTeam().getId(), player.getGamePlayerPosition().toString(), player.getShirtNumber(), numberOfRed
+                        , numberOfYellow));
                     }else{
-                        substitutionsTeamA.add(new SinglePlayerResponse(player.getPlayer().getId(), player.getPlayer().getFirstName(), player.getPlayer().getLastName(), player.getPlayer().getPosition(), numberOfGoals, 0, player.getPlayer().getTeam().getId(), player.getGamePlayerPosition().toString(), player.getShirtNumber()));
+                        substitutionsTeamA.add(new SinglePlayerResponse(player.getPlayer().getId(), player.getPlayer().getFirstName(), player.getPlayer().getLastName(), player.getPlayer().getPosition(), numberOfGoals, 0, player.getPlayer().getTeam().getId(), player.getGamePlayerPosition().toString(), player.getShirtNumber(), numberOfRed, numberOfYellow));
                     }
                 }else{
                     if(player.getGamePlayerStatus() == GamePlayerStatus.FIRST_SQUAD) {
-                        squadTeamB.add(new SinglePlayerResponse(player.getPlayer().getId(), player.getPlayer().getFirstName(), player.getPlayer().getLastName(), player.getPlayer().getPosition(), numberOfGoals, 0, player.getPlayer().getTeam().getId(), player.getGamePlayerPosition().toString(), player.getShirtNumber()));
+                        squadTeamB.add(new SinglePlayerResponse(player.getPlayer().getId(), player.getPlayer().getFirstName(), player.getPlayer().getLastName(), player.getPlayer().getPosition(), numberOfGoals, 0, player.getPlayer().getTeam().getId(), player.getGamePlayerPosition().toString(), player.getShirtNumber(), numberOfRed, numberOfYellow));
                     }else{
-                        substitutionsTeamB.add(new SinglePlayerResponse(player.getPlayer().getId(), player.getPlayer().getFirstName(), player.getPlayer().getLastName(), player.getPlayer().getPosition(), numberOfGoals, 0, player.getPlayer().getTeam().getId(), player.getGamePlayerPosition().toString(), player.getShirtNumber()));
+                        substitutionsTeamB.add(new SinglePlayerResponse(player.getPlayer().getId(), player.getPlayer().getFirstName(), player.getPlayer().getLastName(), player.getPlayer().getPosition(), numberOfGoals, 0, player.getPlayer().getTeam().getId(), player.getGamePlayerPosition().toString(), player.getShirtNumber(), numberOfRed, numberOfYellow));
                     }
                 }
             }
