@@ -102,7 +102,7 @@ public class GameService {
        return game.getId();
     }
 
-    private GameStatus getGameStatus(String nameOfStatus){
+    public GameStatus getGameStatus(String nameOfStatus){
         if(nameOfStatus.equalsIgnoreCase("SCHEDULED")){
             return GameStatus.SCHEDULED;
         }else if(nameOfStatus.equalsIgnoreCase("IN_PROGRESS")){
