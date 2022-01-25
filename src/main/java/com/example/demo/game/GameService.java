@@ -363,4 +363,8 @@ public class GameService {
 
         return result;
     }
+
+    public Optional<Game> getGameOptional(Long gameId){
+        return this.gameRepository.findById(gameId);
+    }
 }
