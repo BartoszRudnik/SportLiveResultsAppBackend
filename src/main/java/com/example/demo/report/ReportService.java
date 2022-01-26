@@ -19,7 +19,7 @@ public class ReportService {
     private final AppUserService appUserService;
     private final GameService gameService;
 
-    public void addReport(AddReportRequest addReportRequest) {
+    public Long addReport(AddReportRequest addReportRequest) {
         if(this.appUserService.findByEmail(addReportRequest.getUserMail()).isPresent() && this.gameService.getGameOptional(addReportRequest.getGameId()).isPresent()){
             Report report = new Report();
 
@@ -30,7 +30,10 @@ public class ReportService {
             report.setExtraMessage(addReportRequest.getExtraMessage());
 
             this.reportRepository.save(report);
+
+            return report.getId();
         }
+        return -1L;
     }
 
     public List<GetReportRequest> getAllUserReports(String userMail) {
@@ -93,6 +96,8 @@ public class ReportService {
 
            if(report.getReportStatus().equals(ReportStatus.WAITING)){
                this.reportRepository.delete(report);
+           }else{
+               throw new IllegalStateException("You can only delete waiting reports");
            }
         }
     }

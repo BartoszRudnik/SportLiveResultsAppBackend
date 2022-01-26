@@ -16,8 +16,8 @@ public class ReportController {
     private final ReportService reportService;
 
     @PostMapping("/addReport")
-    public void addReport(@RequestBody AddReportRequest addReportRequest){
-        this.reportService.addReport(addReportRequest);
+    public Long addReport(@RequestBody AddReportRequest addReportRequest){
+        return this.reportService.addReport(addReportRequest);
     }
 
     @GetMapping("/getSingleReport/{reportId}")
