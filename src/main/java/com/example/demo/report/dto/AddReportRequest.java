@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
@@ -15,4 +17,5 @@ public class AddReportRequest {
     private String extraMessage;
     private Long gameId;
     private String userMail;
+    private LocalDateTime timeOfSending;
 }

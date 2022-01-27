@@ -28,6 +28,7 @@ public class ReportService {
             report.setAppUser(this.appUserService.findByEmail(addReportRequest.getUserMail()).get());
             report.setGame(this.gameService.getGameOptional(addReportRequest.getGameId()).get());
             report.setExtraMessage(addReportRequest.getExtraMessage());
+            report.setTimeOfSending(addReportRequest.getTimeOfSending());
 
             this.reportRepository.save(report);
 
@@ -44,7 +45,7 @@ public class ReportService {
             List<GetReportRequest> result = new ArrayList<>();
 
             for(Report report : userReports){
-                result.add(new GetReportRequest(report.getId(), report.getGame().getId(), report.getAppUser().getEmail(), report.getReportStatus().toString(), report.getReportType().toString(), report.getExtraMessage()));
+                result.add(new GetReportRequest(report.getId(), report.getGame().getId(), report.getGame().getLeague().getId(), report.getAppUser().getEmail(), report.getReportStatus().toString(), report.getReportType().toString(), report.getExtraMessage(), report.getTimeOfSending()));
             }
 
             return result;
@@ -61,7 +62,7 @@ public class ReportService {
             List<GetReportRequest> result = new ArrayList<>();
 
             for(Report report : gameReports){
-                result.add(new GetReportRequest(report.getId(), report.getGame().getId(), report.getAppUser().getEmail(), report.getReportStatus().toString(), report.getReportType().toString(), report.getExtraMessage()));
+                result.add(new GetReportRequest(report.getId(), report.getGame().getId(), report.getGame().getLeague().getId(), report.getAppUser().getEmail(), report.getReportStatus().toString(), report.getReportType().toString(), report.getExtraMessage(), report.getTimeOfSending()));
             }
 
             return result;
@@ -74,7 +75,7 @@ public class ReportService {
         if(this.reportRepository.findById(reportId).isPresent()){
             Report report = this.reportRepository.findById(reportId).get();
 
-            return new GetReportRequest(report.getId(), report.getGame().getId(), report.getAppUser().getEmail(), report.getReportStatus().toString(), report.getReportType().toString(), report.getExtraMessage());
+            return new GetReportRequest(report.getId(), report.getGame().getId(), report.getGame().getLeague().getId(), report.getAppUser().getEmail(), report.getReportStatus().toString(), report.getReportType().toString(), report.getExtraMessage(), report.getTimeOfSending());
         }else{
             return new GetReportRequest();
         }

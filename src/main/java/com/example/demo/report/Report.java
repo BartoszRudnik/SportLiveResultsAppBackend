@@ -5,6 +5,7 @@ import com.example.demo.game.Game;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -29,6 +30,7 @@ public class Report {
     private ReportStatus reportStatus;
     private ReportType reportType;
     private String extraMessage;
+    private LocalDateTime timeOfSending;
 
     @ManyToOne
     @JoinColumn(name = "game_id")
@@ -38,11 +40,12 @@ public class Report {
     @JoinColumn(name = "app_user_id")
     private AppUser appUser;
 
-    public Report(ReportStatus reportStatus, ReportType reportType, String extraMessage, Game game, AppUser appUser){
+    public Report(ReportStatus reportStatus, ReportType reportType, String extraMessage, Game game, AppUser appUser, LocalDateTime timeOfSending){
         this.reportStatus = reportStatus;
         this.reportType = reportType;
         this.extraMessage = extraMessage;
         this.game = game;
         this.appUser = appUser;
+        this.timeOfSending = timeOfSending;
     }
 }
