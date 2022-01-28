@@ -14,4 +14,5 @@ public interface NotificationService {
     void sendNotification(UpdateGameEventRequest request);
     void sendNotification(Long gameId, Long leagueId);
     void sendNotification(Long gameId, Long messageId, String message);
+    void sendNotification(String userMail, Long reportId);
 }

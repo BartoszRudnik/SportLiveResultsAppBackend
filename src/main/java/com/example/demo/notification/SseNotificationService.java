@@ -23,6 +23,11 @@ public class SseNotificationService implements NotificationService{
     }
 
     @Override
+    public void sendNotification(String userMail, Long reportId) {
+        this.doSendNotification(userMail, reportId);
+    }
+
+    @Override
     public void sendNotification(Long gameId, String subtitle) {this.doSendNotification(gameId, subtitle);}
 
     @Override
@@ -60,6 +65,22 @@ public class SseNotificationService implements NotificationService{
     public void sendNotification(NewTimeEventDto request){
         if(request != null){
             this.doSendNotification(request);
+        }
+    }
+
+    private void doSendNotification(String userMail, Long reportId){
+        if(this.emitterRepository.get(userMail + "report").isPresent()){
+            List<SseEmitter> emitters = this.emitterRepository.get(userMail + "report").get();
+
+            for(SseEmitter emitter : emitters){
+                if(emitter != null){
+                    try{
+                        emitter.send(this.eventMapper.toSseEventBuilder(reportId));
+                    }catch(IOException | IllegalStateException e){
+//                        this.emitterRepository.remove(gameId + "reporter", emitter);
+                    }
+                }
+            }
         }
     }
 

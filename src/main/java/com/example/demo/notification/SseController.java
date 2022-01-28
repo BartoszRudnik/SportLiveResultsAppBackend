@@ -53,6 +53,11 @@ public class SseController {
         this.notificationService.sendNotification(gameId, messageId, type);
     }
 
+    @PostMapping("/publishNewReportEvent/{userMail}/{reportId}")
+    public void publishNewReportEvent(@PathVariable String userMail, @PathVariable Long reportId){
+        this.notificationService.sendNotification(userMail, reportId);
+    }
+
     @GetMapping("subscribeMessage/{gameId}")
     public SseEmitter subscribeMessage(@PathVariable Long gameId){
         return this.emitterService.createEmitter(gameId + "message");
@@ -76,5 +81,10 @@ public class SseController {
     @GetMapping("/subscribe/{gameId}")
     public SseEmitter subscribeToEvents(@PathVariable Long gameId) {
         return this.emitterService.createEmitter(Long.toString(gameId));
+    }
+
+    @GetMapping("/subscribeReport/{userMail}")
+    public SseEmitter subscribeToReport(@PathVariable String userMail){
+        return this.emitterService.createEmitter(userMail + "report");
     }
 }
