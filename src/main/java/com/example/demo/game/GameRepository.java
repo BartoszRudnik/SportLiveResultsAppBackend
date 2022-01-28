@@ -13,6 +13,12 @@ public interface GameRepository extends JpaRepository<Game, Long> {
 
     List<Game> findAllByRoundAndLeague(int round, League league);
 
+    @Query("select g from Game g where g.teamA = ?1 AND g.gameStatus = ?2")
+    List<Game> findTeamHomeFinishedGames(Team team, GameStatus gameStatus);
+
+    @Query("select g from Game g where g.teamB = ?1 AND g.gameStatus = ?2")
+    List<Game> findTeamAwayFinishedGames(Team team, GameStatus gameStatus);
+
     @Query("select g from Game g where (g.teamA = ?1 OR g.teamB = ?1) AND g.gameStatus = ?2")
     List<Game> findTeamFinishedGames(Team team, GameStatus gameStatus);
 

@@ -4,6 +4,7 @@ import com.example.demo.game.Game;
 import com.example.demo.game.GameRepository;
 import com.example.demo.game.GameStatus;
 import com.example.demo.gameEvent.GameEvent;
+import com.example.demo.gameEvent.GameEventType;
 import com.example.demo.gamePlayer.GamePlayer;
 import com.example.demo.gamePlayer.GamePlayerStatus;
 import com.example.demo.league.dto.*;
@@ -101,6 +102,114 @@ public class LeagueService {
       List<Game> games = this.gameRepository.findAllByRoundAndLeague(round, league);
 
       return this.getGames(games);
+    }
+
+    private int countScoredGoals(List<Game> games, Team team){
+        int scoredGoals = 0;
+
+        for(Game game : games){
+           scoredGoals += game.getGameEvents().stream().filter((gameEvent -> gameEvent.getGameEventType() == GameEventType.GOAL && gameEvent.getTeam() == team)).count();
+        }
+
+        return scoredGoals;
+    }
+
+    private int countConcededGoals(List<Game> games, Team team){
+        int scoredGoals = 0;
+
+        for(Game game : games){
+            scoredGoals += game.getGameEvents().stream().filter((gameEvent -> gameEvent.getGameEventType() == GameEventType.GOAL && gameEvent.getTeam() != team)).count();
+        }
+
+        return scoredGoals;
+    }
+
+    private int countPoints(List<Game> games, Team team){
+        int points = 0;
+
+        for(Game game : games){
+            if(game.getTeamA() == team){
+                if(game.getScoreTeamA() > game.getScoreTeamB()){
+                    points += 3;
+                }else if(game.getScoreTeamA() == game.getScoreTeamB()){
+                    points += 1;
+                }
+            }else{
+                if(game.getScoreTeamA() < game.getScoreTeamB()){
+                    points += 3;
+                }else if(game.getScoreTeamA() == game.getScoreTeamB()){
+                    points += 1;
+                }
+            }
+        }
+
+        return points;
+    }
+
+    public List<GetLeagueTableResponse> getFormTable(Long leagueId, int size) {
+        if(this.chefIfNotExist(leagueId)){
+            throw new IllegalStateException("League doesn't exist");
+        }
+        League league = this.leagueRepository.findById(leagueId).get();
+
+        List<Team> leagueTeams = league.getTeams();
+        List<GetLeagueTableResponse> leagueTables = new ArrayList<>();
+
+        for(Team team : leagueTeams){
+            List<Game> allGames = gameRepository.findTeamFinishedGames(team, GameStatus.FINISHED);
+            allGames.sort(Comparator.comparing(Game::getGameStartDate).reversed());
+
+            List<Game> games;
+
+            if(size > allGames.size()){
+                games = allGames;
+            }else{
+                games = allGames.subList(0, size);
+            }
+
+            leagueTables.add(new GetLeagueTableResponse(team.getTeamName(), team.getId(), games.size(), this.countScoredGoals(games, team), this.countConcededGoals(games, team), this.countPoints(games, team)));
+        }
+
+        return leagueTables;
+    }
+
+
+    public List<GetLeagueTableResponse> getHomeTable(Long leagueId) {
+        if(this.chefIfNotExist(leagueId)){
+            throw new IllegalStateException("League doesn't exist");
+        }
+        League league = this.leagueRepository.findById(leagueId).get();
+
+        List<Team> leagueTeams = league.getTeams();
+        List<GetLeagueTableResponse> leagueTables = new ArrayList<>();
+
+        for(Team team : leagueTeams){
+            List<Game> games = gameRepository.findTeamHomeFinishedGames(team, GameStatus.FINISHED);
+
+            leagueTables.add(new GetLeagueTableResponse(team.getTeamName(), team.getId(), games.size(), this.countScoredGoals(games, team), this.countConcededGoals(games, team), this.countPoints(games, team)));
+        }
+        Collections.sort(leagueTables);
+
+        return leagueTables;
+    }
+
+    public List<GetLeagueTableResponse> getAwayTable(Long leagueId) {
+        if(this.chefIfNotExist(leagueId)){
+            throw new IllegalStateException("League doesn't exist");
+        }
+        League league = this.leagueRepository.findById(leagueId).get();
+
+        List<Team> leagueTeams = league.getTeams();
+        List<GetLeagueTableResponse> leagueTables = new ArrayList<>();
+
+        for(Team team : leagueTeams){
+            List<Game> games = gameRepository.findTeamAwayFinishedGames(team, GameStatus.FINISHED);
+
+            leagueTables.add(new GetLeagueTableResponse(team.getTeamName(), team.getId(), games.size(), this.countScoredGoals(games, team), this.countConcededGoals(games, team), this.countPoints(games, team)));
+        }
+        Collections.sort(leagueTables);
+
+        return leagueTables;
     }
 
     public List<GetLeagueTableResponse> getLeagueTable(Long leagueId){
@@ -227,4 +336,6 @@ public class LeagueService {
 
         return resultList;
     }
+
+
 }

@@ -39,6 +39,21 @@ public class LeagueController {
         return this.leagueService.getLeagueTable(leagueId);
     }
 
+    @GetMapping("/getFormTable/{leagueId}/{size}")
+        public List<GetLeagueTableResponse> getFormTable5(@PathVariable Long leagueId, @PathVariable int size){
+        return this.leagueService.getFormTable(leagueId, size);
+    }
+
+    @GetMapping("/getHomeTable/{leagueId}")
+    public List<GetLeagueTableResponse> getHomeTable(@PathVariable Long leagueId){
+        return this.leagueService.getHomeTable(leagueId);
+    }
+
+    @GetMapping("/getAwayTable/{leagueId}")
+    public List<GetLeagueTableResponse> getAwayTable(@PathVariable Long leagueId){
+        return this.leagueService.getAwayTable(leagueId);
+    }
+
     @GetMapping("/getAllGamesByRound/{leagueId}/{round}")
     public List<GetGamesResponse> getAllGamesByRound(@PathVariable Long leagueId, @PathVariable int round){
         return this.leagueService.getGamesByRound(leagueId, round);
