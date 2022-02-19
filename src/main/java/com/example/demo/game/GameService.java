@@ -367,4 +367,12 @@ public class GameService {
     public Optional<Game> getGameOptional(Long gameId){
         return this.gameRepository.findById(gameId);
     }
+
+    public Long getLeagueIdOfGame(Long gameId) {
+        if(this.gameRepository.findById(gameId).isPresent()){
+            return this.gameRepository.findById(gameId).get().getLeague().getId();
+        }else{
+            throw new IllegalStateException("Game not found");
+        }
+    }
 }

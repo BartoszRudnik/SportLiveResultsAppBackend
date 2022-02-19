@@ -56,6 +56,11 @@ public class GameController {
         this.gameService.changeGameStatus(gameId, newStatus);
     }
 
+    @GetMapping("/getLeagueIdOfGame/{gameId}")
+    public Long getLeagueIdOfGame(@PathVariable Long gameId){
+        return this.gameService.getLeagueIdOfGame(gameId);
+    }
+
     @GetMapping("/getReporter/{gameId}")
     public String getReporter(@PathVariable Long gameId){
         return this.gameService.getReporter(gameId);
